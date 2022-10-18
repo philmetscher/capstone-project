@@ -12,6 +12,7 @@ const GlobalStyle = createGlobalStyle`
   --gray: #D7D7D7;
   --card-bg: #26282D;
   --main-bg: #111111;
+  --overlap-bg: linear-gradient(180deg, rgba(17, 17, 17, 0) 0%, #111111 100%);
 }
 
 /* open-sans-300 - latin */
@@ -236,6 +237,10 @@ html, body, #__next {
 body {
   font-family: 'Open Sans', sans-serif;
   background-color: var(--main-bg);
+  color: var(--white);
+}
+a {
+  text-decoration: none;
   color: var(--white);
 }
 `;
