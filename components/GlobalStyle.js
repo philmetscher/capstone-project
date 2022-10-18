@@ -159,7 +159,7 @@ const GlobalStyle = createGlobalStyle`
     display: block;
     width: 24px;
     height: 24px;
-    font-size: 24px;
+    font-size: 1.5rem;
   }
 }
 
