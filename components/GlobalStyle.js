@@ -236,6 +236,7 @@ html, body, #__next {
 body {
   font-family: 'Open Sans', sans-serif;
   background-color: var(--main-bg);
+  color: var(--white);
 }
 `;
 
