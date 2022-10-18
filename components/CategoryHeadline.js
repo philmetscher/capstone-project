@@ -1,10 +1,12 @@
 import styled from "styled-components";
+
 import { IconChevronDown, IconChevronUp } from "./Icons";
+import { PTagBold } from "./HtmlComponents";
 
 export default function CategoryHeadline(props) {
   return (
     <CategoryHeadlineWrapper onClick={props.handleClick}>
-      <h3>{props.children}</h3>
+      <PTagBold>{props.children}</PTagBold>
       {props.extended ? <IconChevronDown /> : <IconChevronUp />}
     </CategoryHeadlineWrapper>
   );
@@ -21,11 +23,4 @@ const CategoryHeadlineWrapper = styled.button`
   border: none;
   color: var(--white);
   cursor: pointer;
-
-  h3 {
-    font-weight: 700;
-    font-size: 20px;
-    line-height: 27px;
-    text-align: center;
-  }
 `;
