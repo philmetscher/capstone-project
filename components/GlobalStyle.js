@@ -239,6 +239,13 @@ body {
   background-color: var(--main-bg);
   color: var(--white);
 }
+
+body, button {
+  font-weight: 400;
+  font-size: 1.25rem;
+  line-height: 1.6875rem;
+  font-weight: 700;
+}
 a {
   text-decoration: none;
   color: var(--white);
