@@ -23,7 +23,7 @@ const PageHeader = styled.header`
 const HeaderTitle = styled.h2`
   font-style: normal;
   font-weight: 400;
-  font-size: 24px;
-  line-height: 33px;
+  font-size: 1.5rem;
+  line-height: 2.0625rem;
   color: var(--white-07);
 `;
