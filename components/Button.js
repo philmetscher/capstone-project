@@ -23,11 +23,12 @@ const Button = styled.button`
 `;
 
 const ButtonSmall = styled(Button)`
+  display: inline-flex;
   width: auto;
 `;
 
-const ButtonIcon = styled(Button)`
+const ButtonIcon = styled(ButtonSmall)`
   padding: 14px;
 `;
 
-export { ButtonSmall };
+export { Button, ButtonSmall, ButtonIcon };
