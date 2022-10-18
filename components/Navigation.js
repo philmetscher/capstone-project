@@ -11,7 +11,7 @@ export default function Navigation() {
           <Link href={"/create-entry"} passHref>
             <NavLink width="100%">
               <IconPlus />
-              <p>neuer Eintrag</p>
+              <NavDesc>neuer Eintrag</NavDesc>
             </NavLink>
           </Link>
         </NavEntry>
@@ -60,4 +60,8 @@ const NavLink = styled.a`
   align-items: center;
   flex-flow: column;
   width: 100%;
+`;
+const NavDesc = styled.p`
+  font-size: 0.75rem;
+  line-height: 1rem;
 `;
