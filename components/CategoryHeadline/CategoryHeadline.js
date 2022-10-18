@@ -1,10 +1,10 @@
 import styled from "styled-components";
 import { IconChevronDown } from "../Icons/Icons";
 
-export default function CategoryHeadline() {
+export default function CategoryHeadline(props) {
   return (
     <CategoryHeadlineWrapper>
-      <h3>Kategorie</h3>
+      <h3>{props.children}</h3>
       <IconChevronDown />
     </CategoryHeadlineWrapper>
   );

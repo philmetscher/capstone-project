@@ -1,10 +1,10 @@
 import styled from "styled-components";
 import { PTag } from "../HtmlComponents/HtmlComponents";
 
-export default function CategoryListItem() {
+export default function CategoryListItem(props) {
   return (
     <CategoryListItemWrapper>
-      <PTag>List Item</PTag>
+      <PTag>{props.children}</PTag>
     </CategoryListItemWrapper>
   );
 }
