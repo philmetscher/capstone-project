@@ -1,22 +1,46 @@
-import Head from "next/head";
 import styled from "styled-components";
+import Head from "next/head";
 
-export default function Home() {
+import Header from "../components/Header";
+import CategoryHeadline from "../components/CategoryHeadline";
+import CategoryListItem from "../components/CategoryListItem";
+
+import { exampleCategories, exampleListItems } from "../lib/db";
+
+export default function Home({ categories }) {
   return (
-    <div>
+    <>
       <Head>
         <title>JustList</title>
         <meta name="description" content="JustList App" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
-      <Main>
-        <h1>My App</h1>
-      </Main>
-    </div>
+      <Header />
+      <main>
+        <section>
+          {exampleCategories.map((category) => (
+            <article key={category.id}>
+              <CategoryHeadline>{category.name}</CategoryHeadline>
+              <CategoryList>
+                {exampleListItems.map((listItem) =>
+                  listItem.categoryId === category.id ? (
+                    <CategoryListItem key={listItem.categoryId}>
+                      {listItem.name}
+                    </CategoryListItem>
+                  ) : (
+                    ""
+                  )
+                )}
+              </CategoryList>
+            </article>
+          ))}
+        </section>
+      </main>
+    </>
   );
 }
 
-const Main = styled.main`
-  text-align: center;
+const CategoryList = styled.ul`
+  list-style-type: none;
 `;
