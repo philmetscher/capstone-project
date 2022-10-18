@@ -125,13 +125,12 @@ const GlobalStyle = createGlobalStyle`
 
 /* icons */
 @font-face {
-  font-family: "icomoon";
-  src: url("../assets/fonts/icons/icon.eot?ahq17d");
-  src: url("../assets/fonts/icons/icon.eot?ahq17d#iefix")
-    format("embedded-opentype"),
-    url("../assets/fonts/icons/icon.ttf?ahq17d") format("truetype"),
-    url("../assets/fonts/icons/icon.woff?ahq17d") format("woff"),
-    url("../assets/fonts/icons/icon.svg?ahq17d#icomoon") format("svg");
+  font-family: 'icomoon';
+  src:  url('/fonts/icons/icomoon.eot?ahq17d');
+  src:  url('/fonts/icons/icomoon.eot?ahq17d#iefix') format('embedded-opentype'),
+    url('/fonts/icons/icomoon.ttf?ahq17d') format('truetype'),
+    url('/fonts/icons/icomoon.woff?ahq17d') format('woff'),
+    url('/fonts/icons/icomoon.svg?ahq17d#icomoon') format('svg');
   font-weight: normal;
   font-style: normal;
   font-display: block;
@@ -139,6 +138,7 @@ const GlobalStyle = createGlobalStyle`
 
 [class^="icon-"],
 [class*=" icon-"] {
+  display: inline-block;
   width: 24px;
   height: 24px;
 
@@ -154,67 +154,74 @@ const GlobalStyle = createGlobalStyle`
   /* Better Font Rendering =========== */
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+
+  &:before {
+    display: block;
+    width: 24px;
+    height: 24px;
+    font-size: 24px;
+  }
 }
 
 .icon-check:before {
-  content: "\e900";
+  content: "\\e900";
 }
 .icon-chevron-down:before {
-  content: "\e901";
+  content: "\\e901";
 }
 .icon-chevron-left:before {
-  content: "\e902";
+  content: "\\e902";
 }
 .icon-chevron-right:before {
-  content: "\e903";
+  content: "\\e903";
 }
 .icon-chevron-up:before {
-  content: "\e904";
+  content: "\\e904";
 }
 .icon-cross:before {
-  content: "\e905";
+  content: "\\e905";
 }
 .icon-delete:before {
-  content: "\e906";
+  content: "\\e906";
 }
 .icon-drag:before {
-  content: "\e907";
+  content: "\\e907";
 }
 .icon-edit:before {
-  content: "\e908";
+  content: "\\e908";
 }
 .icon-email:before {
-  content: "\e909";
+  content: "\\e909";
 }
 .icon-google:before {
-  content: "\e90a";
+  content: "\\e90a";
 }
 .icon-list:before {
-  content: "\e90b";
+  content: "\\e90b";
 }
 .icon-lock:before {
-  content: "\e90c";
+  content: "\\e90c";
 }
 .icon-logo:before {
-  content: "\e90d";
+  content: "\\e90d";
 }
 .icon-logout:before {
-  content: "\e90e";
+  content: "\\e90e";
 }
 .icon-minus:before {
-  content: "\e90f";
+  content: "\\e90f";
 }
 .icon-plus:before {
-  content: "\e910";
+  content: "\\e910";
 }
 .icon-reset:before {
-  content: "\e911";
+  content: "\\e911";
 }
 .icon-settings:before {
-  content: "\e912";
+  content: "\\e912";
 }
 .icon-user:before {
-  content: "\e913";
+  content: "\\e913";
 }
 
 * {
@@ -222,10 +229,13 @@ const GlobalStyle = createGlobalStyle`
   margin: 0;
   padding: 0;
 }
-
+html, body, #__next {
+  width: 100%;
+  min-height: 100vh;
+}
 body {
   font-family: 'Open Sans', sans-serif;
-  background-color: var(--background-primary)
+  background-color: var(--main-bg);
 }
 `;
 
