@@ -1,11 +1,10 @@
-import styled from "styled-components";
 import Head from "next/head";
 
 import Header from "../components/Header";
-import CategoryHeadline from "../components/CategoryHeadline";
-import CategoryListItem from "../components/CategoryListItem";
+import Category from "../components/Category";
 
-import { exampleCategories, exampleListItems } from "../lib/db";
+import { exampleCategories } from "../lib/db";
+import styled from "styled-components";
 
 export default function Home({ categories }) {
   return (
@@ -18,29 +17,18 @@ export default function Home({ categories }) {
 
       <Header />
       <main>
-        <section>
+        <CategoriesSection>
           {exampleCategories.map((category) => (
-            <article key={category.id}>
-              <CategoryHeadline>{category.name}</CategoryHeadline>
-              <CategoryList>
-                {exampleListItems.map((listItem) =>
-                  listItem.categoryId === category.id ? (
-                    <CategoryListItem key={listItem.categoryId}>
-                      {listItem.name}
-                    </CategoryListItem>
-                  ) : (
-                    ""
-                  )
-                )}
-              </CategoryList>
-            </article>
+            <Category key={category.id} category={category} />
           ))}
-        </section>
+        </CategoriesSection>
       </main>
     </>
   );
 }
 
-const CategoryList = styled.ul`
-  list-style-type: none;
+const CategoriesSection = styled.section`
+  display: flex;
+  flex-flow: column;
+  gap: 20px;
 `;

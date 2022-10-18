@@ -1,16 +1,16 @@
 import styled from "styled-components";
-import { IconChevronDown } from "./Icons";
+import { IconChevronDown, IconChevronUp } from "./Icons";
 
 export default function CategoryHeadline(props) {
   return (
-    <CategoryHeadlineWrapper>
+    <CategoryHeadlineWrapper onClick={props.handleClick}>
       <h3>{props.children}</h3>
-      <IconChevronDown />
+      {props.extended ? <IconChevronDown /> : <IconChevronUp />}
     </CategoryHeadlineWrapper>
   );
 }
 
-const CategoryHeadlineWrapper = styled.div`
+const CategoryHeadlineWrapper = styled.button`
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -18,4 +18,14 @@ const CategoryHeadlineWrapper = styled.div`
   gap: 10px;
   width: 100%;
   background: var(--primary-gradient);
+  border: none;
+  color: var(--white);
+  cursor: pointer;
+
+  h3 {
+    font-weight: 700;
+    font-size: 20px;
+    line-height: 27px;
+    text-align: center;
+  }
 `;
