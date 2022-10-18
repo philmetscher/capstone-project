@@ -2,6 +2,7 @@ import Head from "next/head";
 
 import Header from "../components/Header";
 import Category from "../components/Category";
+import Navigation from "../components/Navigation";
 
 import { exampleCategories } from "../lib/db";
 import styled from "styled-components";
@@ -15,7 +16,7 @@ export default function Home({ categories }) {
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
-      <Header />
+      <Header>Todos</Header>
       <main>
         <CategoriesSection>
           {exampleCategories.map((category) => (
@@ -23,6 +24,7 @@ export default function Home({ categories }) {
           ))}
         </CategoriesSection>
       </main>
+      <Navigation />
     </>
   );
 }
@@ -31,4 +33,5 @@ const CategoriesSection = styled.section`
   display: flex;
   flex-flow: column;
   gap: 20px;
+  margin-bottom: 126px;
 `;
