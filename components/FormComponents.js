@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import { IconChevronDown, IconChevronUp, IconList } from "./Icons";
+import { IconChevronDown, IconChevronUp, IconList, IconPlus } from "./Icons";
 
 import { PTag } from "./HtmlComponents";
 import { useState } from "react";
@@ -45,6 +45,7 @@ function Input({
       />
       <InputIcon iconBefore={iconBefore}>
         {inputIcon === "list" && <IconList />}
+        {inputIcon === "plus" && <IconPlus />}
       </InputIcon>
     </Group>
   );

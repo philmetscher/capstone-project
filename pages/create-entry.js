@@ -71,6 +71,15 @@ export default function CreateEntry() {
             inputIcon="chevronDown"
             options={exampleCategories}
           />
+          <Input
+            name="newCategory"
+            labelText="oder neue Kateg. erstellen"
+            inputIcon="plus"
+            iconBefore={false}
+            handleChange={(event) => handleInput(event)}
+          >
+            Name...
+          </Input>
           <ButtonGroup>
             <ButtonIcon
               alt={"zurück"}
