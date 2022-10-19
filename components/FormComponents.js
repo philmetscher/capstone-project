@@ -51,6 +51,11 @@ const StyledInput = styled.input`
   border-radius: 13px;
   padding: ${({ iconBefore }) =>
     iconBefore ? "14px 12px 14px 46px" : "14px 46px 14px 12px"};
+  color: var(--white);
+
+  &::placeholder {
+    color: var(--white-05);
+  }
 `;
 
 function Select({
