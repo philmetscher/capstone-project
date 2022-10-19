@@ -2,11 +2,11 @@ import styled from "styled-components";
 
 import { IconLogo } from "./Icons";
 
-export default function Header() {
+export default function Header({ children }) {
   return (
     <PageHeader>
       <IconLogo />
-      <HeaderTitle>Todo</HeaderTitle>
+      <HeaderTitle>{children}</HeaderTitle>
     </PageHeader>
   );
 }
