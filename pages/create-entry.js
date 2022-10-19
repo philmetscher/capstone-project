@@ -33,9 +33,7 @@ export default function CreateEntry() {
     const formData = new FormData(event.target);
     const data = Object.fromEntries(formData);
 
-    console.log(data);
-
-    if ((data.itemName, data.itemCategory)) {
+    if (data.itemName.length > 2 && data.itemCategory) {
       setListItems((oldListItems) => [
         ...oldListItems,
         { id: nanoid(), name: data.itemName, categoryId: data.itemCategory },
@@ -74,10 +72,22 @@ export default function CreateEntry() {
             options={exampleCategories}
           />
           <ButtonGroup>
-            <ButtonIcon alt={"zurück"}>
+            <ButtonIcon
+              alt={"zurück"}
+              onClick={(event) => {
+                event.preventDefault();
+                router.push(`/`);
+              }}
+            >
               <IconChevronLeft />
             </ButtonIcon>
-            <ButtonSmall isPrimary disabled={!inputTextFilled}>
+            <ButtonSmall
+              isPrimary
+              disabled={!inputTextFilled}
+              onClick={(event) => {
+                return inputTextFilled;
+              }}
+            >
               erstellen
               <IconChevronRight />
             </ButtonSmall>
