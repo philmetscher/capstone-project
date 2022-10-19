@@ -121,6 +121,7 @@ function Select({
         name={name}
         style={{ display: "none" }}
         value={selectedOption.id}
+        readOnly
       />
     </Group>
   );
