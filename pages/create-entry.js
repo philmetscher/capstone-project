@@ -1,6 +1,12 @@
 import Head from "next/head";
+import styled from "styled-components";
 
 import Header from "../components/Header";
+import { Input, Select } from "../components/FormComponents";
+import { ButtonIcon, ButtonSmall } from "../components/Button";
+import { IconChevronLeft, IconChevronRight } from "../components/Icons";
+
+import { exampleCategories } from "../lib/db";
 
 export default function CreateEntry() {
   return (
@@ -12,7 +18,40 @@ export default function CreateEntry() {
       </Head>
 
       <Header>neuer Eintrag</Header>
-      <main></main>
+      <Main>
+        <CreateEntryForm>
+          <Input labelText="Name des Eintrags" inputIcon="list">
+            Name...
+          </Input>
+          <Select labelText="Kategorie auswählen" options={exampleCategories}>
+            - auswählen -
+          </Select>
+          <ButtonGroup>
+            <ButtonIcon alt={"zurück"}>
+              <IconChevronLeft />
+            </ButtonIcon>
+            <ButtonSmall isPrimary>
+              erstellen
+              <IconChevronRight />
+            </ButtonSmall>
+          </ButtonGroup>
+        </CreateEntryForm>
+      </Main>
     </>
   );
 }
+
+const Main = styled.main`
+  padding: 0 20px;
+`;
+const CreateEntryForm = styled.form`
+  display: flex;
+  flex-flow: column;
+  gap: 10px;
+`;
+const ButtonGroup = styled.div`
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  margin-top: 20px;
+`;
