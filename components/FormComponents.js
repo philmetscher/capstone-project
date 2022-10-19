@@ -22,11 +22,21 @@ const InputIcon = styled.span`
   opacity: 0.5;
 `;
 
-function Input({ children, labelText, inputIcon, iconBefore = true }) {
+function Input({
+  children,
+  labelText,
+  inputIcon,
+  iconBefore = true,
+  handleChange,
+}) {
   return (
     <Group>
       <Label>{labelText}</Label>
-      <StyledInput iconBefore={iconBefore} placeholder={children} />
+      <StyledInput
+        iconBefore={iconBefore}
+        placeholder={children}
+        onChange={(event) => handleChange(event)}
+      />
       <InputIcon iconBefore={iconBefore}>
         {inputIcon === "list" && <IconList />}
       </InputIcon>
@@ -49,11 +59,12 @@ function Select({
   inputIcon,
   iconBefore = true,
   options,
+  handleChange,
 }) {
   return (
     <Group>
       <Label>{labelText}</Label>
-      <select defaultValue={children}>
+      <select defaultValue={children} onChange={(event) => handleChange(event)}>
         <option disabled>{children}</option>
         {options.map((option) => (
           <option key={option.id}>{option.name}</option>

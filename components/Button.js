@@ -20,6 +20,10 @@ const Button = styled.button`
       ${({ isPrimary }) => (isPrimary ? "--primary" : "--secondary")}
     );
   }
+  &:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
 `;
 
 const ButtonSmall = styled(Button)`

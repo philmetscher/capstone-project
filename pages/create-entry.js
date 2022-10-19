@@ -9,15 +9,31 @@ import { IconChevronLeft, IconChevronRight } from "../components/Icons";
 import { exampleCategories } from "../lib/db";
 
 import useLocalStorage from "../hooks/useLocalStorage";
-import { useEffect } from "react";
+import { useState, useEffect } from "react";
 
 export default function CreateEntry() {
+  const [inputTextFilled, setInputTextFilled] = useState(false);
+  const [selectionSelected, setSelectionSelected] = useState(false);
   const [categories, setCategories] = useLocalStorage("categories", []);
   useEffect(() => {
     setCategories(
       localStorage.getItem("categories") || JSON.stringify(exampleCategories)
     );
   }, []);
+
+  function handleSubmit(event) {
+    event.preventDefault();
+  }
+  function handleInput(event) {
+    const value = event.target.value;
+    value.length > 2 ? setInputTextFilled(true) : setInputTextFilled(false);
+  }
+  function handleSelection(event) {
+    const value = event.target.value;
+    value != "- auswählen -"
+      ? setSelectionSelected(true)
+      : setSelectionSelected(false);
+  }
 
   return (
     <>
@@ -29,18 +45,29 @@ export default function CreateEntry() {
 
       <Header>neuer Eintrag</Header>
       <Main>
-        <CreateEntryForm>
-          <Input labelText="Name des Eintrags" inputIcon="list">
+        <CreateEntryForm onSubmit={(event) => handleSubmit(event)}>
+          <Input
+            labelText="Name des Eintrags"
+            inputIcon="list"
+            handleChange={(event) => handleInput(event)}
+          >
             Name...
           </Input>
-          <Select labelText="Kategorie auswählen" options={exampleCategories}>
+          <Select
+            labelText="Kategorie auswählen"
+            options={exampleCategories}
+            handleChange={(event) => handleSelection(event)}
+          >
             - auswählen -
           </Select>
           <ButtonGroup>
             <ButtonIcon alt={"zurück"}>
               <IconChevronLeft />
             </ButtonIcon>
-            <ButtonSmall isPrimary>
+            <ButtonSmall
+              isPrimary
+              disabled={!inputTextFilled || !selectionSelected}
+            >
               erstellen
               <IconChevronRight />
             </ButtonSmall>
