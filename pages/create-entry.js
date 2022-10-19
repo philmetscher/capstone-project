@@ -18,7 +18,6 @@ export default function CreateEntry() {
   const router = useRouter();
 
   const [inputTextFilled, setInputTextFilled] = useState(false);
-  const [selectionSelected, setSelectionSelected] = useState(false);
   const [categories, setCategories] = useLocalStorage("categories", []);
   const [listItems, setListItems] = useLocalStorage("listItems", []);
 
@@ -34,24 +33,19 @@ export default function CreateEntry() {
     const formData = new FormData(event.target);
     const data = Object.fromEntries(formData);
 
+    console.log(data);
+
     if ((data.itemName, data.itemCategory)) {
       setListItems((oldListItems) => [
         ...oldListItems,
         { id: nanoid(), name: data.itemName, categoryId: data.itemCategory },
       ]);
-
       router.push(`/`);
     }
   }
   function handleInput(event) {
     const value = event.target.value;
     value.length > 2 ? setInputTextFilled(true) : setInputTextFilled(false);
-  }
-  function handleSelection(event) {
-    const value = event.target.value;
-    value != "- auswählen -"
-      ? setSelectionSelected(true)
-      : setSelectionSelected(false);
   }
 
   return (
@@ -76,19 +70,14 @@ export default function CreateEntry() {
           <Select
             name="itemCategory"
             labelText="Kategorie auswählen"
+            inputIcon="chevronDown"
             options={exampleCategories}
-            handleChange={(event) => handleSelection(event)}
-          >
-            - auswählen -
-          </Select>
+          />
           <ButtonGroup>
             <ButtonIcon alt={"zurück"}>
               <IconChevronLeft />
             </ButtonIcon>
-            <ButtonSmall
-              isPrimary
-              disabled={!inputTextFilled || !selectionSelected}
-            >
+            <ButtonSmall isPrimary disabled={!inputTextFilled}>
               erstellen
               <IconChevronRight />
             </ButtonSmall>

@@ -1,5 +1,8 @@
 import styled from "styled-components";
-import { IconList } from "./Icons";
+import { IconChevronDown, IconChevronUp, IconList } from "./Icons";
+
+import { PTag } from "./HtmlComponents";
+import { useState } from "react";
 
 const Group = styled.div`
   display: flex;
@@ -16,7 +19,7 @@ const InputIcon = styled.span`
   position: absolute;
   left: ${({ iconBefore }) => (iconBefore ? "12px" : "unset")};
   right: ${({ iconBefore }) => (iconBefore ? "unset" : "12px")};
-  bottom: 14px;
+  bottom: 0.96875rem;
   width: 24px;
   height: 24px;
   opacity: 0.5;
@@ -35,6 +38,7 @@ function Input({
       <Label>{labelText}</Label>
       <StyledInput
         name={name}
+        inputIcon={inputIcon}
         iconBefore={iconBefore}
         placeholder={children}
         onChange={(event) => handleChange(event)}
@@ -51,8 +55,8 @@ const StyledInput = styled.input`
   background: var(--card-bg);
   border: none;
   border-radius: 13px;
-  padding: ${({ iconBefore }) =>
-    iconBefore ? "14px 12px 14px 46px" : "14px 46px 14px 12px"};
+  padding: ${({ inputIcon, iconBefore }) =>
+    inputIcon && iconBefore ? "14px 12px 14px 46px" : "14px 46px 14px 12px"};
   color: var(--white);
 
   &::placeholder {
@@ -69,23 +73,153 @@ function Select({
   options,
   handleChange,
 }) {
+  const [isOpen, setIsOpen] = useState(false);
+  const [selectedOption, setSelectedOption] = useState(options[0]);
+
+  const toggling = () => setIsOpen(!isOpen);
+
+  const onOptionClicked = (value) => () => {
+    setSelectedOption(value);
+    setIsOpen(false);
+    console.log(selectedOption);
+  };
+
   return (
     <Group>
       <Label>{labelText}</Label>
-      <select
+      <Selection className="noselect">
+        <SelectionHeader
+          className="noselect"
+          onClick={toggling}
+          inputIcon={inputIcon}
+          iconBefore={iconBefore}
+          isOpen={isOpen}
+        >
+          <InputIcon iconBefore={iconBefore}>
+            {inputIcon === "chevronDown" &&
+              (!isOpen ? <IconChevronDown /> : <IconChevronUp />)}
+          </InputIcon>
+          {selectedOption.name}
+        </SelectionHeader>
+        {isOpen && (
+          <SelectionList>
+            {options.map((option) => (
+              <SelectionOption
+                className="noselect"
+                key={option.id}
+                onClick={onOptionClicked(option)}
+                inputIcon={inputIcon}
+                iconBefore={iconBefore}
+              >
+                {option.name}
+              </SelectionOption>
+            ))}
+          </SelectionList>
+        )}
+      </Selection>
+      <input
         name={name}
-        defaultValue={children}
-        onChange={(event) => handleChange(event)}
-      >
-        <option disabled>{children}</option>
-        {options.map((option) => (
-          <option key={option.id} value={option.id}>
-            {option.name}
-          </option>
-        ))}
-      </select>
+        style={{ display: "none" }}
+        value={selectedOption.id}
+      />
     </Group>
   );
 }
+
+const Selection = styled.div`
+  position: relative;
+  z-index: 1000;
+`;
+const SelectionHeader = styled.div`
+  background: var(--primary-gradient);
+  color: var(--white);
+  padding: ${({ inputIcon, iconBefore }) =>
+    inputIcon && iconBefore ? "14px 12px 14px 46px" : "14px 46px 14px 12px"};
+  position: relative;
+  cursor: pointer;
+  border-radius: ${({ isOpen }) => (isOpen ? "13px 13px 0 0" : "13px")};
+`;
+const SelectionList = styled.ul`
+  list-style-type: none;
+  position: absolute;
+  top: 100%;
+  left: 0;
+  width: 100%;
+`;
+const SelectionOption = styled.li`
+  background: var(--card-bg);
+  color: var(--white);
+  padding: ${({ inputIcon, iconBefore }) =>
+    inputIcon && iconBefore ? "14px 12px 14px 46px" : "14px 46px 14px 12px"};
+  cursor: pointer;
+
+  &:last-child {
+    border-radius: 0 0 13px 13px;
+  }
+`;
+
+// function Select({
+//   children,
+//   name,
+//   labelText,
+//   inputIcon,
+//   iconBefore = true,
+//   options,
+//   handleChange,
+// }) {
+//   const [currentlySelected, setCurrentlySelected] = useState(options[0]);
+//   const [selectionOpen, setSelectionOpen] = useState(false);
+
+//   function openSelection() {
+//     setSelectionOpen((oldStatus) => !oldStatus);
+//   }
+//   function handleOptionChange(event, optionId) {
+//     if (optionId !== currentlySelected.id) {
+//       event.stopPropagation();
+//       const newCurrentlySelected = options.filter(
+//         (option) => option.id === optionId
+//       )[0];
+
+//       setCurrentlySelected((oldCurrentlySelected) => newCurrentlySelected);
+//     }
+//   }
+//   return (
+//     <Group>
+//       <Label>{labelText}</Label>
+//       <StyledSelection className="noselect" onClick={() => openSelection()}>
+//         {options.map((option, index) => (
+//           <StyledOption
+//             key={option.id}
+//             selectionOpen={selectionOpen}
+//             inputIcon={inputIcon}
+//             iconBefore={iconBefore}
+//             selected={option.id === currentlySelected.id}
+//             onClick={(event) => handleOptionChange(event, option.id)}
+//           >
+//             {index == 0 && (
+//               <InputIcon iconBefore={iconBefore}>
+//                 {inputIcon === "list" && <IconList />}
+//                 {inputIcon === "chevronDown" &&
+//                   (!selectionOpen ? <IconChevronDown /> : <IconChevronUp />)}
+//               </InputIcon>
+//             )}
+//             {option.name}
+//           </StyledOption>
+//         ))}
+//       </StyledSelection>
+//       <select
+//         name={name}
+//         defaultValue={children}
+//         onChange={(event) => handleChange(event)}
+//       >
+//         {options.map((option) => (
+//           <option key={option.id} value={option.id}>
+//             {option.name}
+//           </option>
+//         ))}
+//       </select>
+//     </Group>
+//   );
+// }
 
 export { Input, Select };
