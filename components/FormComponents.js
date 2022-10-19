@@ -24,6 +24,7 @@ const InputIcon = styled.span`
 
 function Input({
   children,
+  name,
   labelText,
   inputIcon,
   iconBefore = true,
@@ -33,6 +34,7 @@ function Input({
     <Group>
       <Label>{labelText}</Label>
       <StyledInput
+        name={name}
         iconBefore={iconBefore}
         placeholder={children}
         onChange={(event) => handleChange(event)}
@@ -60,6 +62,7 @@ const StyledInput = styled.input`
 
 function Select({
   children,
+  name,
   labelText,
   inputIcon,
   iconBefore = true,
@@ -69,10 +72,16 @@ function Select({
   return (
     <Group>
       <Label>{labelText}</Label>
-      <select defaultValue={children} onChange={(event) => handleChange(event)}>
+      <select
+        name={name}
+        defaultValue={children}
+        onChange={(event) => handleChange(event)}
+      >
         <option disabled>{children}</option>
         {options.map((option) => (
-          <option key={option.id}>{option.name}</option>
+          <option key={option.id} value={option.id}>
+            {option.name}
+          </option>
         ))}
       </select>
     </Group>
