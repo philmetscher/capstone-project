@@ -35,7 +35,7 @@ function Input({
 }) {
   return (
     <Group>
-      <Label>{labelText}</Label>
+      <Label htmlFor={name}>{labelText}</Label>
       <StyledInput
         name={name}
         inputIcon={inputIcon}
@@ -85,7 +85,7 @@ function Select({
 
   return (
     <Group>
-      <Label>{labelText}</Label>
+      <Label htmlFor={name}>{labelText}</Label>
       <Selection className="noselect">
         <SelectionHeader
           className="noselect"
