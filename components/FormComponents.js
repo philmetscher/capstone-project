@@ -53,12 +53,10 @@ function Select({
   return (
     <Group>
       <Label>{labelText}</Label>
-      <select>
-        <option disabled selected>
-          {children}
-        </option>
+      <select defaultValue={children}>
+        <option disabled>{children}</option>
         {options.map((option) => (
-          <option>{option.name}</option>
+          <option key={option.id}>{option.name}</option>
         ))}
       </select>
     </Group>
