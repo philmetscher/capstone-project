@@ -18,7 +18,7 @@ export default function Category({ category }) {
   }, []);
 
   return (
-    <article key={category.id}>
+    <article>
       <CategoryHeadline
         extended={isExtended}
         handleClick={() => setIsExtended((oldIsExtended) => !oldIsExtended)}
