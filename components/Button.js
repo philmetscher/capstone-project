@@ -15,7 +15,7 @@ const Button = styled.button`
       isPrimary ? "--primary-gradient" : "--secondary-gradient"}
   );
 
-  &:hover {
+  &:not(:disabled):hover {
     background: var(
       ${({ isPrimary }) => (isPrimary ? "--primary" : "--secondary")}
     );
