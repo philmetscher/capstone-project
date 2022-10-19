@@ -225,10 +225,25 @@ const GlobalStyle = createGlobalStyle`
   content: "\\e913";
 }
 
-* {
+/* HTML RESET */
+html, body, div, span, applet, object, iframe, h1, h2, h3, h4, h5, h6, p, blockquote, pre, a, abbr, acronym, address, big, cite, code, del, dfn, em, img, ins, kbd, q, s, samp, small, strike, strong, sub, sup, tt, var, b, u, i, center, dl, dt, dd, ol, ul, li, fieldset, form, label, legend, table, caption, tbody, tfoot, thead, tr, th, td, article, aside, canvas, details, embed, figure, figcaption, footer, header, hgroup, menu, nav, output, ruby, section, summary, time, mark, audio, video {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  font-size: 100%;
+  font: inherit;
+  vertical-align: baseline;
+}
+*, *:after, *:before {
   box-sizing: border-box;
   margin: 0;
   padding: 0;
+  font-weight: 400;
+  font-size: 1.25rem;
+  line-height: 1.6875rem;
+}
+*:after, *:before {
+  line-height: 1.25rem;
 }
 html, body, #__next {
   width: 100%;
@@ -238,13 +253,6 @@ body {
   font-family: 'Open Sans', sans-serif;
   background-color: var(--main-bg);
   color: var(--white);
-}
-
-body, button {
-  font-weight: 400;
-  font-size: 1.25rem;
-  line-height: 1.6875rem;
-  font-weight: 700;
 }
 a {
   text-decoration: none;
