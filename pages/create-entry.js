@@ -8,7 +8,17 @@ import { IconChevronLeft, IconChevronRight } from "../components/Icons";
 
 import { exampleCategories } from "../lib/db";
 
+import useLocalStorage from "../hooks/useLocalStorage";
+import { useEffect } from "react";
+
 export default function CreateEntry() {
+  const [categories, setCategories] = useLocalStorage("categories", []);
+  useEffect(() => {
+    setCategories(
+      localStorage.getItem("categories") || JSON.stringify(exampleCategories)
+    );
+  }, []);
+
   return (
     <>
       <Head>

@@ -1,13 +1,21 @@
 import styled from "styled-components";
-import { useState } from "react";
 
 import CategoryHeadline from "./CategoryHeadline";
 import CategoryListItem from "./CategoryListItem";
 
 import { exampleListItems } from "../lib/db";
 
+import { useState, useEffect } from "react";
+import useLocalStorage from "../hooks/useLocalStorage";
+
 export default function Category({ category }) {
   const [isExtended, setIsExtended] = useState(true);
+  const [listItems, setListItems] = useLocalStorage("listItems", []);
+  useEffect(() => {
+    setListItems(
+      JSON.parse(localStorage.getItem("listItems")) || exampleListItems
+    );
+  }, []);
 
   return (
     <article key={category.id}>
@@ -19,7 +27,7 @@ export default function Category({ category }) {
       </CategoryHeadline>
       {isExtended && (
         <CategoryList>
-          {exampleListItems.map((listItem) =>
+          {listItems.map((listItem) =>
             listItem.categoryId === category.id ? (
               <CategoryListItem key={listItem.id}>
                 {listItem.name}
