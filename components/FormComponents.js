@@ -58,7 +58,13 @@ const StyledInput = styled.input`
   padding: ${({ inputIcon, iconBefore }) =>
     inputIcon && iconBefore ? "14px 12px 14px 46px" : "14px 46px 14px 12px"};
   color: var(--white);
+  outline: none;
 
+  &:focus {
+    padding: ${({ inputIcon, iconBefore }) =>
+      inputIcon && iconBefore ? "13px 11px 13px 45px" : "13px 45px 13px 11px"};
+    border: 1px solid var(--primary);
+  }
   &::placeholder {
     color: var(--white-05);
   }
