@@ -4,7 +4,7 @@ import { IconChevronDown, IconChevronUp, IconList } from "./Icons";
 import { PTag } from "./HtmlComponents";
 import { useState } from "react";
 
-const Group = styled.div`
+const Group = styled.fieldset`
   display: flex;
   flex-flow: column;
   gap: 8px;

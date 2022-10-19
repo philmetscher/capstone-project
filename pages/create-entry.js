@@ -106,7 +106,7 @@ const CreateEntryForm = styled.form`
   flex-flow: column;
   gap: 10px;
 `;
-const ButtonGroup = styled.div`
+const ButtonGroup = styled.fieldset`
   display: flex;
   justify-content: space-between;
   width: 100%;
