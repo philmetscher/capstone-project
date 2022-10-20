@@ -24,6 +24,9 @@ export default function CreateEntry() {
   const [categorySelectionAvailable, setCategorySelectionAvailable] =
     useState(true);
 
+  //variable to set error (category is in categories)
+  const [categoryExists, setCategoryExists] = useState(false);
+
   const [categories, setCategories] = useLocalStorage(
     "categories",
     exampleCategories
@@ -38,32 +41,58 @@ export default function CreateEntry() {
     const data = Object.fromEntries(formData);
 
     //check if user has not pressed enter on input field
+    // (for mobile check purposes "Go" or "Enter")
     if (!enterInInput) {
-      if (data.itemName.length > 2) {
-        if (data.newCategory) {
-          let newCategory = { id: nanoid(), name: data.newCategory };
-          setCategories((oldCategories) => [...oldCategories, newCategory]);
+      //new category
+      if (data.newCategory) {
+        // check if new category name exists in old categories names
+        let newCategoryinCategories = false;
 
-          setListItems((oldListItems) => [
-            ...oldListItems,
-            { id: nanoid(), name: data.itemName, categoryId: newCategory.id },
-          ]);
+        categories.forEach((category) => {
+          if (category.name == data.newCategory) {
+            newCategoryinCategories = true;
+            return;
+          }
+        });
+
+        if (!newCategoryinCategories) {
+          const newCategoryId = nanoid();
+
+          addNewCategory(newCategoryId, data.newCategory);
+          addListItem(data.itemName, newCategoryId);
         } else {
-          setListItems((oldListItems) => [
-            ...oldListItems,
-            {
-              id: nanoid(),
-              name: data.itemName,
-              categoryId: data.itemCategory,
-            },
-          ]);
+          setCategoryExists(true);
         }
       }
-      router.push(`/`);
+      //old category
+      else {
+        addListItem(data.itemName, data.itemCategory);
+      }
     } else {
       setEnterInInput(false);
     }
+
+    function addNewCategory(newCategoryId, name) {
+      setCategories((oldCategories) => [
+        ...oldCategories,
+        {
+          id: newCategoryId,
+          name: name,
+        },
+      ]);
+    }
+    function addListItem(name, categoryId) {
+      setListItems((oldListItems) => [
+        ...oldListItems,
+        {
+          id: nanoid(),
+          name: name,
+          categoryId: categoryId,
+        },
+      ]);
+    }
   }
+
   function handleGoBack(event) {
     event.preventDefault();
     if (!enterInInput) {
@@ -81,6 +110,8 @@ export default function CreateEntry() {
     value.length >= 1
       ? setCategorySelectionAvailable(false)
       : setCategorySelectionAvailable(true);
+
+    setCategoryExists(false);
   }
 
   function handlePressEnter(event) {
@@ -111,7 +142,7 @@ export default function CreateEntry() {
             name="itemCategory"
             labelText="Kategorie auswählen"
             inputIcon="chevronDown"
-            options={exampleCategories}
+            options={categories}
             disabled={!categorySelectionAvailable}
           />
           <Input
@@ -121,6 +152,7 @@ export default function CreateEntry() {
             iconBefore={false}
             handleChange={(event) => handleCategoryInput(event)}
             handleKeyPress={(event) => handlePressEnter(event)}
+            error={categoryExists}
           >
             Kategorie-Name...
           </Input>

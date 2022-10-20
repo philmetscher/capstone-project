@@ -13,6 +13,8 @@ const GlobalStyle = createGlobalStyle`
   --card-bg: #26282D;
   --main-bg: #111111;
   --overlap-bg: linear-gradient(180deg, rgba(17, 17, 17, 0) 0%, #111111 100%);
+
+  --error: #EE3232;
 }
 
 /* open-sans-300 - latin */

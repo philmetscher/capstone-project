@@ -33,15 +33,18 @@ function Input({
   iconBefore = true,
   handleChange,
   handleKeyPress,
+  error = false,
 }) {
   return (
     <Group>
       <Label htmlFor={name}>{labelText}</Label>
       <StyledInput
+        className={error ? "error" : ""}
         name={name}
         inputIcon={inputIcon}
         iconBefore={iconBefore}
         placeholder={children}
+        error={error}
         onChange={(event) => handleChange(event)}
         onKeyDown={(event) => handleKeyPress(event)}
       />
@@ -70,6 +73,12 @@ const StyledInput = styled.input`
   }
   &::placeholder {
     color: var(--white-05);
+  }
+
+  &.error {
+    padding: ${({ inputIcon, iconBefore }) =>
+      inputIcon && iconBefore ? "13px 11px 13px 45px" : "13px 45px 13px 11px"};
+    border: 1px solid var(--error);
   }
 `;
 
