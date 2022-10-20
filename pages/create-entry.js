@@ -17,16 +17,13 @@ import { useState, useEffect } from "react";
 export default function CreateEntry() {
   const router = useRouter();
 
-  const [inputTextFilled, setInputTextFilled] = useState(false);
-  const [categories, setCategories] = useLocalStorage("categories", []);
+  const [submitReady, setSubmitReady] = useState(false);
+  const [categories, setCategories] = useLocalStorage(
+    "categories",
+    exampleCategories
+  );
   const [listItems, setListItems] = useLocalStorage("listItems", []);
   const [enterInInput, setEnterInInput] = useState(false);
-
-  useEffect(() => {
-    if (!localStorage.getItem("categories")) {
-      setCategories(JSON.stringify(exampleCategories));
-    }
-  }, []);
 
   function handleSubmit(event) {
     event.preventDefault();
@@ -34,14 +31,29 @@ export default function CreateEntry() {
     const formData = new FormData(event.target);
     const data = Object.fromEntries(formData);
 
+    //check if user has not pressed enter on input field
     if (!enterInInput) {
-      if (data.itemName.length > 2 && data.itemCategory) {
-        setListItems((oldListItems) => [
-          ...oldListItems,
-          { id: nanoid(), name: data.itemName, categoryId: data.itemCategory },
-        ]);
-        router.push(`/`);
+      if (data.itemName.length > 2) {
+        if (data.newCategory) {
+          let newCategory = { id: nanoid(), name: data.newCategory };
+          setCategories((oldCategories) => [...oldCategories, newCategory]);
+
+          setListItems((oldListItems) => [
+            ...oldListItems,
+            { id: nanoid(), name: data.itemName, categoryId: newCategory.id },
+          ]);
+        } else {
+          setListItems((oldListItems) => [
+            ...oldListItems,
+            {
+              id: nanoid(),
+              name: data.itemName,
+              categoryId: data.itemCategory,
+            },
+          ]);
+        }
       }
+      // router.push(`/`);
     } else {
       setEnterInInput(false);
     }
@@ -56,14 +68,12 @@ export default function CreateEntry() {
   }
   function handleInput(event) {
     const value = event.target.value;
-    value.length > 2 ? setInputTextFilled(true) : setInputTextFilled(false);
+    value.length > 2 ? setSubmitReady(true) : setSubmitReady(false);
   }
 
   function handlePressEnter(event) {
     if (event.keyCode == 13) setEnterInInput(true);
   }
-
-  function handleNewCategory(event) {}
 
   return (
     <>
@@ -96,7 +106,7 @@ export default function CreateEntry() {
             labelText="oder neue Kateg. erstellen"
             inputIcon="plus"
             iconBefore={false}
-            handleChange={(event) => handleNewCategory(event)}
+            handleChange={() => {}}
             handleKeyPress={(event) => handlePressEnter(event)}
           >
             Kategorie-Name...
@@ -107,9 +117,9 @@ export default function CreateEntry() {
             </ButtonIcon>
             <ButtonSmall
               isPrimary
-              disabled={!inputTextFilled}
+              disabled={!submitReady}
               onClick={(event) => {
-                return inputTextFilled;
+                return submitReady;
               }}
             >
               erstellen
