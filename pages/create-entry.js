@@ -8,7 +8,7 @@ import { Input, Select } from "../components/FormComponents";
 import { ButtonIcon, ButtonSmall } from "../components/Button";
 import { IconChevronLeft, IconChevronRight } from "../components/Icons";
 
-import { exampleCategories } from "../lib/db";
+import { exampleCategories, exampleListItems } from "../lib/db";
 
 import useLocalStorage from "../hooks/useLocalStorage";
 import { useRouter } from "next/router";
@@ -31,7 +31,10 @@ export default function CreateEntry() {
     "categories",
     exampleCategories
   );
-  const [listItems, setListItems] = useLocalStorage("listItems", []);
+  const [listItems, setListItems] = useLocalStorage(
+    "listItems",
+    exampleListItems
+  );
   const [enterInInput, setEnterInInput] = useState(false);
 
   function handleSubmit(event) {
@@ -60,6 +63,7 @@ export default function CreateEntry() {
 
           addNewCategory(newCategoryId, data.newCategory);
           addListItem(data.itemName, newCategoryId);
+          router.push(`/`);
         } else {
           setCategoryExists(true);
         }
@@ -67,6 +71,7 @@ export default function CreateEntry() {
       //old category
       else {
         addListItem(data.itemName, data.itemCategory);
+        router.push(`/`);
       }
     } else {
       setEnterInInput(false);
