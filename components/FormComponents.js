@@ -80,7 +80,7 @@ function Select({
   inputIcon,
   iconBefore = true,
   options,
-  handleChange,
+  disabled = false,
 }) {
   const [isOpen, setIsOpen] = useState(false);
   const [selectedOption, setSelectedOption] = useState(options[0]);
@@ -95,13 +95,14 @@ function Select({
   return (
     <Group>
       <Label htmlFor={name}>{labelText}</Label>
-      <Selection className="noselect">
+      <Selection className="noselect" disabled={disabled}>
         <SelectionHeader
           className="noselect"
-          onClick={toggling}
+          onClick={disabled ? () => setIsOpen(false) : toggling}
           inputIcon={inputIcon}
           iconBefore={iconBefore}
           isOpen={isOpen}
+          disabled={disabled}
         >
           <InputIcon iconBefore={iconBefore}>
             {inputIcon === "chevronDown" &&
@@ -138,6 +139,7 @@ function Select({
 const Selection = styled.div`
   position: relative;
   z-index: 1000;
+  opacity: ${({ disabled }) => disabled && ".5"};
 `;
 const SelectionHeader = styled.div`
   background: var(--primary-gradient);
@@ -145,7 +147,7 @@ const SelectionHeader = styled.div`
   padding: ${({ inputIcon, iconBefore }) =>
     inputIcon && iconBefore ? "14px 12px 14px 46px" : "14px 46px 14px 12px"};
   position: relative;
-  cursor: pointer;
+  cursor: ${({ disabled }) => (disabled ? "not-allowed" : "pointer")};
   border-radius: ${({ isOpen }) => (isOpen ? "13px 13px 0 0" : "13px")};
 `;
 const SelectionList = styled.ul`

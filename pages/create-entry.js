@@ -17,7 +17,13 @@ import { useState, useEffect } from "react";
 export default function CreateEntry() {
   const router = useRouter();
 
+  //check if list item name has value to activate the button
   const [submitReady, setSubmitReady] = useState(false);
+
+  //variable to check if Input Field with new category has value
+  const [categorySelectionAvailable, setCategorySelectionAvailable] =
+    useState(true);
+
   const [categories, setCategories] = useLocalStorage(
     "categories",
     exampleCategories
@@ -70,6 +76,12 @@ export default function CreateEntry() {
     const value = event.target.value;
     value.length > 2 ? setSubmitReady(true) : setSubmitReady(false);
   }
+  function handleCategoryInput(event) {
+    const value = event.target.value;
+    value.length >= 1
+      ? setCategorySelectionAvailable(false)
+      : setCategorySelectionAvailable(true);
+  }
 
   function handlePressEnter(event) {
     if (event.keyCode == 13) setEnterInInput(true);
@@ -100,13 +112,14 @@ export default function CreateEntry() {
             labelText="Kategorie auswählen"
             inputIcon="chevronDown"
             options={exampleCategories}
+            disabled={!categorySelectionAvailable}
           />
           <Input
             name="newCategory"
             labelText="oder neue Kateg. erstellen"
             inputIcon="plus"
             iconBefore={false}
-            handleChange={() => {}}
+            handleChange={(event) => handleCategoryInput(event)}
             handleKeyPress={(event) => handlePressEnter(event)}
           >
             Kategorie-Name...
