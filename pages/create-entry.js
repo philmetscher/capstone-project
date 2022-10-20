@@ -59,7 +59,7 @@ export default function CreateEntry() {
           ]);
         }
       }
-      // router.push(`/`);
+      router.push(`/`);
     } else {
       setEnterInInput(false);
     }
