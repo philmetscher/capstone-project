@@ -20,6 +20,7 @@ export default function CreateEntry() {
   const [inputTextFilled, setInputTextFilled] = useState(false);
   const [categories, setCategories] = useLocalStorage("categories", []);
   const [listItems, setListItems] = useLocalStorage("listItems", []);
+  const [enterInInput, setEnterInInput] = useState(false);
 
   useEffect(() => {
     if (!localStorage.getItem("categories")) {
@@ -33,18 +34,36 @@ export default function CreateEntry() {
     const formData = new FormData(event.target);
     const data = Object.fromEntries(formData);
 
-    if (data.itemName.length > 2 && data.itemCategory) {
-      setListItems((oldListItems) => [
-        ...oldListItems,
-        { id: nanoid(), name: data.itemName, categoryId: data.itemCategory },
-      ]);
+    if (!enterInInput) {
+      if (data.itemName.length > 2 && data.itemCategory) {
+        setListItems((oldListItems) => [
+          ...oldListItems,
+          { id: nanoid(), name: data.itemName, categoryId: data.itemCategory },
+        ]);
+        router.push(`/`);
+      }
+    } else {
+      setEnterInInput(false);
+    }
+  }
+  function handleGoBack(event) {
+    event.preventDefault();
+    if (!enterInInput) {
       router.push(`/`);
+    } else {
+      setEnterInInput(false);
     }
   }
   function handleInput(event) {
     const value = event.target.value;
     value.length > 2 ? setInputTextFilled(true) : setInputTextFilled(false);
   }
+
+  function handlePressEnter(event) {
+    if (event.keyCode == 13) setEnterInInput(true);
+  }
+
+  function handleNewCategory(event) {}
 
   return (
     <>
@@ -62,6 +81,7 @@ export default function CreateEntry() {
             labelText="Name des Eintrags"
             inputIcon="list"
             handleChange={(event) => handleInput(event)}
+            handleKeyPress={(event) => handlePressEnter(event)}
           >
             Name...
           </Input>
@@ -76,18 +96,13 @@ export default function CreateEntry() {
             labelText="oder neue Kateg. erstellen"
             inputIcon="plus"
             iconBefore={false}
-            handleChange={(event) => handleInput(event)}
+            handleChange={(event) => handleNewCategory(event)}
+            handleKeyPress={(event) => handlePressEnter(event)}
           >
-            Name...
+            Kategorie-Name...
           </Input>
           <ButtonGroup>
-            <ButtonIcon
-              alt={"zurück"}
-              onClick={(event) => {
-                event.preventDefault();
-                router.push(`/`);
-              }}
-            >
+            <ButtonIcon alt={"zurück"} onClick={(event) => handleGoBack(event)}>
               <IconChevronLeft />
             </ButtonIcon>
             <ButtonSmall

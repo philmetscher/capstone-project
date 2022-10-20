@@ -32,6 +32,7 @@ function Input({
   inputIcon,
   iconBefore = true,
   handleChange,
+  handleKeyPress,
 }) {
   return (
     <Group>
@@ -42,6 +43,7 @@ function Input({
         iconBefore={iconBefore}
         placeholder={children}
         onChange={(event) => handleChange(event)}
+        onKeyDown={(event) => handleKeyPress(event)}
       />
       <InputIcon iconBefore={iconBefore}>
         {inputIcon === "list" && <IconList />}
