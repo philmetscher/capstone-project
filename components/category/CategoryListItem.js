@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import { PTag } from "./HtmlComponents";
+import { PTag } from "./../HtmlComponents";
 
 export default function CategoryListItem(props) {
   return (

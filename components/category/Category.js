@@ -3,10 +3,10 @@ import styled from "styled-components";
 import CategoryHeadline from "./CategoryHeadline";
 import CategoryListItem from "./CategoryListItem";
 
-import { exampleListItems } from "../lib/db";
+import { exampleListItems } from "../../lib/db";
 
 import { useState, useEffect } from "react";
-import useLocalStorage from "../hooks/useLocalStorage";
+import useLocalStorage from "../../hooks/useLocalStorage";
 
 export default function Category({ category }) {
   const [isExtended, setIsExtended] = useState(true);

@@ -2,7 +2,7 @@ import styled from "styled-components";
 import Head from "next/head";
 
 import Header from "../components/Header";
-import Category from "../components/Category";
+import Category from "../components/category/Category";
 import Navigation from "../components/Navigation";
 
 import { exampleCategories } from "../lib/db";
