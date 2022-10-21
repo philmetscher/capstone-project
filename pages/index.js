@@ -11,12 +11,10 @@ import useLocalStorage from "../hooks/useLocalStorage";
 import { useEffect } from "react";
 
 export default function Home() {
-  const [categories, setCategories] = useLocalStorage("categories", []);
-  useEffect(() => {
-    setCategories(
-      JSON.parse(localStorage.getItem("categories")) || exampleCategories
-    );
-  }, []);
+  const [categories, setCategories] = useLocalStorage(
+    "categories",
+    exampleCategories
+  );
 
   return (
     <>

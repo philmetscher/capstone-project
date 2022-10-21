@@ -10,12 +10,10 @@ import useLocalStorage from "../hooks/useLocalStorage";
 
 export default function Category({ category }) {
   const [isExtended, setIsExtended] = useState(true);
-  const [listItems, setListItems] = useLocalStorage("listItems", []);
-  useEffect(() => {
-    setListItems(
-      JSON.parse(localStorage.getItem("listItems")) || exampleListItems
-    );
-  }, []);
+  const [listItems, setListItems] = useLocalStorage(
+    "listItems",
+    exampleListItems
+  );
 
   return (
     <article>

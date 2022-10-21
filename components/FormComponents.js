@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import { IconChevronDown, IconChevronUp, IconList } from "./Icons";
+import { IconChevronDown, IconChevronUp, IconList, IconPlus } from "./Icons";
 
 import { PTag } from "./HtmlComponents";
 import { useState } from "react";
@@ -32,19 +32,25 @@ function Input({
   inputIcon,
   iconBefore = true,
   handleChange,
+  handleKeyPress,
+  error = false,
 }) {
   return (
     <Group>
       <Label htmlFor={name}>{labelText}</Label>
       <StyledInput
+        className={error ? "error" : ""}
         name={name}
         inputIcon={inputIcon}
         iconBefore={iconBefore}
         placeholder={children}
+        error={error}
         onChange={(event) => handleChange(event)}
+        onKeyDown={(event) => handleKeyPress(event)}
       />
       <InputIcon iconBefore={iconBefore}>
         {inputIcon === "list" && <IconList />}
+        {inputIcon === "plus" && <IconPlus />}
       </InputIcon>
     </Group>
   );
@@ -58,9 +64,21 @@ const StyledInput = styled.input`
   padding: ${({ inputIcon, iconBefore }) =>
     inputIcon && iconBefore ? "14px 12px 14px 46px" : "14px 46px 14px 12px"};
   color: var(--white);
+  outline: none;
 
+  &:focus {
+    padding: ${({ inputIcon, iconBefore }) =>
+      inputIcon && iconBefore ? "13px 11px 13px 45px" : "13px 45px 13px 11px"};
+    border: 1px solid var(--primary);
+  }
   &::placeholder {
     color: var(--white-05);
+  }
+
+  &.error {
+    padding: ${({ inputIcon, iconBefore }) =>
+      inputIcon && iconBefore ? "13px 11px 13px 45px" : "13px 45px 13px 11px"};
+    border: 1px solid var(--error);
   }
 `;
 
@@ -71,7 +89,7 @@ function Select({
   inputIcon,
   iconBefore = true,
   options,
-  handleChange,
+  disabled = false,
 }) {
   const [isOpen, setIsOpen] = useState(false);
   const [selectedOption, setSelectedOption] = useState(options[0]);
@@ -86,13 +104,14 @@ function Select({
   return (
     <Group>
       <Label htmlFor={name}>{labelText}</Label>
-      <Selection className="noselect">
+      <Selection className="noselect" disabled={disabled}>
         <SelectionHeader
           className="noselect"
-          onClick={toggling}
+          onClick={disabled ? () => setIsOpen(false) : toggling}
           inputIcon={inputIcon}
           iconBefore={iconBefore}
           isOpen={isOpen}
+          disabled={disabled}
         >
           <InputIcon iconBefore={iconBefore}>
             {inputIcon === "chevronDown" &&
@@ -129,6 +148,7 @@ function Select({
 const Selection = styled.div`
   position: relative;
   z-index: 1000;
+  opacity: ${({ disabled }) => disabled && ".5"};
 `;
 const SelectionHeader = styled.div`
   background: var(--primary-gradient);
@@ -136,7 +156,7 @@ const SelectionHeader = styled.div`
   padding: ${({ inputIcon, iconBefore }) =>
     inputIcon && iconBefore ? "14px 12px 14px 46px" : "14px 46px 14px 12px"};
   position: relative;
-  cursor: pointer;
+  cursor: ${({ disabled }) => (disabled ? "not-allowed" : "pointer")};
   border-radius: ${({ isOpen }) => (isOpen ? "13px 13px 0 0" : "13px")};
 `;
 const SelectionList = styled.ul`
