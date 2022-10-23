@@ -4,6 +4,21 @@ import { IconChevronDown, IconChevronUp, IconList, IconPlus } from "./Icons";
 import { PTag } from "./HtmlComponents";
 import { useState } from "react";
 
+const FormMain = styled.main`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: calc(100vh - 81px);
+  padding: 0 20px;
+`;
+
+const StyledForm = styled.form`
+  margin-top: -81px;
+  display: flex;
+  flex-flow: column;
+  gap: 10px;
+`;
+
 const Group = styled.fieldset`
   display: flex;
   flex-flow: column;
@@ -178,4 +193,4 @@ const SelectionOption = styled.li`
   }
 `;
 
-export { Input, Select };
+export { FormMain, StyledForm, Input, Select };

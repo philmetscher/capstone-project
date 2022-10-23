@@ -1,5 +1,4 @@
 import Head from "next/head";
-import styled from "styled-components";
 import { useRouter } from "next/router";
 import { useState } from "react";
 import { useCategoriesStore, useListItemsStore } from "../useStore";
@@ -8,8 +7,13 @@ import { nanoid } from "nanoid";
 
 // Components
 import Header from "../components/Header";
-import { Input, Select } from "../components/FormComponents";
-import { ButtonIcon, ButtonSmall } from "../components/Button";
+import {
+  FormMain,
+  StyledForm,
+  Input,
+  Select,
+} from "../components/FormComponents";
+import { ButtonGroup, ButtonIcon, ButtonSmall } from "../components/Button";
 import { IconChevronLeft, IconChevronRight } from "../components/Icons";
 
 export default function CreateEntry() {
@@ -106,8 +110,8 @@ export default function CreateEntry() {
       </Head>
 
       <Header>neuer Eintrag</Header>
-      <Main>
-        <CreateEntryForm onSubmit={(event) => handleSubmit(event)}>
+      <FormMain>
+        <StyledForm onSubmit={(event) => handleSubmit(event)}>
           <Input
             name="itemName"
             labelText="Name des Eintrags"
@@ -150,23 +154,8 @@ export default function CreateEntry() {
               <IconChevronRight />
             </ButtonSmall>
           </ButtonGroup>
-        </CreateEntryForm>
-      </Main>
+        </StyledForm>
+      </FormMain>
     </>
   );
 }
-
-const Main = styled.main`
-  padding: 0 20px;
-`;
-const CreateEntryForm = styled.form`
-  display: flex;
-  flex-flow: column;
-  gap: 10px;
-`;
-const ButtonGroup = styled.fieldset`
-  display: flex;
-  justify-content: space-between;
-  width: 100%;
-  margin-top: 20px;
-`;

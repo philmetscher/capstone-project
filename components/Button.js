@@ -1,5 +1,12 @@
 import styled from "styled-components";
 
+const ButtonGroup = styled.fieldset`
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  margin-top: 20px;
+`;
+
 const Button = styled.button`
   display: flex;
   justify-content: center;
@@ -35,4 +42,4 @@ const ButtonIcon = styled(ButtonSmall)`
   padding: 14px;
 `;
 
-export { Button, ButtonSmall, ButtonIcon };
+export { ButtonGroup, Button, ButtonSmall, ButtonIcon };
