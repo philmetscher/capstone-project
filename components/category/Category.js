@@ -22,7 +22,7 @@ export default function Category({ category }) {
         <CategoryList>
           {listItems.map((listItem) =>
             listItem.categoryId === category.id ? (
-              <CategoryListItem key={listItem.id}>
+              <CategoryListItem key={listItem.id} id={listItem.id}>
                 {listItem.name}
               </CategoryListItem>
             ) : (
