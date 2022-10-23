@@ -1,19 +1,14 @@
 import styled from "styled-components";
+import { useState, useEffect } from "react";
+import { useListItemsStore } from "../../useStore";
 
+// Components
 import CategoryHeadline from "./CategoryHeadline";
 import CategoryListItem from "./CategoryListItem";
 
-import { exampleListItems } from "../../lib/db";
-
-import { useState, useEffect } from "react";
-import useLocalStorage from "../../hooks/useLocalStorage";
-
 export default function Category({ category }) {
   const [isExtended, setIsExtended] = useState(true);
-  const [listItems, setListItems] = useLocalStorage(
-    "listItems",
-    exampleListItems
-  );
+  const listItems = useListItemsStore((state) => state.listItems);
 
   return (
     <article>
