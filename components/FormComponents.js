@@ -8,6 +8,7 @@ const FormMain = styled.main`
   display: flex;
   justify-content: center;
   align-items: center;
+  width: 100%;
   min-height: calc(100vh - 81px);
   padding: 0 20px;
 `;
