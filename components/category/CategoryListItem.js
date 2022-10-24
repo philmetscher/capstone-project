@@ -10,9 +10,9 @@ export default function CategoryListItem({ children, id }) {
     <CategoryListItemWrapper>
       <PTag>{children}</PTag>
       <Link href={"/edit-entry/" + id} passHref>
-        <EditButton>
+        <EditAnchor>
           <IconEdit />
-        </EditButton>
+        </EditAnchor>
       </Link>
     </CategoryListItemWrapper>
   );
@@ -31,7 +31,7 @@ const CategoryListItemWrapper = styled.li`
   }
 `;
 
-const EditButton = styled.a`
+const EditAnchor = styled.a`
   width: 24px;
   height: 24px;
 `;
