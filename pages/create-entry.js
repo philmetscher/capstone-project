@@ -1,41 +1,39 @@
 import Head from "next/head";
-import styled from "styled-components";
+import { useRouter } from "next/router";
+import { useState } from "react";
+import { useCategoriesStore, useListItemsStore } from "../useStore";
 
 import { nanoid } from "nanoid";
 
+// Components
 import Header from "../components/Header";
-import { Input, Select } from "../components/FormComponents";
-import { ButtonIcon, ButtonSmall } from "../components/Button";
+import {
+  FormMain,
+  StyledForm,
+  Input,
+  Select,
+} from "../components/FormComponents";
+import { ButtonGroup, ButtonIcon, ButtonSmall } from "../components/Button";
 import { IconChevronLeft, IconChevronRight } from "../components/Icons";
-
-import { exampleCategories, exampleListItems } from "../lib/db";
-
-import useLocalStorage from "../hooks/useLocalStorage";
-import { useRouter } from "next/router";
-import { useState, useEffect } from "react";
 
 export default function CreateEntry() {
   const router = useRouter();
 
-  //check if list item name has value to activate the button
+  //check if submit button should be klickable
   const [submitReady, setSubmitReady] = useState(false);
-
-  //variable to check if Input Field with new category has value
+  //set error (category is in categories)
+  const [categoryExists, setCategoryExists] = useState(false);
+  //check if input-field with new category has value
   const [categorySelectionAvailable, setCategorySelectionAvailable] =
     useState(true);
-
-  //variable to set error (category is in categories)
-  const [categoryExists, setCategoryExists] = useState(false);
-
-  const [categories, setCategories] = useLocalStorage(
-    "categories",
-    exampleCategories
-  );
-  const [listItems, setListItems] = useLocalStorage(
-    "listItems",
-    exampleListItems
-  );
+  //check if user has not pressed enter on input field
+  // (for mobile check purposes "Go" or "Enter")
   const [enterInInput, setEnterInInput] = useState(false);
+
+  //get categories and events for categories & listItems
+  const categories = useCategoriesStore((state) => state.categories) || [];
+  const addCategory = useCategoriesStore((state) => state.addCategory);
+  const addListItem = useListItemsStore((state) => state.addListItem);
 
   function handleSubmit(event) {
     event.preventDefault();
@@ -61,7 +59,7 @@ export default function CreateEntry() {
         if (!newCategoryinCategories) {
           const newCategoryId = nanoid();
 
-          addNewCategory(newCategoryId, data.newCategory);
+          addCategory(newCategoryId, data.newCategory);
           addListItem(data.itemName, newCategoryId);
           router.push(`/`);
         } else {
@@ -75,26 +73,6 @@ export default function CreateEntry() {
       }
     } else {
       setEnterInInput(false);
-    }
-
-    function addNewCategory(newCategoryId, name) {
-      setCategories((oldCategories) => [
-        ...oldCategories,
-        {
-          id: newCategoryId,
-          name: name,
-        },
-      ]);
-    }
-    function addListItem(name, categoryId) {
-      setListItems((oldListItems) => [
-        ...oldListItems,
-        {
-          id: nanoid(),
-          name: name,
-          categoryId: categoryId,
-        },
-      ]);
     }
   }
 
@@ -132,8 +110,8 @@ export default function CreateEntry() {
       </Head>
 
       <Header>neuer Eintrag</Header>
-      <Main>
-        <CreateEntryForm onSubmit={(event) => handleSubmit(event)}>
+      <FormMain>
+        <StyledForm onSubmit={(event) => handleSubmit(event)}>
           <Input
             name="itemName"
             labelText="Name des Eintrags"
@@ -162,7 +140,10 @@ export default function CreateEntry() {
             Kategorie-Name...
           </Input>
           <ButtonGroup>
-            <ButtonIcon alt={"zurück"} onClick={(event) => handleGoBack(event)}>
+            <ButtonIcon
+              aria-label={"zurück"}
+              onClick={(event) => handleGoBack(event)}
+            >
               <IconChevronLeft />
             </ButtonIcon>
             <ButtonSmall
@@ -176,23 +157,8 @@ export default function CreateEntry() {
               <IconChevronRight />
             </ButtonSmall>
           </ButtonGroup>
-        </CreateEntryForm>
-      </Main>
+        </StyledForm>
+      </FormMain>
     </>
   );
 }
-
-const Main = styled.main`
-  padding: 0 20px;
-`;
-const CreateEntryForm = styled.form`
-  display: flex;
-  flex-flow: column;
-  gap: 10px;
-`;
-const ButtonGroup = styled.fieldset`
-  display: flex;
-  justify-content: space-between;
-  width: 100%;
-  margin-top: 20px;
-`;

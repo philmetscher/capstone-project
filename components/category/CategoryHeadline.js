@@ -1,7 +1,7 @@
 import styled from "styled-components";
 
-import { IconChevronDown, IconChevronUp } from "./Icons";
-import { PTagBold } from "./HtmlComponents";
+import { IconChevronDown, IconChevronUp } from "./../Icons";
+import { PTagBold } from "./../HtmlComponents";
 
 export default function CategoryHeadline(props) {
   return (
