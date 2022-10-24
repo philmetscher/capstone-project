@@ -45,6 +45,23 @@ export const useListItemsStore = create(
           ],
         });
       },
+      editListItem: (listItemId, newName, newCategoryId) => {
+        const currentListItem = get().listItems.find(
+          (listItem) => listItem.id === listItemId
+        );
+        if (currentListItem) {
+          const newListItem = {
+            id: currentListItem.id,
+            name: newName,
+            categoryId: newCategoryId,
+          };
+          set({
+            listItems: get().listItems.map((listItem) =>
+              listItem.id === listItemId ? newListItem : listItem
+            ),
+          });
+        }
+      },
     }),
     {
       name: "listItems",

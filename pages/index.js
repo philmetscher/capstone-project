@@ -21,9 +21,10 @@ export default function Home() {
       <Header>Todos</Header>
       <main>
         <CategoriesSection>
-          {categories.map((category) => (
-            <Category key={category.id} category={category} />
-          ))}
+          {categories &&
+            categories.map((category) => (
+              <Category key={category.id} category={category} />
+            ))}
         </CategoriesSection>
       </main>
       <Navigation />

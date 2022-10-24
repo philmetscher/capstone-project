@@ -171,12 +171,18 @@ const GlobalStyle = createGlobalStyle`
 }
 .icon-chevron-down:before {
   content: "\\e901";
+  position: relative;
+  top: 2px;
 }
 .icon-chevron-left:before {
   content: "\\e902";
+  position: relative;
+  top: 3px;
 }
 .icon-chevron-right:before {
   content: "\\e903";
+  position: relative;
+  top: 3px;
 }
 .icon-chevron-up:before {
   content: "\\e904";
@@ -192,6 +198,8 @@ const GlobalStyle = createGlobalStyle`
 }
 .icon-edit:before {
   content: "\\e908";
+  position: relative;
+  top: 1px; 
 }
 .icon-email:before {
   content: "\\e909";

@@ -1,4 +1,5 @@
 import styled from "styled-components";
+import Link from "next/link";
 
 //Components
 import { IconEdit } from "../Icons";
@@ -8,9 +9,11 @@ export default function CategoryListItem({ children, id }) {
   return (
     <CategoryListItemWrapper>
       <PTag>{children}</PTag>
-      <EditButton href={"/edit-entry/" + id}>
-        <IconEdit />
-      </EditButton>
+      <Link href={"/edit-entry/" + id} passHref>
+        <EditButton>
+          <IconEdit />
+        </EditButton>
+      </Link>
     </CategoryListItemWrapper>
   );
 }
@@ -31,11 +34,4 @@ const CategoryListItemWrapper = styled.li`
 const EditButton = styled.a`
   width: 24px;
   height: 24px;
-
-  [class*="icon"] {
-    &:before {
-      position: relative;
-      top: 1px;
-    }
-  }
 `;

@@ -2,7 +2,7 @@ import styled from "styled-components";
 import { IconChevronDown, IconChevronUp, IconList, IconPlus } from "./Icons";
 
 import { PTag } from "./HtmlComponents";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 const FormMain = styled.main`
   display: flex;
@@ -51,6 +51,7 @@ function Input({
   handleChange,
   handleKeyPress,
   error = false,
+  value = "",
 }) {
   return (
     <Group>
@@ -64,6 +65,7 @@ function Input({
         error={error}
         onChange={(event) => handleChange(event)}
         onKeyDown={(event) => handleKeyPress(event)}
+        defaultValue={value ? value : ""}
       />
       <InputIcon iconBefore={iconBefore}>
         {inputIcon === "list" && <IconList />}

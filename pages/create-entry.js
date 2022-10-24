@@ -140,7 +140,10 @@ export default function CreateEntry() {
             Kategorie-Name...
           </Input>
           <ButtonGroup>
-            <ButtonIcon alt={"zurück"} onClick={(event) => handleGoBack(event)}>
+            <ButtonIcon
+              aria-label={"zurück"}
+              onClick={(event) => handleGoBack(event)}
+            >
               <IconChevronLeft />
             </ButtonIcon>
             <ButtonSmall
