@@ -8,7 +8,7 @@ import Category from "../components/category/Category";
 import Navigation from "../components/Navigation";
 
 export default function Home() {
-  const categories = useCategoriesStore((state) => state.categories);
+  const categories = useCategoriesStore((state) => state.categories) || [];
 
   return (
     <>

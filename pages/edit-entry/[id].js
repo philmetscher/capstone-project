@@ -14,7 +14,7 @@ import { IconChevronLeft, IconChevronRight } from "../../components/Icons";
 
 export default function EditEntry() {
   //get categories and events for categories & listItems
-  const categories = useCategoriesStore((state) => state.categories);
+  const categories = useCategoriesStore((state) => state.categories) || [];
 
   return (
     <>

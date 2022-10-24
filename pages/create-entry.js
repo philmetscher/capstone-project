@@ -31,7 +31,7 @@ export default function CreateEntry() {
   const [enterInInput, setEnterInInput] = useState(false);
 
   //get categories and events for categories & listItems
-  const categories = useCategoriesStore((state) => state.categories);
+  const categories = useCategoriesStore((state) => state.categories) || [];
   const addCategory = useCategoriesStore((state) => state.addCategory);
   const addListItem = useListItemsStore((state) => state.addListItem);
 
