@@ -18,6 +18,7 @@ const StyledForm = styled.form`
   display: flex;
   flex-flow: column;
   gap: 10px;
+  width: 100%;
 `;
 
 const Group = styled.fieldset`
