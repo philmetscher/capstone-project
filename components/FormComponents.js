@@ -8,7 +8,6 @@ const FormMain = styled.main`
   display: flex;
   justify-content: center;
   align-items: center;
-  width: 100%;
   min-height: calc(100vh - 81px);
   padding: 0 20px;
 `;
@@ -65,7 +64,7 @@ function Input({
         error={error}
         onChange={(event) => handleChange(event)}
         onKeyDown={(event) => handleKeyPress(event)}
-        defaultValue={value ? value : ""}
+        defaultValue={value || ""}
       />
       <InputIcon iconBefore={iconBefore}>
         {inputIcon === "list" && <IconList />}
