@@ -50,9 +50,7 @@ export default function EditEntry() {
 
     //check if user has not pressed enter on input field
     // (for mobile check purposes "Go" or "Enter")
-    console.log("test");
     if (!enterInInput) {
-      console.log("enterInInput");
       //check if something has changed
       if (
         listItem.name !== data.itemName ||
