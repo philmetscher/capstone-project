@@ -19,13 +19,13 @@ export default function EditEntry() {
   const { id } = router.query;
 
   //get categories and events for categories & listItems
-  const categories = useCategoriesStore((state) => state.categories) || [];
+  const categories = useCategoriesStore((state) => state.categories);
   const editListItem = useListItemsStore((state) => state.editListItem);
   //check if user has not pressed enter on input field
   // (for mobile check purposes "Go" or "Enter")
   const [enterInInput, setEnterInInput] = useState(false);
 
-  const listItems = useListItemsStore((state) => state.listItems) || [];
+  const listItems = useListItemsStore((state) => state.listItems);
   const listItem = listItems.find((listItem) => listItem.id == id) || {
     name: "",
   };
@@ -66,6 +66,10 @@ export default function EditEntry() {
 
   const handlePressEnter = (event) =>
     event.keyCode == 13 ? setEnterInInput(true) : "";
+
+  if (!categories || !listItems) {
+    return <p>Loading...</p>;
+  }
 
   return (
     <>

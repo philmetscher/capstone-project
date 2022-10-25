@@ -31,7 +31,7 @@ export default function CreateEntry() {
   const [enterInInput, setEnterInInput] = useState(false);
 
   //get categories and events for categories & listItems
-  const categories = useCategoriesStore((state) => state.categories) || [];
+  const categories = useCategoriesStore((state) => state.categories);
   const addCategory = useCategoriesStore((state) => state.addCategory);
   const addListItem = useListItemsStore((state) => state.addListItem);
 
@@ -99,6 +99,10 @@ export default function CreateEntry() {
 
   function handlePressEnter(event) {
     if (event.keyCode == 13) setEnterInInput(true);
+  }
+
+  if (!categories) {
+    return <p>Loading...</p>;
   }
 
   return (

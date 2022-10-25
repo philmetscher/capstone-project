@@ -4,11 +4,11 @@ import { useCategoriesStore } from "../useStore";
 
 // Components
 import Header from "../components/Header";
-import Category from "../components/category/Category";
 import Navigation from "../components/Navigation";
+import Category from "../components/category/Category";
 
 export default function Home() {
-  const categories = useCategoriesStore((state) => state.categories) || [];
+  const categories = useCategoriesStore((state) => state.categories);
 
   return (
     <>
@@ -21,8 +21,10 @@ export default function Home() {
       <Header>Todos</Header>
       <main>
         <CategoriesSection>
+          {!categories && <p>Loading...</p>}
           {categories &&
             categories.map((category) => (
+              // <h4>{category.name}</h4>
               <Category key={category.id} category={category} />
             ))}
         </CategoriesSection>
