@@ -19,21 +19,77 @@ import { IconChevronLeft, IconChevronRight } from "../components/Icons";
 export default function CreateEntry() {
   const router = useRouter();
 
-  //check if submit button should be klickable
-  const [submitReady, setSubmitReady] = useState(false);
-  //set error (category is in categories)
-  const [categoryExists, setCategoryExists] = useState(false);
-  //check if input-field with new category has value
-  const [categorySelectionAvailable, setCategorySelectionAvailable] =
-    useState(true);
-  //check if user has not pressed enter on input field
-  // (for mobile check purposes "Go" or "Enter")
-  const [enterInInput, setEnterInInput] = useState(false);
+  const startsWith = new RegExp("^[a-zA-Z]");
 
-  //get categories and events for categories & listItems
+  //######################
+  //GET THINGS FROM STORE
+  //######################
   const categories = useCategoriesStore((state) => state.categories);
+
   const addCategory = useCategoriesStore((state) => state.addCategory);
   const addListItem = useListItemsStore((state) => state.addListItem);
+
+  //######################
+  //SOME STATES
+  //######################
+  //variable to check if user has pressed enter on input field
+  const [pressedEnter, setPressedEnter] = useState(false);
+  //variable to check if input-field with new category has value
+  const [categoriesSelectionAvailable, setCategoriesSelectionAvailable] =
+    useState(true);
+  //variable to validate the "list item name" input field (not empty)
+  const [submitButtonReady, setSubmitButtonReady] = useState(false);
+  //variable to check if the new category exists in the already existing categories
+  const [categoryExistsInCategories, setCategoryExistsInCategories] =
+    useState(false);
+
+  //######################
+  //HANDLING FUNCTIONS
+  //######################
+  function handleGoBack(event) {
+    event.preventDefault();
+    if (!pressedEnter) {
+      router.push(`/`);
+    } else {
+      setPressedEnter(false);
+    }
+  }
+  const handlePressEnter = (event) => {
+    //check if user has not pressed enter on input field (for mobile check purposes "Go" or "Enter")
+    event.keyCode == 13 ? setPressedEnter(true) : "";
+  };
+
+  function handleListItemInput(event) {
+    const value = event.target.value;
+
+    if (startsWith.test(value)) {
+      setSubmitButtonReady(true);
+    } else if ((value.length > 0) & value.startsWith(" ")) {
+      event.target.value = "";
+    } else {
+      setSubmitButtonReady(false);
+    }
+  }
+
+  function handleCategoryInput(event) {
+    const value = event.target.value;
+
+    if (startsWith.test(value)) {
+      setCategoriesSelectionAvailable(false);
+
+      if (categoryInCategories(event.target.value)) {
+        setCategoryExistsInCategories(true);
+      } else {
+        setCategoryExistsInCategories(false);
+      }
+    } else if ((value.length > 0) & value.startsWith(" ")) {
+      event.target.value = "";
+      setCategoriesSelectionAvailable(true);
+    } else {
+      setCategoryExistsInCategories(false);
+      setCategoriesSelectionAvailable(true);
+    }
+  }
 
   function handleSubmit(event) {
     event.preventDefault();
@@ -41,65 +97,37 @@ export default function CreateEntry() {
     const formData = new FormData(event.target);
     const data = Object.fromEntries(formData);
 
-    //check if user has not pressed enter on input field
-    // (for mobile check purposes "Go" or "Enter")
-    if (!enterInInput) {
-      //new category
+    let name = data.itemName,
+      categoryId = listItem.categoryId;
+
+    if (!pressedEnter) {
       if (data.newCategory) {
-        // check if new category name exists in old categories names
-        let newCategoryinCategories = false;
+        const newCategoryId = nanoid();
+        addCategory(newCategoryId, data.newCategory);
+        categoryId = newCategoryId;
 
-        categories.forEach((category) => {
-          if (category.name == data.newCategory) {
-            newCategoryinCategories = true;
-            return;
-          }
-        });
+        somethingChanged = true;
+      } else if (categoryId !== data.itemCategory) {
+        categoryId = data.itemCategory;
 
-        if (!newCategoryinCategories) {
-          const newCategoryId = nanoid();
-
-          addCategory(newCategoryId, data.newCategory);
-          addListItem(data.itemName, newCategoryId);
-          router.push(`/`);
-        } else {
-          setCategoryExists(true);
-        }
+        somethingChanged = true;
       }
-      //old category
-      else {
-        addListItem(data.itemName, data.itemCategory);
+
+      //check if something has changed. if so redirect to list
+      if (somethingChanged) {
+        addListItem(name, categoryId);
         router.push(`/`);
       }
     } else {
-      setEnterInInput(false);
+      setPressedEnter(false);
     }
   }
 
-  function handleGoBack(event) {
-    event.preventDefault();
-    if (!enterInInput) {
-      router.push(`/`);
-    } else {
-      setEnterInInput(false);
-    }
-  }
-  function handleInput(event) {
-    const value = event.target.value;
-    value.length > 2 ? setSubmitReady(true) : setSubmitReady(false);
-  }
-  function handleCategoryInput(event) {
-    const value = event.target.value;
-    value.length >= 1
-      ? setCategorySelectionAvailable(false)
-      : setCategorySelectionAvailable(true);
-
-    setCategoryExists(false);
-  }
-
-  function handlePressEnter(event) {
-    if (event.keyCode == 13) setEnterInInput(true);
-  }
+  //######################
+  //HELPER FUNCTIONS
+  //######################
+  const categoryInCategories = (newCategoryName) =>
+    categories.find((category) => category.name === newCategoryName);
 
   if (!categories) {
     return <p>Loading...</p>;
@@ -120,7 +148,7 @@ export default function CreateEntry() {
             name="itemName"
             labelText="Name des Eintrags"
             inputIcon="list"
-            handleChange={(event) => handleInput(event)}
+            handleChange={(event) => handleListItemInput(event)}
             handleKeyPress={(event) => handlePressEnter(event)}
           >
             Name...
@@ -130,7 +158,7 @@ export default function CreateEntry() {
             labelText="Kategorie auswählen"
             inputIcon="chevronDown"
             options={categories}
-            disabled={!categorySelectionAvailable}
+            disabled={!categoriesSelectionAvailable}
           />
           <Input
             name="newCategory"
@@ -139,7 +167,7 @@ export default function CreateEntry() {
             iconBefore={false}
             handleChange={(event) => handleCategoryInput(event)}
             handleKeyPress={(event) => handlePressEnter(event)}
-            error={categoryExists}
+            error={categoryExistsInCategories}
           >
             Kategorie-Name...
           </Input>
@@ -152,9 +180,9 @@ export default function CreateEntry() {
             </ButtonIcon>
             <ButtonSmall
               isPrimary
-              disabled={!submitReady}
-              onClick={(event) => {
-                return submitReady;
+              disabled={!submitButtonReady || categoryExistsInCategories}
+              onClick={() => {
+                return submitButtonReady && categoryExistsInCategories;
               }}
             >
               erstellen

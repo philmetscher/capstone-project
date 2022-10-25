@@ -101,9 +101,9 @@ export default function EditEntry() {
       event.target.value = "";
       setCategoriesSelectionAvailable(true);
     } else {
+      setCategoryExistsInCategories(false);
       setCategoriesSelectionAvailable(true);
     }
-    setCategoryExistsInCategories(false);
   }
 
   function handleSubmit(event) {
@@ -210,9 +210,9 @@ export default function EditEntry() {
             </ButtonIcon>
             <ButtonSmall
               isPrimary
-              disabled={!submitButtonReady}
+              disabled={!submitButtonReady || categoryExistsInCategories}
               onClick={() => {
-                return submitButtonReady;
+                return submitButtonReady && categoryExistsInCategories;
               }}
             >
               speichern
