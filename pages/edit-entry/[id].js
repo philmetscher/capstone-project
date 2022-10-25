@@ -13,6 +13,7 @@ import {
 } from "../../components/FormComponents";
 import { ButtonGroup, ButtonIcon, ButtonSmall } from "../../components/Button";
 import { IconChevronLeft, IconChevronRight } from "../../components/Icons";
+import { nanoid } from "nanoid";
 
 export default function EditEntry() {
   const router = useRouter();
@@ -20,7 +21,13 @@ export default function EditEntry() {
 
   //get categories and events for categories & listItems
   const categories = useCategoriesStore((state) => state.categories);
+  const addCategory = useCategoriesStore((state) => state.addCategory);
   const editListItem = useListItemsStore((state) => state.editListItem);
+  //set error (category is in categories)
+  const [categoryExists, setCategoryExists] = useState(false);
+  //check if input-field with new category has value
+  const [categorySelectionAvailable, setCategorySelectionAvailable] =
+    useState(true);
   //check if user has not pressed enter on input field
   // (for mobile check purposes "Go" or "Enter")
   const [enterInInput, setEnterInInput] = useState(false);
@@ -51,17 +58,52 @@ export default function EditEntry() {
     //check if user has not pressed enter on input field
     // (for mobile check purposes "Go" or "Enter")
     if (!enterInInput) {
-      //check if something has changed
-      if (
-        listItem.name !== data.itemName ||
-        listItem.categoryId !== data.itemCategory
-      ) {
-        editListItem(listItem.id, data.itemName, data.itemCategory);
+      let id = listItem.id,
+        name = listItem.name,
+        categoryId = listItem.categoryId,
+        somethingChanged = false;
+
+      if (name !== data.itemName) {
+        name = data.itemName;
+        somethingChanged = true;
       }
-      router.push(`/`);
+
+      if (data.newCategory) {
+        // check if new category name exists in old categories names
+        if (
+          !categories.find((category) => category.name === data.newCategory)
+        ) {
+          const newCategoryId = nanoid();
+
+          addCategory(newCategoryId, data.newCategory);
+          categoryId = newCategoryId;
+          somethingChanged = true;
+        } else {
+          setCategoryExists(true);
+        }
+      } else {
+        if (categoryId !== data.itemCategory) {
+          categoryId = data.itemCategory;
+          somethingChanged = true;
+        }
+      }
+
+      if (somethingChanged) {
+        editListItem(id, name, categoryId);
+        router.push(`/`);
+      }
     } else {
       setEnterInInput(false);
     }
+  }
+
+  function handleCategoryInput(event) {
+    const value = event.target.value;
+    value.length >= 1
+      ? setCategorySelectionAvailable(false)
+      : setCategorySelectionAvailable(true);
+
+    setCategoryExists(false);
   }
 
   const handlePressEnter = (event) =>
@@ -103,8 +145,20 @@ export default function EditEntry() {
                   (category) => category.id !== listItem.categoryId
                 ),
               ]}
+              disabled={!categorySelectionAvailable}
             />
           )}
+          <Input
+            name="newCategory"
+            labelText="oder neue Kateg. erstellen"
+            inputIcon="plus"
+            iconBefore={false}
+            handleChange={(event) => handleCategoryInput(event)}
+            handleKeyPress={(event) => handlePressEnter(event)}
+            error={categoryExists}
+          >
+            Kategorie-Name...
+          </Input>
           <ButtonGroup>
             <ButtonIcon
               aria-label={"zurück"}
