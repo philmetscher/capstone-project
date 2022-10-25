@@ -66,6 +66,7 @@ export default function CreateEntry() {
       setSubmitButtonReady(true);
     } else if ((value.length > 0) & value.startsWith(" ")) {
       event.target.value = "";
+      setSubmitButtonReady(false);
     } else {
       setSubmitButtonReady(false);
     }
@@ -98,7 +99,7 @@ export default function CreateEntry() {
     const data = Object.fromEntries(formData);
 
     let name = data.itemName,
-      categoryId = listItem.categoryId;
+      categoryId = data.itemCategory;
 
     if (!pressedEnter) {
       if (data.newCategory) {
