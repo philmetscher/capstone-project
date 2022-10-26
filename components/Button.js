@@ -17,15 +17,10 @@ const Button = styled.button`
   border-radius: 55px;
   width: 100%;
   color: var(--white);
-  background: var(
-    ${({ isPrimary }) =>
-      isPrimary ? "--primary-gradient" : "--secondary-gradient"}
-  );
+  background: var(${({ color }) => "--" + color + "-gradient"});
 
   &:not(:disabled):hover {
-    background: var(
-      ${({ isPrimary }) => (isPrimary ? "--primary" : "--secondary")}
-    );
+    background: var(${({ color }) => "--" + color});
   }
   &:disabled {
     opacity: 0.5;

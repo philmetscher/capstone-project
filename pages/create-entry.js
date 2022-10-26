@@ -200,13 +200,14 @@ export default function CreateEntry() {
           </Input>
           <ButtonGroup>
             <ButtonIcon
+              color="secondary"
               aria-label={"zurück"}
               onClick={(event) => handleGoBack(event)}
             >
               <IconChevronLeft />
             </ButtonIcon>
             <ButtonSmall
-              isPrimary
+              color="primary"
               disabled={!submitButtonReady || categoryExistsInCategories}
               onClick={() => {
                 return submitButtonReady && categoryExistsInCategories;
