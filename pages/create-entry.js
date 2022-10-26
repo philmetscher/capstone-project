@@ -119,27 +119,17 @@ export default function CreateEntry() {
     const data = Object.fromEntries(formData);
 
     let name = data.itemName,
-      categoryId = data.itemCategory,
-      somethingChanged = false;
+      categoryId = data.itemCategory;
 
     if (!pressedEnter) {
       if (data.newCategory) {
         const newCategoryId = nanoid();
         addCategory(newCategoryId, data.newCategory);
         categoryId = newCategoryId;
-
-        somethingChanged = true;
-      } else if (categoryId !== data.itemCategory) {
-        categoryId = data.itemCategory;
-
-        somethingChanged = true;
       }
 
-      //check if something has changed. if so redirect to list
-      if (somethingChanged) {
-        addListItem(name, categoryId);
-        router.push(`/`);
-      }
+      addListItem(name, categoryId);
+      router.push(`/`);
     } else {
       setPressedEnter(false);
     }
