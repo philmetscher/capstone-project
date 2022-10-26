@@ -69,37 +69,61 @@ export default function EditEntry() {
     }
   }
 
-  const handlePressEnter = (event) => {
-    //check if user has not pressed enter on input field (for mobile check purposes "Go" or "Enter")
-    event.keyCode == 13 ? setPressedEnter(true) : "";
-  };
+  function handleKeyPress(event) {
+    switch (event.key) {
+      case "Enter": //check if user has not pressed enter on input field (for mobile check purposes "Go" or "Enter")
+        setPressedEnter(true);
+        break;
+      case "Backspace": //check if user has pressed backspace on input field (onChange won't work on backspace)
+        if (event.target.name === "newCategory") {
+          handleCategoryInput(event);
+        } else if (event.target.name === "itemName") {
+          handleListItemInput(event);
+        }
+        break;
+    }
+  }
 
   function handleListItemInput(event) {
-    const value = event.target.value;
+    checkListItemInput();
 
-    if (startsWith.test(value)) {
-      setSubmitButtonReady(true);
-    } else {
-      event.target.value = "";
-      setSubmitButtonReady(false);
+    function checkListItemInput() {
+      if (!event.target.value.startsWith(" ")) {
+        setSubmitButtonReady(true);
+      } else {
+        const value = event.target.value.substring(
+          1,
+          event.target.value.length
+        );
+        event.target.value = value;
+        checkListItemInput();
+        setSubmitButtonReady(false);
+      }
     }
   }
 
   function handleCategoryInput(event) {
-    const value = event.target.value;
+    checkCategoryInput();
 
-    if (startsWith.test(value)) {
-      setCategoriesSelectionAvailable(false);
+    function checkCategoryInput() {
+      if (!event.target.value.startsWith(" ")) {
+        setCategoriesSelectionAvailable(false);
 
-      if (categoryInCategories(event.target.value)) {
-        setCategoryExistsInCategories(true);
+        if (categoryInCategories(event.target.value)) {
+          setCategoryExistsInCategories(true);
+        } else {
+          setCategoryExistsInCategories(false);
+        }
       } else {
+        const value = event.target.value.substring(
+          1,
+          event.target.value.length
+        );
+        event.target.value = value;
+        checkCategoryInput();
         setCategoryExistsInCategories(false);
+        setCategoriesSelectionAvailable(true);
       }
-    } else {
-      event.target.value = value.replace(!startsWith, "");
-      setCategoryExistsInCategories(false);
-      setCategoriesSelectionAvailable(true);
     }
   }
 
@@ -168,7 +192,7 @@ export default function EditEntry() {
             labelText="Name des Eintrags"
             inputIcon="list"
             handleChange={(event) => handleListItemInput(event)}
-            handleKeyPress={(event) => handlePressEnter(event)}
+            handleKeyPress={(event) => handleKeyPress(event)}
             value={listItem.name}
           >
             Name...
@@ -193,7 +217,7 @@ export default function EditEntry() {
             inputIcon="plus"
             iconBefore={false}
             handleChange={(event) => handleCategoryInput(event)}
-            handleKeyPress={(event) => handlePressEnter(event)}
+            handleKeyPress={(event) => handleKeyPress(event)}
             error={categoryExistsInCategories}
           >
             Kategorie-Name...
