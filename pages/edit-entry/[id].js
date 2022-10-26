@@ -35,6 +35,7 @@ export default function EditEntry() {
 
   const addCategory = useCategoriesStore((state) => state.addCategory);
   const editListItem = useListItemsStore((state) => state.editListItem);
+  const deleteListItem = useListItemsStore((state) => state.deleteListItem);
 
   //######################
   //GET CURRENT LIST ITEM
@@ -65,6 +66,8 @@ export default function EditEntry() {
   //variable to check if the "list item name" exists in the already existing "list item names"
   const [listItemExistsInListItems, setListItemExistsInListItems] =
     useState(false);
+  //variable to check if Modal Box for deletion is open
+  const [deleteModalBoxOpen, setDeleteModalBoxOpen] = useState(false);
 
   //######################
   //HANDLING FUNCTIONS
@@ -135,6 +138,11 @@ export default function EditEntry() {
         setCategoriesSelectionAvailable(true);
       }
     }
+  }
+
+  function handleDelete() {
+    deleteListItem(listItem.id);
+    router.push("/");
   }
 
   function handleSubmit(event) {
@@ -249,7 +257,12 @@ export default function EditEntry() {
             >
               <IconChevronLeft />
             </ButtonIcon>
-            <ButtonSmall color="error">
+            <ButtonSmall
+              color="error"
+              onClick={() => {
+                setDeleteModalBoxOpen((oldState) => !oldState);
+              }}
+            >
               <IconDelete />
               löschen
             </ButtonSmall>
@@ -266,7 +279,12 @@ export default function EditEntry() {
           </EditButtonGroup>
         </StyledForm>
       </FormMain>
-      <ModalDeleteBox infoText="Bist du dir sicher, dass du diesen Eintrag löschen willst?" />
+      <ModalDeleteBox
+        infoText="Bist du dir sicher, dass du diesen Eintrag löschen willst?"
+        onClickDelete={() => handleDelete()}
+        deleteModalBoxOpen={deleteModalBoxOpen}
+        setDeleteModalBoxOpen={setDeleteModalBoxOpen}
+      />
     </>
   );
 }

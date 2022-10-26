@@ -16,7 +16,7 @@ const GlobalStyle = createGlobalStyle`
   --overlap-bg: linear-gradient(180deg, rgba(17, 17, 17, 0) 0%, #111111 100%);
 
   --error: #EE3232;
-  --error-gradient: linear-gradient(180deg, #EE3232 0%, #A00404 100%);
+  --error-gradient: linear-gradient(180deg, #EE3232 0%, #b60f0f 100%);
 }
 
 /* open-sans-300 - latin */

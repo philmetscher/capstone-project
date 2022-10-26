@@ -8,27 +8,33 @@ import { PTagBold } from "./HtmlComponents";
 
 export default function ModalDeleteBox({
   infoText,
-  deleteButtonOnClick,
-  modalOpenState = true,
+  onClickDelete,
+  deleteModalBoxOpen,
+  setDeleteModalBoxOpen,
 }) {
-  const [modalOpen, setModalOpen] = useState(modalOpenState);
-
   return (
-    <Modal>
-      <ModalInner>
-        <PTagBold>{infoText}</PTagBold>
-        <ModalButtonGroup>
-          <ButtonSmall color="secondary">
-            <IconChevronLeft />
-            zurück
-          </ButtonSmall>
-          <ButtonSmall color="error">
-            <IconDelete />
-            ja löschen
-          </ButtonSmall>
-        </ModalButtonGroup>
-      </ModalInner>
-    </Modal>
+    <>
+      {deleteModalBoxOpen && (
+        <Modal>
+          <ModalInner>
+            <PTagBold>{infoText}</PTagBold>
+            <ModalButtonGroup>
+              <ButtonSmall
+                color="secondary"
+                onClick={() => setDeleteModalBoxOpen(false)}
+              >
+                <IconChevronLeft />
+                zurück
+              </ButtonSmall>
+              <ButtonSmall color="error" onClick={() => onClickDelete()}>
+                <IconDelete />
+                ja löschen
+              </ButtonSmall>
+            </ModalButtonGroup>
+          </ModalInner>
+        </Modal>
+      )}
+    </>
   );
 }
 
