@@ -59,7 +59,7 @@ export default function CreateEntry() {
       case "Enter": //check if user has not pressed enter on input field (for mobile check purposes "Go" or "Enter")
         setPressedEnter(true);
         break;
-      case "Backspace":
+      case "Backspace": //check if user has pressed backspace on input field (onChange won't work on backspace)
         if (event.target.name === "newCategory") {
           handleCategoryInput(event);
         } else if (event.target.name === "itemName") {
