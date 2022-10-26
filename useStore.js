@@ -62,6 +62,15 @@ export const useListItemsStore = create(
           });
         }
       },
+      deleteListItem: (listItemId) => {
+        const newListItems = get().listItems.filter(
+          (listItem) => listItem.id != listItemId
+        );
+
+        set({
+          listItems: newListItems,
+        });
+      },
     }),
     {
       name: "listItems",
