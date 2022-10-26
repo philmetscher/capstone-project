@@ -1,11 +1,18 @@
 import styled from "styled-components";
 import Head from "next/head";
 import { useCategoriesStore } from "../useStore";
+import dynamic from "next/dynamic";
 
 // Components
 import Header from "../components/Header";
 import Navigation from "../components/Navigation";
-import Category from "../components/category/Category";
+
+const DynamicCategory = dynamic(
+  () => import("../components/category/Category"),
+  {
+    ssr: false,
+  }
+);
 
 export default function Home() {
   const categories = useCategoriesStore((state) => state.categories);
@@ -24,8 +31,7 @@ export default function Home() {
           {!categories && <p>Loading...</p>}
           {categories &&
             categories.map((category) => (
-              // <h4>{category.name}</h4>
-              <Category key={category.id} category={category} />
+              <DynamicCategory key={category.id} category={category} />
             ))}
         </CategoriesSection>
       </ListMain>
