@@ -19,7 +19,7 @@ export default function EditEntry() {
   const router = useRouter();
   const { id } = router.query;
 
-  const startsWith = new RegExp("^[a-zA-Z]");
+  const startsWith = new RegExp("^[0-9a-zA-Z]");
 
   //######################
   //GET THINGS FROM STORE
@@ -79,9 +79,8 @@ export default function EditEntry() {
 
     if (startsWith.test(value)) {
       setSubmitButtonReady(true);
-    } else if ((value.length > 0) & value.startsWith(" ")) {
-      event.target.value = "";
     } else {
+      event.target.value = "";
       setSubmitButtonReady(false);
     }
   }
@@ -97,10 +96,8 @@ export default function EditEntry() {
       } else {
         setCategoryExistsInCategories(false);
       }
-    } else if ((value.length > 0) & value.startsWith(" ")) {
-      event.target.value = "";
-      setCategoriesSelectionAvailable(true);
     } else {
+      event.target.value = value.replace(!startsWith, "");
       setCategoryExistsInCategories(false);
       setCategoriesSelectionAvailable(true);
     }
