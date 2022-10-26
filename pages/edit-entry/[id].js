@@ -56,6 +56,9 @@ export default function EditEntry() {
   //variable to check if the new category exists in the already existing categories
   const [categoryExistsInCategories, setCategoryExistsInCategories] =
     useState(false);
+  //variable to check if the "list item name" exists in the already existing "list item names"
+  const [listItemExistsInListItems, setListItemExistsInListItems] =
+    useState(false);
 
   //######################
   //HANDLING FUNCTIONS
@@ -95,13 +98,15 @@ export default function EditEntry() {
       let value = event.target.value;
 
       if (!value.startsWith(" ") && value.length > 0) {
-        setSubmitButtonReady(true);
+        setListItemExistsInListItems(listItemInListItems(value));
+        setSubmitButtonReady(!listItemInListItems(value));
       } else if (value.length > 0) {
         value = value.trim();
         event.target.value = value;
         checkListItemInput();
       } else {
         setSubmitButtonReady(false);
+        setListItemExistsInListItems(false);
       }
     }
   }
@@ -173,6 +178,11 @@ export default function EditEntry() {
       ? true
       : false;
   }
+  function listItemInListItems(newListItemName) {
+    return listItems.find((listItem) => listItem.name === newListItemName)
+      ? true
+      : false;
+  }
 
   if (!categories || !listItem) {
     return <p>Loading...</p>;
@@ -196,6 +206,7 @@ export default function EditEntry() {
             handleChange={(event) => handleListItemInput(event)}
             handleKeyPress={(event) => handleKeyPress(event)}
             value={listItem.name}
+            error={listItemExistsInListItems}
           >
             Name...
           </Input>
