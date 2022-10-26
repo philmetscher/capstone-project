@@ -25,6 +25,7 @@ export default function CreateEntry() {
   //GET THINGS FROM STORE
   //######################
   const categories = useCategoriesStore((state) => state.categories);
+  const listItems = useListItemsStore((state) => state.listItems);
 
   const addCategory = useCategoriesStore((state) => state.addCategory);
   const addListItem = useListItemsStore((state) => state.addListItem);
@@ -39,6 +40,9 @@ export default function CreateEntry() {
     useState(true);
   //variable to validate the "list item name" input field (not empty)
   const [submitButtonReady, setSubmitButtonReady] = useState(false);
+  //variable to check if the "list item name" exists in the already existing "list item names"
+  const [listItemExistsInListItems, setListItemExistsInListItems] =
+    useState(false);
   //variable to check if the new category exists in the already existing categories
   const [categoryExistsInCategories, setCategoryExistsInCategories] =
     useState(false);
@@ -73,16 +77,18 @@ export default function CreateEntry() {
     checkListItemInput();
 
     function checkListItemInput() {
-      if (!event.target.value.startsWith(" ")) {
-        setSubmitButtonReady(true);
-      } else {
-        const value = event.target.value.substring(
-          1,
-          event.target.value.length
-        );
+      let value = event.target.value;
+
+      if (!value.startsWith(" ") && value.length > 0) {
+        setListItemExistsInListItems(listItemInListItems(value));
+        setSubmitButtonReady(!listItemInListItems(value));
+      } else if (value.length > 0) {
+        value = value.trim();
         event.target.value = value;
         checkListItemInput();
+      } else {
         setSubmitButtonReady(false);
+        setListItemExistsInListItems(false);
       }
     }
   }
@@ -138,10 +144,18 @@ export default function CreateEntry() {
   //######################
   //HELPER FUNCTIONS
   //######################
-  const categoryInCategories = (newCategoryName) =>
-    categories.find((category) => category.name === newCategoryName);
+  function categoryInCategories(newCategoryName) {
+    return categories.find((category) => category.name === newCategoryName)
+      ? true
+      : false;
+  }
+  function listItemInListItems(newListItemName) {
+    return listItems.find((listItem) => listItem.name === newListItemName)
+      ? true
+      : false;
+  }
 
-  if (!categories) {
+  if (!categories || !listItems) {
     return <p>Loading...</p>;
   }
 
@@ -162,6 +176,7 @@ export default function CreateEntry() {
             inputIcon="list"
             handleChange={(event) => handleListItemInput(event)}
             handleKeyPress={(event) => handleKeyPress(event)}
+            error={listItemExistsInListItems}
           >
             Name...
           </Input>
