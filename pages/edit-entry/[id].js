@@ -1,4 +1,5 @@
 import Head from "next/head";
+import styled from "styled-components";
 import { useState } from "react";
 import { useRouter } from "next/router";
 import { useCategoriesStore, useListItemsStore } from "../../useStore";
@@ -12,7 +13,11 @@ import {
   Select,
 } from "../../components/FormComponents";
 import { ButtonGroup, ButtonIcon, ButtonSmall } from "../../components/Button";
-import { IconChevronLeft, IconChevronRight } from "../../components/Icons";
+import {
+  IconChevronLeft,
+  IconChevronRight,
+  IconDelete,
+} from "../../components/Icons";
 import { nanoid } from "nanoid";
 
 export default function EditEntry() {
@@ -235,7 +240,7 @@ export default function EditEntry() {
           >
             Kategorie-Name...
           </Input>
-          <ButtonGroup>
+          <EditButtonGroup>
             <ButtonIcon
               color="secondary"
               aria-label={"zurück"}
@@ -243,6 +248,10 @@ export default function EditEntry() {
             >
               <IconChevronLeft />
             </ButtonIcon>
+            <ButtonSmall color="error">
+              <IconDelete />
+              löschen
+            </ButtonSmall>
             <ButtonSmall
               color="primary"
               disabled={!submitButtonReady || categoryExistsInCategories}
@@ -253,9 +262,27 @@ export default function EditEntry() {
               speichern
               <IconChevronRight />
             </ButtonSmall>
-          </ButtonGroup>
+          </EditButtonGroup>
         </StyledForm>
       </FormMain>
     </>
   );
 }
+
+const EditButtonGroup = styled(ButtonGroup)`
+  flex-flow: row wrap;
+  gap: 20px 0;
+
+  @media screen and (min-width: 650px) {
+    justify-content: start;
+    gap: 20px;
+  }
+  button[color="primary"] {
+    width: 100%;
+
+    @media screen and (min-width: 650px) {
+      width: auto;
+      margin-left: auto;
+    }
+  }
+`;
