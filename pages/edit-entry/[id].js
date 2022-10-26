@@ -3,6 +3,7 @@ import styled from "styled-components";
 import { useState } from "react";
 import { useRouter } from "next/router";
 import { useCategoriesStore, useListItemsStore } from "../../useStore";
+import { nanoid } from "nanoid";
 
 // Components
 import Header from "../../components/Header";
@@ -12,13 +13,13 @@ import {
   Input,
   Select,
 } from "../../components/FormComponents";
+import ModalDeleteBox from "../../components/ModalDeleteBox";
 import { ButtonGroup, ButtonIcon, ButtonSmall } from "../../components/Button";
 import {
   IconChevronLeft,
   IconChevronRight,
   IconDelete,
 } from "../../components/Icons";
-import { nanoid } from "nanoid";
 
 export default function EditEntry() {
   const router = useRouter();
@@ -265,6 +266,7 @@ export default function EditEntry() {
           </EditButtonGroup>
         </StyledForm>
       </FormMain>
+      <ModalDeleteBox infoText="Bist du dir sicher, dass du diesen Eintrag löschen willst?" />
     </>
   );
 }

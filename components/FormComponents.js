@@ -10,6 +10,7 @@ const FormMain = styled.main`
   align-items: center;
   min-height: calc(100vh - 81px);
   padding: 0 20px;
+  position: relative;
 `;
 
 const StyledForm = styled.form`
