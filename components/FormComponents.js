@@ -62,7 +62,7 @@ function Input({
         iconBefore={iconBefore}
         placeholder={children}
         error={error}
-        onChange={(event) => handleChange(event)}
+        onInput={(event) => handleChange(event)}
         onKeyDown={(event) => handleKeyPress(event)}
         defaultValue={value || ""}
       />

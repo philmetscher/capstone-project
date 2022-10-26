@@ -13,32 +13,121 @@ import {
 } from "../../components/FormComponents";
 import { ButtonGroup, ButtonIcon, ButtonSmall } from "../../components/Button";
 import { IconChevronLeft, IconChevronRight } from "../../components/Icons";
+import { nanoid } from "nanoid";
 
 export default function EditEntry() {
   const router = useRouter();
   const { id } = router.query;
 
-  //get categories and events for categories & listItems
+  const startsWith = new RegExp("^[0-9a-zA-Z]");
+
+  //######################
+  //GET THINGS FROM STORE
+  //######################
   const categories = useCategoriesStore((state) => state.categories);
-  const editListItem = useListItemsStore((state) => state.editListItem);
-  //check if user has not pressed enter on input field
-  // (for mobile check purposes "Go" or "Enter")
-  const [enterInInput, setEnterInInput] = useState(false);
-
   const listItems = useListItemsStore((state) => state.listItems);
-  const listItem = listItems.find((listItem) => listItem.id == id) || {
-    name: "",
-  };
-  const listItemCategory = categories.find(
-    (category) => category.id === listItem.categoryId
-  );
 
+  const addCategory = useCategoriesStore((state) => state.addCategory);
+  const editListItem = useListItemsStore((state) => state.editListItem);
+
+  //######################
+  //GET CURRENT LIST ITEM
+  //GET LIST ITEM CATEGORY
+  //######################
+  let listItem = {};
+  if (listItems) listItem = listItems.find((listItem) => listItem.id == id);
+
+  let listItemCategory = {};
+  if (listItem)
+    listItemCategory = categories.find(
+      (category) => category.id === listItem.categoryId
+    );
+
+  //######################
+  //SOME STATES
+  //######################
+  //variable to check if user has pressed enter on input field
+  const [pressedEnter, setPressedEnter] = useState(false);
+  //variable to check if input-field with new category has value
+  const [categoriesSelectionAvailable, setCategoriesSelectionAvailable] =
+    useState(true);
+  //variable to validate the "list item name" input field (not empty)
+  const [submitButtonReady, setSubmitButtonReady] = useState(true);
+  //variable to check if the new category exists in the already existing categories
+  const [categoryExistsInCategories, setCategoryExistsInCategories] =
+    useState(false);
+  //variable to check if the "list item name" exists in the already existing "list item names"
+  const [listItemExistsInListItems, setListItemExistsInListItems] =
+    useState(false);
+
+  //######################
+  //HANDLING FUNCTIONS
+  //######################
   function handleGoBack(event) {
     event.preventDefault();
-    if (!enterInInput) {
+    if (!pressedEnter) {
       router.push(`/`);
     } else {
-      setEnterInInput(false);
+      setPressedEnter(false);
+    }
+  }
+
+  function handleKeyPress(event) {
+    switch (event.key) {
+      case "Enter": //check if user has not pressed enter on input field (for mobile check purposes "Go" or "Enter")
+        setPressedEnter(true);
+        break;
+      case "Backspace": //check if user has pressed backspace on input field (onChange won't work on backspace)
+        checkHandling(event);
+        break;
+    }
+
+    function checkHandling(event) {
+      if (event.target.name === "newCategory") {
+        handleCategoryInput(event);
+      } else if (event.target.name === "itemName") {
+        handleListItemInput(event);
+      }
+    }
+  }
+
+  function handleListItemInput(event) {
+    checkListItemInput();
+
+    function checkListItemInput() {
+      let value = event.target.value;
+
+      if (!value.startsWith(" ") && value.length > 0) {
+        setListItemExistsInListItems(listItemInListItems(value));
+        setSubmitButtonReady(!listItemInListItems(value));
+      } else if (value.length > 0) {
+        value = value.trim();
+        event.target.value = value;
+        checkListItemInput();
+      } else {
+        setSubmitButtonReady(false);
+        setListItemExistsInListItems(false);
+      }
+    }
+  }
+
+  function handleCategoryInput(event) {
+    checkCategoryInput();
+
+    function checkCategoryInput() {
+      let value = event.target.value;
+
+      if (!value.startsWith(" ") && value.length > 0) {
+        setCategoriesSelectionAvailable(false);
+        setCategoryExistsInCategories(categoryInCategories(value));
+      } else if (value.length > 0) {
+        value = value.trim();
+        event.target.value = value;
+        checkCategoryInput();
+      } else {
+        setCategoryExistsInCategories(false);
+        setCategoriesSelectionAvailable(true);
+      }
     }
   }
 
@@ -48,26 +137,54 @@ export default function EditEntry() {
     const formData = new FormData(event.target);
     const data = Object.fromEntries(formData);
 
-    //check if user has not pressed enter on input field
-    // (for mobile check purposes "Go" or "Enter")
-    if (!enterInInput) {
-      //check if something has changed
-      if (
-        listItem.name !== data.itemName ||
-        listItem.categoryId !== data.itemCategory
-      ) {
-        editListItem(listItem.id, data.itemName, data.itemCategory);
+    let id = listItem.id,
+      name = listItem.name,
+      categoryId = listItem.categoryId,
+      somethingChanged = false;
+
+    if (!pressedEnter) {
+      if (name !== data.itemName) {
+        name = data.itemName;
+        somethingChanged = true;
       }
-      router.push(`/`);
+      if (data.newCategory) {
+        const newCategoryId = nanoid();
+
+        addCategory(newCategoryId, data.newCategory);
+        categoryId = newCategoryId;
+
+        somethingChanged = true;
+      } else if (categoryId !== data.itemCategory) {
+        categoryId = data.itemCategory;
+
+        somethingChanged = true;
+      }
+
+      //check if something has changed. if so redirect to list
+      if (somethingChanged) {
+        editListItem(id, name, categoryId);
+        router.push(`/`);
+      }
     } else {
-      setEnterInInput(false);
+      setPressedEnter(false);
     }
   }
 
-  const handlePressEnter = (event) =>
-    event.keyCode == 13 ? setEnterInInput(true) : "";
+  //######################
+  //HELPER FUNCTIONS
+  //######################
+  function categoryInCategories(newCategoryName) {
+    return categories.find((category) => category.name === newCategoryName)
+      ? true
+      : false;
+  }
+  function listItemInListItems(newListItemName) {
+    return listItems.find((listItem) => listItem.name === newListItemName)
+      ? true
+      : false;
+  }
 
-  if (!categories || !listItems) {
+  if (!categories || !listItem) {
     return <p>Loading...</p>;
   }
 
@@ -86,9 +203,10 @@ export default function EditEntry() {
             name="itemName"
             labelText="Name des Eintrags"
             inputIcon="list"
-            handleChange={() => {}}
-            handleKeyPress={(event) => handlePressEnter(event)}
+            handleChange={(event) => handleListItemInput(event)}
+            handleKeyPress={(event) => handleKeyPress(event)}
             value={listItem.name}
+            error={listItemExistsInListItems}
           >
             Name...
           </Input>
@@ -103,8 +221,20 @@ export default function EditEntry() {
                   (category) => category.id !== listItem.categoryId
                 ),
               ]}
+              disabled={!categoriesSelectionAvailable}
             />
           )}
+          <Input
+            name="newCategory"
+            labelText="oder neue Kateg. erstellen"
+            inputIcon="plus"
+            iconBefore={false}
+            handleChange={(event) => handleCategoryInput(event)}
+            handleKeyPress={(event) => handleKeyPress(event)}
+            error={categoryExistsInCategories}
+          >
+            Kategorie-Name...
+          </Input>
           <ButtonGroup>
             <ButtonIcon
               aria-label={"zurück"}
@@ -112,7 +242,13 @@ export default function EditEntry() {
             >
               <IconChevronLeft />
             </ButtonIcon>
-            <ButtonSmall isPrimary>
+            <ButtonSmall
+              isPrimary
+              disabled={!submitButtonReady || categoryExistsInCategories}
+              onClick={() => {
+                return submitButtonReady && categoryExistsInCategories;
+              }}
+            >
               speichern
               <IconChevronRight />
             </ButtonSmall>
