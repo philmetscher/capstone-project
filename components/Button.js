@@ -2,6 +2,7 @@ import styled from "styled-components";
 
 const ButtonGroup = styled.fieldset`
   display: flex;
+  flex-flow: row wrap;
   justify-content: space-between;
   width: 100%;
   margin-top: 20px;
