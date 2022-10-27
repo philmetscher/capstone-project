@@ -21,18 +21,16 @@ export default function CreateEntry() {
 
   const startsWith = new RegExp("^[^-\\s][\\w]");
 
-  //######################
   //GET THINGS FROM STORE
-  //######################
+
   const categories = useCategoriesStore((state) => state.categories);
   const listItems = useListItemsStore((state) => state.listItems);
 
   const addCategory = useCategoriesStore((state) => state.addCategory);
   const addListItem = useListItemsStore((state) => state.addListItem);
 
-  //######################
   //SOME STATES
-  //######################
+
   //variable to check if user has pressed enter on input field
   const [pressedEnter, setPressedEnter] = useState(false);
   //variable to check if input-field with new category has value
@@ -47,9 +45,8 @@ export default function CreateEntry() {
   const [categoryExistsInCategories, setCategoryExistsInCategories] =
     useState(false);
 
-  //######################
   //HANDLING FUNCTIONS
-  //######################
+
   function handleGoBack(event) {
     event.preventDefault();
     if (!pressedEnter) {
@@ -141,19 +138,12 @@ export default function CreateEntry() {
     }
   }
 
-  //######################
   //HELPER FUNCTIONS
-  //######################
-  function categoryInCategories(newCategoryName) {
-    return categories.find((category) => category.name === newCategoryName)
-      ? true
-      : false;
-  }
-  function listItemInListItems(newListItemName) {
-    return listItems.find((listItem) => listItem.name === newListItemName)
-      ? true
-      : false;
-  }
+  const categoryInCategories = (newCategoryName) =>
+    categories.some((category) => category.name === newCategoryName);
+
+  const listItemInListItems = (newListItemName) =>
+    listItems.some((listItem) => listItem.name === newListItemName);
 
   if (!categories || !listItems) {
     return <p>Loading...</p>;

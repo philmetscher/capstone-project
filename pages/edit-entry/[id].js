@@ -25,11 +25,8 @@ export default function EditEntry() {
   const router = useRouter();
   const { id } = router.query;
 
-  const startsWith = new RegExp("^[0-9a-zA-Z]");
-
-  //######################
   //GET THINGS FROM STORE
-  //######################
+
   const categories = useCategoriesStore((state) => state.categories);
   const listItems = useListItemsStore((state) => state.listItems);
 
@@ -37,10 +34,8 @@ export default function EditEntry() {
   const editListItem = useListItemsStore((state) => state.editListItem);
   const deleteListItem = useListItemsStore((state) => state.deleteListItem);
 
-  //######################
-  //GET CURRENT LIST ITEM
-  //GET LIST ITEM CATEGORY
-  //######################
+  //GET CURRENT LIST ITEM & LIST ITEM CATEGORY
+
   let listItem = {};
   if (listItems) listItem = listItems.find((listItem) => listItem.id == id);
 
@@ -50,9 +45,8 @@ export default function EditEntry() {
       (category) => category.id === listItem.categoryId
     );
 
-  //######################
   //SOME STATES
-  //######################
+
   //variable to check if user has pressed enter on input field
   const [pressedEnter, setPressedEnter] = useState(false);
   //variable to check if input-field with new category has value
@@ -69,9 +63,8 @@ export default function EditEntry() {
   //variable to check if Modal Box for deletion is open
   const [deleteModalBoxOpen, setDeleteModalBoxOpen] = useState(false);
 
-  //######################
   //HANDLING FUNCTIONS
-  //######################
+
   function handleGoBack(event) {
     event.preventDefault();
     if (!pressedEnter) {
@@ -107,8 +100,10 @@ export default function EditEntry() {
       let value = event.target.value;
 
       if (!value.startsWith(" ") && value.length > 0) {
-        setListItemExistsInListItems(listItemInListItems(value));
-        setSubmitButtonReady(!listItemInListItems(value));
+        const inListItems = listItemInListItems(value);
+
+        setListItemExistsInListItems(inListItems);
+        setSubmitButtonReady(!inListItems);
       } else if (value.length > 0) {
         value = value.trim();
         event.target.value = value;
@@ -127,8 +122,10 @@ export default function EditEntry() {
       let value = event.target.value;
 
       if (!value.startsWith(" ") && value.length > 0) {
+        const inCategories = categoryInCategories(value);
+
         setCategoriesSelectionAvailable(false);
-        setCategoryExistsInCategories(categoryInCategories(value));
+        setCategoryExistsInCategories(inCategories);
       } else if (value.length > 0) {
         value = value.trim();
         event.target.value = value;
@@ -184,19 +181,14 @@ export default function EditEntry() {
     }
   }
 
-  //######################
   //HELPER FUNCTIONS
-  //######################
-  function categoryInCategories(newCategoryName) {
-    return categories.find((category) => category.name === newCategoryName)
-      ? true
-      : false;
-  }
-  function listItemInListItems(newListItemName) {
-    return listItems.find((listItem) => listItem.name === newListItemName)
-      ? true
-      : false;
-  }
+  const categoryInCategories = (newCategoryName) =>
+    categories.some((category) => category.name === newCategoryName);
+
+  const listItemInListItems = (newListItemName) =>
+    listItems.some(
+      (item) => item.name === newListItemName && item.id != listItem.id
+    );
 
   if (!categories || !listItem) {
     return <p>Loading...</p>;
@@ -292,7 +284,6 @@ export default function EditEntry() {
 }
 
 const EditButtonGroup = styled(ButtonGroup)`
-  flex-flow: row wrap;
   gap: 20px 0;
 
   @media screen and (min-width: 650px) {
