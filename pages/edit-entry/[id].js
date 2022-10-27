@@ -1,7 +1,9 @@
 import Head from "next/head";
+import styled from "styled-components";
 import { useState } from "react";
 import { useRouter } from "next/router";
 import { useCategoriesStore, useListItemsStore } from "../../useStore";
+import { nanoid } from "nanoid";
 
 // Components
 import Header from "../../components/Header";
@@ -11,9 +13,13 @@ import {
   Input,
   Select,
 } from "../../components/FormComponents";
+import ModalDeleteBox from "../../components/ModalDeleteBox";
 import { ButtonGroup, ButtonIcon, ButtonSmall } from "../../components/Button";
-import { IconChevronLeft, IconChevronRight } from "../../components/Icons";
-import { nanoid } from "nanoid";
+import {
+  IconChevronLeft,
+  IconChevronRight,
+  IconDelete,
+} from "../../components/Icons";
 
 export default function EditEntry() {
   const router = useRouter();
@@ -29,6 +35,7 @@ export default function EditEntry() {
 
   const addCategory = useCategoriesStore((state) => state.addCategory);
   const editListItem = useListItemsStore((state) => state.editListItem);
+  const deleteListItem = useListItemsStore((state) => state.deleteListItem);
 
   //######################
   //GET CURRENT LIST ITEM
@@ -59,6 +66,8 @@ export default function EditEntry() {
   //variable to check if the "list item name" exists in the already existing "list item names"
   const [listItemExistsInListItems, setListItemExistsInListItems] =
     useState(false);
+  //variable to check if Modal Box for deletion is open
+  const [deleteModalBoxOpen, setDeleteModalBoxOpen] = useState(false);
 
   //######################
   //HANDLING FUNCTIONS
@@ -129,6 +138,11 @@ export default function EditEntry() {
         setCategoriesSelectionAvailable(true);
       }
     }
+  }
+
+  function handleDelete() {
+    deleteListItem(listItem.id);
+    router.push("/");
   }
 
   function handleSubmit(event) {
@@ -235,15 +249,27 @@ export default function EditEntry() {
           >
             Kategorie-Name...
           </Input>
-          <ButtonGroup>
+          <EditButtonGroup>
             <ButtonIcon
+              color="secondary"
               aria-label={"zurück"}
               onClick={(event) => handleGoBack(event)}
             >
               <IconChevronLeft />
             </ButtonIcon>
             <ButtonSmall
-              isPrimary
+              color="error"
+              onClick={(event) => {
+                event.preventDefault();
+                setDeleteModalBoxOpen(true);
+                return false;
+              }}
+            >
+              <IconDelete />
+              löschen
+            </ButtonSmall>
+            <ButtonSmall
+              color="primary"
               disabled={!submitButtonReady || categoryExistsInCategories}
               onClick={() => {
                 return submitButtonReady && categoryExistsInCategories;
@@ -252,9 +278,33 @@ export default function EditEntry() {
               speichern
               <IconChevronRight />
             </ButtonSmall>
-          </ButtonGroup>
+          </EditButtonGroup>
         </StyledForm>
       </FormMain>
+      <ModalDeleteBox
+        infoText="Bist du dir sicher, dass du diesen Eintrag löschen willst?"
+        onClickDelete={() => handleDelete()}
+        deleteModalBoxOpen={deleteModalBoxOpen}
+        setDeleteModalBoxOpen={setDeleteModalBoxOpen}
+      />
     </>
   );
 }
+
+const EditButtonGroup = styled(ButtonGroup)`
+  flex-flow: row wrap;
+  gap: 20px 0;
+
+  @media screen and (min-width: 650px) {
+    justify-content: start;
+    gap: 20px;
+  }
+  button[color="primary"] {
+    width: 100%;
+
+    @media screen and (min-width: 650px) {
+      width: auto;
+      margin-left: auto;
+    }
+  }
+`;

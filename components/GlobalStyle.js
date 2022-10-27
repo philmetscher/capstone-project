@@ -6,6 +6,7 @@ const GlobalStyle = createGlobalStyle`
   --primary-gradient: linear-gradient(180deg, #6996DB 0%, #4E87DD 100%);
   --secondary: #1D1D1D;
   --secondary-gradient: linear-gradient(180deg, #2D2D2D 0%, #1D1D1D 100%);
+  --secondary-05: rgba(17, 17, 17, 0.5);
   --white: #FAFAFA;
   --white-07: rgba(250, 250, 250, 0.7);
   --white-05: rgba(250, 250, 250, 0.5);
@@ -15,6 +16,7 @@ const GlobalStyle = createGlobalStyle`
   --overlap-bg: linear-gradient(180deg, rgba(17, 17, 17, 0) 0%, #111111 100%);
 
   --error: #EE3232;
+  --error-gradient: linear-gradient(180deg, #EE3232 0%, #b60f0f 100%);
 }
 
 /* open-sans-300 - latin */
