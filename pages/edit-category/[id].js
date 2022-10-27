@@ -2,7 +2,8 @@ import Head from "next/head";
 import styled from "styled-components";
 import { useState } from "react";
 import { useRouter } from "next/router";
-import { useCategoriesStore } from "../../useStore";
+import { useCategoriesStore, useListItemsStore } from "../../useStore";
+import { nanoid } from "nanoid";
 
 // Components
 import Header from "../../components/Header";
@@ -22,7 +23,13 @@ export default function EditCategory() {
   //GET THINGS FROM STORE
 
   const categories = useCategoriesStore((state) => state.categories);
+  const listItems = useListItemsStore((state) => state.listItems);
+
+  const addCategory = useCategoriesStore((state) => state.addCategory);
   const editCategory = useCategoriesStore((state) => state.editCategory);
+  const deleteCategory = useCategoriesStore((state) => state.deleteCategory);
+
+  const editListItem = useListItemsStore((state) => state.editListItem);
 
   //GET CURRENT CATEGORY
 
@@ -82,6 +89,31 @@ export default function EditCategory() {
         setSubmitButtonReady(false);
         setCategoryExistsInCategories(false);
       }
+    }
+  }
+
+  function handleDelete() {
+    checkDelete();
+
+    function checkDelete() {
+      let standardCategory = categories.find(
+        (category) => category.default === true
+      );
+      let standardCategoryId = standardCategory ? standardCategory.id : null;
+
+      //no default category exist
+      if (!standardCategoryId) {
+        standardCategoryId = nanoid();
+        addCategory(standardCategoryId, "Standard Kategorie", true);
+      }
+
+      listItems.forEach((item) => {
+        if (item.categoryId === category.id)
+          editListItem(item.id, item.name, standardCategoryId); //checks if any listItem is part of the deleted category
+      });
+
+      deleteCategory(category.id);
+      router.push("/");
     }
   }
 
