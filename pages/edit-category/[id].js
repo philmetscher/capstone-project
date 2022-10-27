@@ -7,6 +7,7 @@ import { useCategoriesStore } from "../../useStore";
 // Components
 import Header from "../../components/Header";
 import { FormMain, StyledForm, Input } from "../../components/FormComponents";
+import ModalDeleteBox from "../../components/ModalDeleteBox";
 import { ButtonGroup, ButtonIcon, ButtonSmall } from "../../components/Button";
 import {
   IconChevronLeft,
@@ -37,6 +38,8 @@ export default function EditCategory() {
   //variable to check if the new category exists in the already existing categories
   const [categoryExistsInCategories, setCategoryExistsInCategories] =
     useState(false);
+  //variable to check if Modal Box for deletion is open
+  const [deleteModalBoxOpen, setDeleteModalBoxOpen] = useState(false);
 
   //HANDLING FUNCTIONS
 
@@ -161,6 +164,13 @@ export default function EditCategory() {
           </EditButtonGroup>
         </StyledForm>
       </FormMain>
+      <ModalDeleteBox
+        infoText="Bist du dir sicher, dass du diese Kategorie löschen willst?"
+        extraInfoText="(Alle dazu gehörenden Einträge werden einer Standard-Kategorie zugewiesen)"
+        onClickDelete={() => handleDelete()}
+        deleteModalBoxOpen={deleteModalBoxOpen}
+        setDeleteModalBoxOpen={setDeleteModalBoxOpen}
+      />
     </>
   );
 }
