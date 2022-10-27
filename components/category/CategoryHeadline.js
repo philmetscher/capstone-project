@@ -12,14 +12,12 @@ export default function CategoryHeadline({
 }) {
   return (
     <CategoryHeadlineWrapper onClick={handleClick}>
-      <CategoryHeadlineText onClick={(event) => event.stopPropagation()}>
-        <PTagBold>{children}</PTagBold>
-        <Link href={"/edit-category/" + id} passHref>
-          <EditAnchor>
-            <IconEdit />
-          </EditAnchor>
-        </Link>
-      </CategoryHeadlineText>
+      <Link href={"/edit-category/" + id} passHref>
+        <EditAnchor onClick={(event) => event.stopPropagation()}>
+          <PTagBold>{children}</PTagBold>
+          <IconEdit />
+        </EditAnchor>
+      </Link>
       {extended ? <IconChevronDown /> : <IconChevronUp />}
     </CategoryHeadlineWrapper>
   );
@@ -37,19 +35,10 @@ const CategoryHeadlineWrapper = styled.button`
   color: var(--white);
   cursor: pointer;
 `;
-const CategoryHeadlineText = styled.div`
+const EditAnchor = styled.a`
   display: inline-flex;
   align-items: center;
   gap: 5px;
-
-  &:hover {
-    > * {
-      color: var(--secondary);
-    }
-  }
-`;
-const EditAnchor = styled.a`
-  width: 24px;
   height: 24px;
 
   i {
@@ -59,6 +48,12 @@ const EditAnchor = styled.a`
     &:before {
       width: 20px;
       height: 20px;
+    }
+  }
+
+  &:hover {
+    > * {
+      color: var(--secondary);
     }
   }
 `;
