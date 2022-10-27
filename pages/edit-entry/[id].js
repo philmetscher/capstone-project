@@ -25,8 +25,6 @@ export default function EditEntry() {
   const router = useRouter();
   const { id } = router.query;
 
-  const startsWith = new RegExp("^[0-9a-zA-Z]");
-
   //######################
   //GET THINGS FROM STORE
   //######################
