@@ -13,6 +13,7 @@ export default function Category({ category }) {
   return (
     <article>
       <CategoryHeadline
+        id={category.id}
         extended={isExtended}
         handleClick={() => setIsExtended((oldIsExtended) => !oldIsExtended)}
       >

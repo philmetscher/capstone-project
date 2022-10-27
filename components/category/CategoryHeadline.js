@@ -1,13 +1,26 @@
 import styled from "styled-components";
+import Link from "next/link";
 
-import { IconChevronDown, IconChevronUp } from "./../Icons";
+import { IconChevronDown, IconChevronUp, IconEdit } from "./../Icons";
 import { PTagBold } from "./../HtmlComponents";
 
-export default function CategoryHeadline(props) {
+export default function CategoryHeadline({
+  children,
+  id,
+  extended,
+  handleClick,
+}) {
   return (
-    <CategoryHeadlineWrapper onClick={props.handleClick}>
-      <PTagBold>{props.children}</PTagBold>
-      {props.extended ? <IconChevronDown /> : <IconChevronUp />}
+    <CategoryHeadlineWrapper onClick={handleClick}>
+      <CategoryHeadlineText>
+        <PTagBold>{children}</PTagBold>
+        <Link href={"/edit-category/" + id} passHref>
+          <EditAnchor onClick={(event) => event.stopPropagation()}>
+            <IconEdit />
+          </EditAnchor>
+        </Link>
+      </CategoryHeadlineText>
+      {extended ? <IconChevronDown /> : <IconChevronUp />}
     </CategoryHeadlineWrapper>
   );
 }
@@ -23,4 +36,23 @@ const CategoryHeadlineWrapper = styled.button`
   border: none;
   color: var(--white);
   cursor: pointer;
+`;
+const CategoryHeadlineText = styled.div`
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+`;
+const EditAnchor = styled.a`
+  width: 24px;
+  height: 24px;
+
+  i {
+    width: 20px;
+    height: 20px;
+
+    &:before {
+      width: 20px;
+      height: 20px;
+    }
+  }
 `;
