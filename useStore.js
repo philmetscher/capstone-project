@@ -21,6 +21,22 @@ export const useCategoriesStore = create(
           ],
         });
       },
+      editCategory: (categoryId, newName) => {
+        const currentCategory = get().categories.find(
+          (category) => category.id === categoryId
+        );
+        if (currentCategory) {
+          const newCategory = {
+            id: currentCategory.id,
+            name: newName,
+          };
+          set({
+            categories: get().categories.map((category) =>
+              category.id === categoryId ? newCategory : category
+            ),
+          });
+        }
+      },
     }),
     {
       name: "categories",
