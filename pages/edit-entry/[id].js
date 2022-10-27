@@ -182,19 +182,13 @@ export default function EditEntry() {
   }
 
   //HELPER FUNCTIONS
+  const categoryInCategories = (newCategoryName) =>
+    categories.some((category) => category.name === newCategoryName);
 
-  function categoryInCategories(newCategoryName) {
-    return categories.find((category) => category.name === newCategoryName)
-      ? true
-      : false;
-  }
-  function listItemInListItems(newListItemName) {
-    return listItems.find(
+  const listItemInListItems = (newListItemName) =>
+    listItems.some(
       (item) => item.name === newListItemName && item.id != listItem.id
-    )
-      ? true
-      : false;
-  }
+    );
 
   if (!categories || !listItem) {
     return <p>Loading...</p>;

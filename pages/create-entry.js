@@ -139,17 +139,11 @@ export default function CreateEntry() {
   }
 
   //HELPER FUNCTIONS
+  const categoryInCategories = (newCategoryName) =>
+    categories.some((category) => category.name === newCategoryName);
 
-  function categoryInCategories(newCategoryName) {
-    return categories.find((category) => category.name === newCategoryName)
-      ? true
-      : false;
-  }
-  function listItemInListItems(newListItemName) {
-    return listItems.find((listItem) => listItem.name === newListItemName)
-      ? true
-      : false;
-  }
+  const listItemInListItems = (newListItemName) =>
+    listItems.some((listItem) => listItem.name === newListItemName);
 
   if (!categories || !listItems) {
     return <p>Loading...</p>;

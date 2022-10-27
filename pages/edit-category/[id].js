@@ -94,14 +94,10 @@ export default function EditCategory() {
   }
 
   //HELPER FUNCTIONS
-
-  function categoryInCategories(newCategoryName) {
-    return categories.find(
+  const categoryInCategories = (newCategoryName) =>
+    categories.some(
       (item) => item.name === newCategoryName && item.id != category.id
-    )
-      ? true
-      : false;
-  }
+    );
 
   if (!category) {
     return <p>Loading...</p>;
