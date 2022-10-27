@@ -7,8 +7,12 @@ import { useCategoriesStore } from "../../useStore";
 // Components
 import Header from "../../components/Header";
 import { FormMain, StyledForm, Input } from "../../components/FormComponents";
-import { ButtonGroup, ButtonSmall } from "../../components/Button";
-import { IconChevronLeft, IconChevronRight } from "../../components/Icons";
+import { ButtonGroup, ButtonIcon, ButtonSmall } from "../../components/Button";
+import {
+  IconChevronLeft,
+  IconChevronRight,
+  IconDelete,
+} from "../../components/Icons";
 
 export default function EditCategory() {
   const router = useRouter();
@@ -126,13 +130,23 @@ export default function EditCategory() {
             Name...
           </Input>
           <EditButtonGroup>
-            <ButtonSmall
+            <ButtonIcon
               color="secondary"
               aria-label={"zurück"}
               onClick={(event) => handleGoBack(event)}
             >
               <IconChevronLeft />
-              zurück
+            </ButtonIcon>
+            <ButtonSmall
+              color="error"
+              onClick={(event) => {
+                event.preventDefault();
+                setDeleteModalBoxOpen(true);
+                return false;
+              }}
+            >
+              <IconDelete />
+              löschen
             </ButtonSmall>
             <ButtonSmall
               color="primary"
@@ -152,6 +166,18 @@ export default function EditCategory() {
 }
 
 const EditButtonGroup = styled(ButtonGroup)`
-  flex-flow: column;
-  gap: 20px;
+  gap: 20px 0;
+
+  @media screen and (min-width: 650px) {
+    justify-content: start;
+    gap: 20px;
+  }
+  button[color="primary"] {
+    width: 100%;
+
+    @media screen and (min-width: 650px) {
+      width: auto;
+      margin-left: auto;
+    }
+  }
 `;
