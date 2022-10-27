@@ -14,21 +14,18 @@ export default function EditCategory() {
   const router = useRouter();
   const { id } = router.query;
 
-  //######################
   //GET THINGS FROM STORE
-  //######################
+
   const categories = useCategoriesStore((state) => state.categories);
   const editCategory = useCategoriesStore((state) => state.editCategory);
 
-  //######################
   //GET CURRENT CATEGORY
-  //######################
+
   let category = {};
   if (categories) category = categories.find((category) => category.id == id);
 
-  //######################
   //SOME STATES
-  //######################
+
   //variable to check if user has pressed enter on input field
   const [pressedEnter, setPressedEnter] = useState(false);
   //variable to validate the "list item name" input field (not empty)
@@ -37,9 +34,8 @@ export default function EditCategory() {
   const [categoryExistsInCategories, setCategoryExistsInCategories] =
     useState(false);
 
-  //######################
   //HANDLING FUNCTIONS
-  //######################
+
   function handleGoBack(event) {
     event.preventDefault();
     if (!pressedEnter) {
@@ -97,9 +93,8 @@ export default function EditCategory() {
     }
   }
 
-  //######################
   //HELPER FUNCTIONS
-  //######################
+
   function categoryInCategories(newCategoryName) {
     return categories.find(
       (item) => item.name === newCategoryName && item.id != category.id

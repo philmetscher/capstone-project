@@ -25,9 +25,8 @@ export default function EditEntry() {
   const router = useRouter();
   const { id } = router.query;
 
-  //######################
   //GET THINGS FROM STORE
-  //######################
+
   const categories = useCategoriesStore((state) => state.categories);
   const listItems = useListItemsStore((state) => state.listItems);
 
@@ -35,10 +34,8 @@ export default function EditEntry() {
   const editListItem = useListItemsStore((state) => state.editListItem);
   const deleteListItem = useListItemsStore((state) => state.deleteListItem);
 
-  //######################
-  //GET CURRENT LIST ITEM
-  //GET LIST ITEM CATEGORY
-  //######################
+  //GET CURRENT LIST ITEM & LIST ITEM CATEGORY
+
   let listItem = {};
   if (listItems) listItem = listItems.find((listItem) => listItem.id == id);
 
@@ -48,9 +45,8 @@ export default function EditEntry() {
       (category) => category.id === listItem.categoryId
     );
 
-  //######################
   //SOME STATES
-  //######################
+
   //variable to check if user has pressed enter on input field
   const [pressedEnter, setPressedEnter] = useState(false);
   //variable to check if input-field with new category has value
@@ -67,9 +63,8 @@ export default function EditEntry() {
   //variable to check if Modal Box for deletion is open
   const [deleteModalBoxOpen, setDeleteModalBoxOpen] = useState(false);
 
-  //######################
   //HANDLING FUNCTIONS
-  //######################
+
   function handleGoBack(event) {
     event.preventDefault();
     if (!pressedEnter) {
@@ -186,9 +181,8 @@ export default function EditEntry() {
     }
   }
 
-  //######################
   //HELPER FUNCTIONS
-  //######################
+
   function categoryInCategories(newCategoryName) {
     return categories.find((category) => category.name === newCategoryName)
       ? true
