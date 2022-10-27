@@ -259,8 +259,10 @@ export default function EditEntry() {
             </ButtonIcon>
             <ButtonSmall
               color="error"
-              onClick={() => {
-                setDeleteModalBoxOpen((oldState) => !oldState);
+              onClick={(event) => {
+                event.preventDefault();
+                setDeleteModalBoxOpen(true);
+                return false;
               }}
             >
               <IconDelete />
