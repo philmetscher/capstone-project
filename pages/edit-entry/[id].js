@@ -105,8 +105,10 @@ export default function EditEntry() {
       let value = event.target.value;
 
       if (!value.startsWith(" ") && value.length > 0) {
-        setListItemExistsInListItems(listItemInListItems(value));
-        setSubmitButtonReady(!listItemInListItems(value));
+        const inListItems = listItemInListItems(value);
+
+        setListItemExistsInListItems(inListItems);
+        setSubmitButtonReady(!inListItems);
       } else if (value.length > 0) {
         value = value.trim();
         event.target.value = value;
@@ -125,8 +127,10 @@ export default function EditEntry() {
       let value = event.target.value;
 
       if (!value.startsWith(" ") && value.length > 0) {
+        const inCategories = categoryInCategories(value);
+
         setCategoriesSelectionAvailable(false);
-        setCategoryExistsInCategories(categoryInCategories(value));
+        setCategoryExistsInCategories(inCategories);
       } else if (value.length > 0) {
         value = value.trim();
         event.target.value = value;
@@ -292,7 +296,6 @@ export default function EditEntry() {
 }
 
 const EditButtonGroup = styled(ButtonGroup)`
-  flex-flow: row wrap;
   gap: 20px 0;
 
   @media screen and (min-width: 650px) {
