@@ -191,7 +191,9 @@ export default function EditEntry() {
       : false;
   }
   function listItemInListItems(newListItemName) {
-    return listItems.find((listItem) => listItem.name === newListItemName)
+    return listItems.find(
+      (item) => item.name === newListItemName && item.id != listItem.id
+    )
       ? true
       : false;
   }
