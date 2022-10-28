@@ -3,10 +3,11 @@ import styled from "styled-components";
 //Components
 import { ButtonGroup, ButtonSmall } from "./Button";
 import { IconChevronLeft, IconDelete } from "./Icons";
-import { PTagBold } from "./HtmlComponents";
+import { PTag, PTagBold, PTagSmall } from "./HtmlComponents";
 
 export default function ModalDeleteBox({
   infoText,
+  extraInfoText = "",
   onClickDelete,
   deleteModalBoxOpen,
   setDeleteModalBoxOpen,
@@ -17,6 +18,8 @@ export default function ModalDeleteBox({
         <Modal>
           <ModalInner>
             <PTagBold>{infoText}</PTagBold>
+            {extraInfoText && <ErrorInfo>{extraInfoText}</ErrorInfo>}
+
             <ModalButtonGroup>
               <ButtonSmall
                 color="secondary"
@@ -60,4 +63,7 @@ const ModalInner = styled.section`
 const ModalButtonGroup = styled(ButtonGroup)`
   flex-flow: column;
   gap: 20px;
+`;
+const ErrorInfo = styled(PTagSmall)`
+  color: var(--error);
 `;

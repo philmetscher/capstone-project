@@ -8,4 +8,9 @@ const PTagBold = styled(PTag)`
   font-weight: 700;
 `;
 
-export { PTag, PTagBold };
+const PTagSmall = styled.p`
+  font-size: 0.85rem;
+  line-height: 1rem;
+`;
+
+export { PTag, PTagBold, PTagSmall };

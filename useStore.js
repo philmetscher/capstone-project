@@ -10,13 +10,14 @@ export const useCategoriesStore = create(
     (set, get) => ({
       categories: exampleCategories,
 
-      addCategory: (newCategoryId, newCategoryName) => {
+      addCategory: (newCategoryId, newCategoryName, isDefault = false) => {
         set({
           categories: [
             ...get().categories,
             {
               id: newCategoryId,
               name: newCategoryName,
+              default: isDefault,
             },
           ],
         });
@@ -29,6 +30,7 @@ export const useCategoriesStore = create(
           const newCategory = {
             id: currentCategory.id,
             name: newName,
+            default: currentCategory.default,
           };
           set({
             categories: get().categories.map((category) =>
@@ -36,6 +38,15 @@ export const useCategoriesStore = create(
             ),
           });
         }
+      },
+      deleteCategory: (categoryId) => {
+        const newCategories = get().categories.filter(
+          (category) => category.id != categoryId
+        );
+
+        set({
+          categories: newCategories,
+        });
       },
     }),
     {
