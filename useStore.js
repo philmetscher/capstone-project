@@ -98,6 +98,25 @@ export const useListItemsStore = create(
           listItems: newListItems,
         });
       },
+      updateListItemIndex: (destination, source) => {
+        const swappedListItem = get().listItems[destination];
+        const draggedListItem = get().listItems[source];
+
+        const newSortedListItems = get().listItems.map((item) => {
+          switch (item) {
+            case swappedListItem:
+              return draggedListItem;
+            case draggedListItem:
+              return swappedListItem;
+            default:
+              return item;
+          }
+        });
+
+        set({
+          listItems: newSortedListItems,
+        });
+      },
     }),
     {
       name: "listItems",
