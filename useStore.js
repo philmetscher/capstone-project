@@ -99,26 +99,17 @@ export const useListItemsStore = create(
         });
       },
       updateListItemIndex: (destination, source) => {
-        const swappedListItem = get().listItems.find(
-          (listItem) => listItem.index === destination
-        );
-        const draggedListItem = get().listItems.find(
-          (listItem) => listItem.index === source
-        );
+        const swappedListItem = get().listItems[destination];
+        const draggedListItem = get().listItems[source];
 
         const newSortedListItems = get().listItems.map((item) => {
-          if (item.index === destination) {
-            return {
-              ...draggedListItem,
-              index: destination,
-            };
-          } else if (item.index === source) {
-            return {
-              ...swappedListItem,
-              index: source,
-            };
-          } else {
-            return item;
+          switch (item) {
+            case swappedListItem:
+              return draggedListItem;
+            case draggedListItem:
+              return swappedListItem;
+            default:
+              return item;
           }
         });
 
