@@ -18,13 +18,12 @@ export default function Category({ category }) {
 
   const handleOnDragEnd = ({ destination, source }) => {
     //check if destination is not the same index as before & the destination is not in another category
+    if (!destination) return;
     if (
-      (destination.droppableId === source.droppableId &&
-        destination.index === source.index) ||
-      !destination
-    ) {
+      destination.droppableId === source.droppableId &&
+      destination.index === source.index
+    )
       return;
-    }
 
     updateListItemIndex(destination.index, source.index);
   };
