@@ -16,9 +16,7 @@ export default function Category({ category }) {
     (state) => state.updateListItemIndex
   );
 
-  function handleOnDragEnd(result) {
-    const { destination, source, draggableId } = result;
-
+  const handleOnDragEnd = ({ destination, source }) => {
     //check if destination is not the same index as before & the destination is not in another category
     if (
       (destination.droppableId === source.droppableId &&
@@ -29,7 +27,7 @@ export default function Category({ category }) {
     }
 
     updateListItemIndex(destination.index, source.index);
-  }
+  };
 
   return (
     <article>
