@@ -98,6 +98,34 @@ export const useListItemsStore = create(
           listItems: newListItems,
         });
       },
+      updateListItemIndex: (destination, source) => {
+        const swappedListItem = get().listItems.find(
+          (listItem) => listItem.index === destination
+        );
+        const draggedListItem = get().listItems.find(
+          (listItem) => listItem.index === source
+        );
+
+        const newSortedListItems = get().listItems.map((item) => {
+          if (item.index === destination) {
+            return {
+              ...draggedListItem,
+              index: destination,
+            };
+          } else if (item.index === source) {
+            return {
+              ...swappedListItem,
+              index: source,
+            };
+          } else {
+            return item;
+          }
+        });
+
+        set({
+          listItems: newSortedListItems,
+        });
+      },
     }),
     {
       name: "listItems",
