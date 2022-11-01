@@ -4,7 +4,8 @@ import { Draggable } from "@hello-pangea/dnd";
 
 //Components
 import { IconDrag, IconEdit } from "../Icons";
-import { PTag } from "./../HtmlComponents";
+import { PTag } from "../HtmlComponents";
+import Checkbox from "../Checkbox";
 
 export default function CategoryListItem({ children, id, index }) {
   return (
@@ -18,6 +19,7 @@ export default function CategoryListItem({ children, id, index }) {
           <DragWrapper>
             <IconDrag />
           </DragWrapper>
+          <Checkbox id={id} />
           <ListItemName>{children}</ListItemName>
           <Link href={"/edit-entry/" + id} passHref>
             <EditAnchor>
