@@ -2,15 +2,11 @@ import { useState } from "react";
 import styled from "styled-components";
 import { IconCheck } from "./Icons";
 
-export default function Checkbox({ id }) {
-  const [checked, setChecked] = useState(false);
-
-  const handleChange = () => setChecked((oldChecked) => !oldChecked);
-
+export default function Checkbox({ id, onChange, checked }) {
   if (id) {
     return (
       <CheckboxGroup>
-        <Input name={"checkbox" + id} type="checkbox" onChange={handleChange} />
+        <Input name={"checkbox" + id} type="checkbox" onChange={onChange} />
         <Label className={checked && "checked"} htmlFor={"checkbox" + id}>
           {checked && <IconCheck />}
         </Label>

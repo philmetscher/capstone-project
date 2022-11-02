@@ -1,13 +1,27 @@
 import styled from "styled-components";
 import Link from "next/link";
 import { Draggable } from "@hello-pangea/dnd";
+import { useEffect, useState } from "react";
+import { useListItemsStore } from "../../useStore";
 
 //Components
 import { IconDrag, IconEdit } from "../Icons";
 import { PTag } from "../HtmlComponents";
 import Checkbox from "../Checkbox";
 
-export default function CategoryListItem({ children, id, index }) {
+export default function CategoryListItem({ children, id, index, checked }) {
+  const updateCheck = useListItemsStore((state) => state.updateCheck);
+  const checkAnyListItemChecked = useListItemsStore(
+    (state) => state.checkAnyListItemChecked
+  );
+
+  useEffect(() => {
+    checkAnyListItemChecked();
+  }, []);
+  const handleCheckboxChange = () => {
+    updateCheck(id);
+    checkAnyListItemChecked();
+  };
   return (
     <Draggable draggableId={id} index={index}>
       {(provided) => (
@@ -19,7 +33,7 @@ export default function CategoryListItem({ children, id, index }) {
           <DragWrapper>
             <IconDrag />
           </DragWrapper>
-          <Checkbox id={id} />
+          <Checkbox id={id} onChange={handleCheckboxChange} checked={checked} />
           <ListItemName>{children}</ListItemName>
           <Link href={"/edit-entry/" + id} passHref>
             <EditAnchor>
