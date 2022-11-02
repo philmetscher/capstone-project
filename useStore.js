@@ -133,6 +133,8 @@ export const useListItemsStore = create(
         set({
           listItems: newListItems,
         });
+
+        get().checkAnyListItemChecked();
       },
 
       anyListItemChecked: false,

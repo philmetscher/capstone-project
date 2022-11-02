@@ -7,9 +7,20 @@ import { IconCross, IconDelete, IconPlus } from "./Icons";
 
 export default function Navigation() {
   //GET THINGS FROM STORE
+  const listItems = useListItemsStore((state) => state.listItems);
   const anyListItemChecked = useListItemsStore(
     (state) => state.anyListItemChecked
   );
+  const updateCheck = useListItemsStore((state) => state.updateCheck);
+
+  const handleUnselect = () => {
+    listItems.forEach((item) => {
+      if (item.checked) {
+        updateCheck(item.id);
+      }
+    });
+  };
+  const handleDeleteSelected = () => {};
 
   return (
     <NavigationWrapper>
@@ -17,7 +28,7 @@ export default function Navigation() {
         {anyListItemChecked ? (
           <>
             <NavEntry width="50%">
-              <NavButton>
+              <NavButton onClick={handleUnselect}>
                 <IconCross />
                 <NavDesc>alles abwählen</NavDesc>
               </NavButton>
