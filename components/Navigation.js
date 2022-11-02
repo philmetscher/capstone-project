@@ -1,20 +1,44 @@
 import Link from "next/link";
 import styled from "styled-components";
+import { useListItemsStore } from "../useStore";
 
-import { IconPlus } from "./Icons";
+//Components
+import { IconCross, IconDelete, IconPlus } from "./Icons";
 
 export default function Navigation() {
+  //GET THINGS FROM STORE
+  const anyListItemChecked = useListItemsStore(
+    (state) => state.anyListItemChecked
+  );
+
   return (
     <NavigationWrapper>
       <NavList>
-        <NavEntry width="100%">
-          <Link href={"/create-entry"} passHref>
-            <NavLink width="100%">
-              <IconPlus />
-              <NavDesc>neuer Eintrag</NavDesc>
-            </NavLink>
-          </Link>
-        </NavEntry>
+        {anyListItemChecked ? (
+          <>
+            <NavEntry width="50%">
+              <NavButton>
+                <IconCross />
+                <NavDesc>alles abwählen</NavDesc>
+              </NavButton>
+            </NavEntry>
+            <NavEntry width="50%">
+              <NavButton>
+                <IconDelete />
+                <NavDesc>markierte löschen</NavDesc>
+              </NavButton>
+            </NavEntry>
+          </>
+        ) : (
+          <NavEntry width="100%">
+            <Link href={"/create-entry"} passHref>
+              <NavLink width="100%">
+                <IconPlus />
+                <NavDesc>neuer Eintrag</NavDesc>
+              </NavLink>
+            </Link>
+          </NavEntry>
+        )}
       </NavList>
     </NavigationWrapper>
   );
@@ -53,12 +77,23 @@ const NavList = styled.ul`
 `;
 const NavEntry = styled.li`
   width: ${({ width }) => (width ? width : "auto")};
+  height: 40px;
 `;
 
 const NavLink = styled.a`
   display: inline-flex;
   align-items: center;
   flex-flow: column;
+  width: 100%;
+`;
+const NavButton = styled.button`
+  display: flex;
+  flex-flow: column;
+  align-items: center;
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: var(--white);
   width: 100%;
 `;
 const NavDesc = styled.p`

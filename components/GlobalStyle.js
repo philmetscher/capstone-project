@@ -191,9 +191,13 @@ const GlobalStyle = createGlobalStyle`
 }
 .icon-cross:before {
   content: "\\e905";
+  position: relative;
+  top: 3px;
 }
 .icon-delete:before {
   content: "\\e906";
+  position: relative;
+  top: 3px;
 }
 .icon-drag:before {
   content: "\\e907";
