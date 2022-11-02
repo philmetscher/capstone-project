@@ -17,7 +17,7 @@ export default function Navigation() {
   const anyListItemChecked = useListItemsStore(
     (state) => state.anyListItemChecked
   );
-  const updateCheck = useListItemsStore((state) => state.updateCheck);
+  const toggleCheck = useListItemsStore((state) => state.toggleCheck);
   const deleteListItem = useListItemsStore((state) => state.deleteListItem);
   const updateAnyListItemChecked = useListItemsStore(
     (state) => state.updateAnyListItemChecked
@@ -26,7 +26,7 @@ export default function Navigation() {
   const handleUnselect = () => {
     listItems.forEach((item) => {
       if (item.checked) {
-        updateCheck(item.id);
+        toggleCheck(item.id);
       }
     });
   };

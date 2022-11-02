@@ -119,7 +119,7 @@ export const useListItemsStore = create(
           listItems: newSortedListItems,
         });
       },
-      updateCheck: (listItemId) => {
+      toggleCheck: (listItemId) => {
         const newListItems = get().listItems.map((item) => {
           if (item.id === listItemId) {
             return {

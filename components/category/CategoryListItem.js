@@ -10,7 +10,7 @@ import { PTag } from "../HtmlComponents";
 import Checkbox from "../Checkbox";
 
 export default function CategoryListItem({ children, id, index, checked }) {
-  const updateCheck = useListItemsStore((state) => state.updateCheck);
+  const toggleCheck = useListItemsStore((state) => state.toggleCheck);
   const updateAnyListItemChecked = useListItemsStore(
     (state) => state.updateAnyListItemChecked
   );
@@ -19,7 +19,7 @@ export default function CategoryListItem({ children, id, index, checked }) {
     updateAnyListItemChecked();
   }, []);
   const handleCheckboxChange = () => {
-    updateCheck(id);
+    toggleCheck(id);
     updateAnyListItemChecked();
   };
   return (
