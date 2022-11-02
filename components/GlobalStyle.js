@@ -131,11 +131,11 @@ const GlobalStyle = createGlobalStyle`
 /* icons */
 @font-face {
   font-family: 'icomoon';
-  src:  url('/fonts/icons/icomoon.eot?ahq17d');
-  src:  url('/fonts/icons/icomoon.eot?ahq17d#iefix') format('embedded-opentype'),
-    url('/fonts/icons/icomoon.ttf?ahq17d') format('truetype'),
-    url('/fonts/icons/icomoon.woff?ahq17d') format('woff'),
-    url('/fonts/icons/icomoon.svg?ahq17d#icomoon') format('svg');
+  src:  url('/fonts/icons/icomoon.eot?hvm3lq');
+  src:  url('/fonts/icons/icomoon.eot?hvm3lq#iefix') format('embedded-opentype'),
+    url('/fonts/icons/icomoon.ttf?hvm3lq') format('truetype'),
+    url('/fonts/icons/icomoon.woff?hvm3lq') format('woff'),
+    url('/fonts/icons/icomoon.svg?hvm3lq#icomoon') format('svg');
   font-weight: normal;
   font-style: normal;
   font-display: block;
@@ -191,9 +191,13 @@ const GlobalStyle = createGlobalStyle`
 }
 .icon-cross:before {
   content: "\\e905";
+  position: relative;
+  top: 3px;
 }
 .icon-delete:before {
   content: "\\e906";
+  position: relative;
+  top: 3px;
 }
 .icon-drag:before {
   content: "\\e907";
@@ -203,38 +207,23 @@ const GlobalStyle = createGlobalStyle`
   position: relative;
   top: 1px; 
 }
-.icon-email:before {
+.icon-info:before {
   content: "\\e909";
 }
-.icon-google:before {
+.icon-list:before {
   content: "\\e90a";
 }
-.icon-list:before {
+.icon-logo:before {
   content: "\\e90b";
 }
-.icon-lock:before {
+.icon-minus:before {
   content: "\\e90c";
 }
-.icon-logo:before {
+.icon-plus:before {
   content: "\\e90d";
 }
-.icon-logout:before {
-  content: "\\e90e";
-}
-.icon-minus:before {
-  content: "\\e90f";
-}
-.icon-plus:before {
-  content: "\\e910";
-}
-.icon-reset:before {
-  content: "\\e911";
-}
 .icon-settings:before {
-  content: "\\e912";
-}
-.icon-user:before {
-  content: "\\e913";
+  content: "\\e90e";
 }
 
 *, *:after, *:before {

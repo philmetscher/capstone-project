@@ -68,6 +68,7 @@ export const useListItemsStore = create(
               id: nanoid(),
               name: newListItemName,
               categoryId: categoryId,
+              checked: false,
             },
           ],
         });
@@ -81,6 +82,7 @@ export const useListItemsStore = create(
             id: currentListItem.id,
             name: newName,
             categoryId: newCategoryId,
+            checked: currentListItem.checked,
           };
           set({
             listItems: get().listItems.map((listItem) =>
@@ -115,6 +117,33 @@ export const useListItemsStore = create(
 
         set({
           listItems: newSortedListItems,
+        });
+      },
+      toggleCheck: (listItemId) => {
+        const newListItems = get().listItems.map((item) => {
+          if (item.id === listItemId) {
+            return {
+              ...item,
+              checked: !item.checked,
+            };
+          }
+          return item;
+        });
+
+        set({
+          listItems: newListItems,
+        });
+
+        get().updateAnyListItemChecked();
+      },
+
+      anyListItemChecked: false,
+      updateAnyListItemChecked: (state = false) => {
+        let anyChecked = state;
+        if (!state) anyChecked = get().listItems.some((item) => item.checked);
+
+        set({
+          anyListItemChecked: anyChecked,
         });
       },
     }),

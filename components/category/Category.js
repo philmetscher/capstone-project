@@ -51,6 +51,7 @@ export default function Category({ category }) {
                       key={listItem.id}
                       id={listItem.id}
                       index={index}
+                      checked={listItem.checked}
                     >
                       {listItem.name}
                     </CategoryListItem>

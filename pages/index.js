@@ -5,7 +5,9 @@ import dynamic from "next/dynamic";
 
 // Components
 import Header from "../components/Header";
-import Navigation from "../components/Navigation";
+const DynamicNavigation = dynamic(() => import("../components/Navigation"), {
+  ssr: false,
+});
 
 const DynamicCategory = dynamic(
   () => import("../components/category/Category"),
@@ -35,7 +37,7 @@ export default function Home() {
             ))}
         </CategoriesSection>
       </ListMain>
-      <Navigation />
+      <DynamicNavigation />
     </>
   );
 }
