@@ -7,7 +7,7 @@ export default function Checkbox({ id, onChange, checked }) {
     return (
       <CheckboxGroup>
         <Input name={"checkbox" + id} type="checkbox" onChange={onChange} />
-        <Label className={checked && "checked"} htmlFor={"checkbox" + id}>
+        <Label checked={checked} htmlFor={"checkbox" + id}>
           {checked && <IconCheck />}
         </Label>
       </CheckboxGroup>
@@ -36,15 +36,12 @@ const Label = styled.label`
   height: 24px;
   border: 2px solid var(--white);
   border-radius: 6px;
+  background: ${({ checked }) => (checked ? "var(--white)" : "none")};
 
-  &.checked {
-    background: var(--white);
-
-    [class*="icon-"] {
-      position: relative;
-      top: -1px;
-      left: -2px;
-      color: var(--card-bg);
-    }
+  [class*="icon-"] {
+    position: relative;
+    top: -1px;
+    left: -2px;
+    color: var(--card-bg);
   }
 `;
