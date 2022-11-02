@@ -1,17 +1,27 @@
 import Link from "next/link";
 import styled from "styled-components";
 import { useListItemsStore } from "../useStore";
+import { useState } from "react";
 
 //Components
 import { IconCross, IconDelete, IconPlus } from "./Icons";
+import ModalDeleteBox from "./ModalDeleteBox";
 
 export default function Navigation() {
+  //SOME STATES
+  //variable to check if Modal Box for deletion is open
+  const [deleteModalBoxOpen, setDeleteModalBoxOpen] = useState(false);
+
   //GET THINGS FROM STORE
   const listItems = useListItemsStore((state) => state.listItems);
   const anyListItemChecked = useListItemsStore(
     (state) => state.anyListItemChecked
   );
   const updateCheck = useListItemsStore((state) => state.updateCheck);
+  const deleteListItem = useListItemsStore((state) => state.deleteListItem);
+  const updateAnyListItemChecked = useListItemsStore(
+    (state) => state.updateAnyListItemChecked
+  );
 
   const handleUnselect = () => {
     listItems.forEach((item) => {
@@ -20,38 +30,53 @@ export default function Navigation() {
       }
     });
   };
-  const handleDeleteSelected = () => {};
+  const handleDeleteSelected = () => {
+    listItems.forEach((item) => {
+      if (item.checked) deleteListItem(item.id);
+    });
+
+    setDeleteModalBoxOpen(false);
+    updateAnyListItemChecked(false);
+  };
 
   return (
-    <NavigationWrapper>
-      <NavList>
-        {anyListItemChecked ? (
-          <>
-            <NavEntry width="50%">
-              <NavButton onClick={handleUnselect}>
-                <IconCross />
-                <NavDesc>alles abwählen</NavDesc>
-              </NavButton>
+    <>
+      <NavigationWrapper>
+        <NavList>
+          {anyListItemChecked ? (
+            <>
+              <NavEntry width="50%">
+                <NavButton onClick={handleUnselect}>
+                  <IconCross />
+                  <NavDesc>alles abwählen</NavDesc>
+                </NavButton>
+              </NavEntry>
+              <NavEntry width="50%">
+                <NavButton onClick={() => setDeleteModalBoxOpen(true)}>
+                  <IconDelete />
+                  <NavDesc>markierte löschen</NavDesc>
+                </NavButton>
+              </NavEntry>
+            </>
+          ) : (
+            <NavEntry width="100%">
+              <Link href={"/create-entry"} passHref>
+                <NavLink width="100%">
+                  <IconPlus />
+                  <NavDesc>neuer Eintrag</NavDesc>
+                </NavLink>
+              </Link>
             </NavEntry>
-            <NavEntry width="50%">
-              <NavButton>
-                <IconDelete />
-                <NavDesc>markierte löschen</NavDesc>
-              </NavButton>
-            </NavEntry>
-          </>
-        ) : (
-          <NavEntry width="100%">
-            <Link href={"/create-entry"} passHref>
-              <NavLink width="100%">
-                <IconPlus />
-                <NavDesc>neuer Eintrag</NavDesc>
-              </NavLink>
-            </Link>
-          </NavEntry>
-        )}
-      </NavList>
-    </NavigationWrapper>
+          )}
+        </NavList>
+      </NavigationWrapper>
+      <ModalDeleteBox
+        infoText="Bist du dir sicher, dass du die selektierten Einträge löschen willst?"
+        onClickDelete={() => handleDeleteSelected()}
+        deleteModalBoxOpen={deleteModalBoxOpen}
+        setDeleteModalBoxOpen={setDeleteModalBoxOpen}
+      />
+    </>
   );
 }
 

@@ -11,16 +11,16 @@ import Checkbox from "../Checkbox";
 
 export default function CategoryListItem({ children, id, index, checked }) {
   const updateCheck = useListItemsStore((state) => state.updateCheck);
-  const checkAnyListItemChecked = useListItemsStore(
-    (state) => state.checkAnyListItemChecked
+  const updateAnyListItemChecked = useListItemsStore(
+    (state) => state.updateAnyListItemChecked
   );
 
   useEffect(() => {
-    checkAnyListItemChecked();
+    updateAnyListItemChecked();
   }, []);
   const handleCheckboxChange = () => {
     updateCheck(id);
-    checkAnyListItemChecked();
+    updateAnyListItemChecked();
   };
   return (
     <Draggable draggableId={id} index={index}>

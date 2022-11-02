@@ -134,15 +134,16 @@ export const useListItemsStore = create(
           listItems: newListItems,
         });
 
-        get().checkAnyListItemChecked();
+        get().updateAnyListItemChecked();
       },
 
       anyListItemChecked: false,
-      checkAnyListItemChecked: () => {
-        const state = get().listItems.some((item) => item.checked);
+      updateAnyListItemChecked: (state = false) => {
+        let anyChecked = state;
+        if (!state) anyChecked = get().listItems.some((item) => item.checked);
 
         set({
-          anyListItemChecked: state,
+          anyListItemChecked: anyChecked,
         });
       },
     }),
