@@ -1,7 +1,8 @@
 import styled from "styled-components";
 import Link from "next/link";
 
-import { IconChevronDown, IconChevronUp, IconEdit } from "./../Icons";
+//Components
+import { MdKeyboardArrowDown, MdKeyboardArrowUp, MdEdit } from "react-icons/md"; //Icons
 import { PTagBold } from "./../HtmlComponents";
 
 export default function CategoryHeadline({
@@ -15,10 +16,14 @@ export default function CategoryHeadline({
       <Link href={"/edit-category/" + id} passHref>
         <EditAnchor onClick={(event) => event.stopPropagation()}>
           <PTagBold>{children}</PTagBold>
-          <IconEdit />
+          <MdEdit size="24px" />
         </EditAnchor>
       </Link>
-      {extended ? <IconChevronDown /> : <IconChevronUp />}
+      {extended ? (
+        <MdKeyboardArrowDown size="24px" />
+      ) : (
+        <MdKeyboardArrowUp size="24px" />
+      )}
     </CategoryHeadlineWrapper>
   );
 }

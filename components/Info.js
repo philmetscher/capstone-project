@@ -1,10 +1,10 @@
 import styled from "styled-components";
-import { IconInfo } from "../components/Icons";
+import { MdInfo } from "react-icons/md"; //Icons
 
 export default function Info({ children }) {
   return (
     <InfoWrapper>
-      <IconInfo />
+      <MdInfo size="24px" />
       <InfoText>{children}</InfoText>
     </InfoWrapper>
   );

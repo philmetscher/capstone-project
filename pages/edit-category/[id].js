@@ -11,10 +11,10 @@ import { FormMain, StyledForm, Input } from "../../components/FormComponents";
 import ModalDeleteBox from "../../components/ModalDeleteBox";
 import { ButtonGroup, ButtonIcon, ButtonSmall } from "../../components/Button";
 import {
-  IconChevronLeft,
-  IconChevronRight,
-  IconDelete,
-} from "../../components/Icons";
+  MdKeyboardArrowLeft,
+  MdKeyboardArrowRight,
+  MdDelete,
+} from "react-icons/md"; //Icons
 
 export default function EditCategory() {
   const router = useRouter();
@@ -170,7 +170,7 @@ export default function EditCategory() {
               aria-label={"zurück"}
               onClick={(event) => handleGoBack(event)}
             >
-              <IconChevronLeft />
+              <MdKeyboardArrowLeft size="24px" />
             </ButtonIcon>
             <ButtonSmall
               color="error"
@@ -180,7 +180,7 @@ export default function EditCategory() {
                 return false;
               }}
             >
-              <IconDelete />
+              <MdDelete size="24px" />
               löschen
             </ButtonSmall>
             <ButtonSmall
@@ -191,7 +191,7 @@ export default function EditCategory() {
               }}
             >
               speichern
-              <IconChevronRight />
+              <MdKeyboardArrowRight size="24px" />
             </ButtonSmall>
           </EditButtonGroup>
         </StyledForm>
