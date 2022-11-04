@@ -76,7 +76,7 @@ export default function EditCategory() {
     //no default category exist
     if (!standardCategoryId) {
       standardCategoryId = nanoid();
-      addCategory(standardCategoryId, "Standard Kategorie", true);
+      addCategory(standardCategoryId, "Verschiedenes", true);
     }
 
     listItems.forEach((item) => {
