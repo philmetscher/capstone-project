@@ -29,9 +29,7 @@ export default function CreateEntry() {
   const addListItem = useListItemsStore((state) => state.addListItem);
 
   //STATES
-  const [itemNameExist, setItemNameExist] = useState(false); //checks if the listItem name is already taken
   const [itemNameValidated, setItemNameValidated] = useState(true);
-  const [categoryNameExist, setCategoryNameExist] = useState(false); //checks if the category name is already taken
   const [categoryValidated, setCategoryValidated] = useState(false);
   const [categoryDropdownUsed, setCategoryDropdownUsed] = useState(true);
   const [submitButtonReady, setSubmitButtonReady] = useState(false);
