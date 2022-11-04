@@ -2,8 +2,8 @@ import styled from "styled-components";
 
 //Components
 import { ButtonGroup, ButtonSmall } from "./Button";
-import { IconChevronLeft, IconDelete } from "./Icons";
 import { PTag, PTagBold, PTagSmall } from "./HtmlComponents";
+import { MdChevronLeft, MdDeleteForever } from "react-icons/md"; //Icons
 
 export default function ModalDeleteBox({
   infoText,
@@ -25,11 +25,11 @@ export default function ModalDeleteBox({
                 color="secondary"
                 onClick={() => setDeleteModalBoxOpen(false)}
               >
-                <IconChevronLeft />
+                <MdChevronLeft size="24px" />
                 zurück
               </ButtonSmall>
               <ButtonSmall color="error" onClick={() => onClickDelete()}>
-                <IconDelete />
+                <MdDeleteForever size="24px" />
                 ja löschen
               </ButtonSmall>
             </ModalButtonGroup>

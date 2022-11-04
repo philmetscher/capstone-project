@@ -1,6 +1,7 @@
-import { useState } from "react";
 import styled from "styled-components";
-import { IconCheck } from "./Icons";
+
+//Components
+import { MdOutlineCheck } from "react-icons/md"; //Icons
 
 export default function Checkbox({ id, onChange, checked }) {
   if (id) {
@@ -8,7 +9,7 @@ export default function Checkbox({ id, onChange, checked }) {
       <CheckboxGroup>
         <Input name={"checkbox" + id} type="checkbox" onChange={onChange} />
         <Label checked={checked} htmlFor={"checkbox" + id}>
-          {checked && <IconCheck />}
+          {checked && <MdOutlineCheck size="20px" color="var(--card-bg)" />}
         </Label>
       </CheckboxGroup>
     );
@@ -38,10 +39,8 @@ const Label = styled.label`
   border-radius: 6px;
   background: ${({ checked }) => (checked ? "var(--white)" : "none")};
 
-  [class*="icon-"] {
+  svg {
     position: relative;
     top: -1px;
-    left: -2px;
-    color: var(--card-bg);
   }
 `;

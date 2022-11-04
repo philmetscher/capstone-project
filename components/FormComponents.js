@@ -1,5 +1,10 @@
 import styled from "styled-components";
-import { IconChevronDown, IconChevronUp, IconList, IconPlus } from "./Icons";
+import {
+  MdKeyboardArrowDown,
+  MdKeyboardArrowUp,
+  MdList,
+  MdAdd,
+} from "react-icons/md"; //Icons
 
 import { PTag } from "./HtmlComponents";
 import { useEffect, useState } from "react";
@@ -49,7 +54,6 @@ function Input({
   inputIcon,
   iconBefore = true,
   handleChange,
-  handleKeyPress,
   error = false,
   value = "",
 }) {
@@ -63,13 +67,17 @@ function Input({
         iconBefore={iconBefore}
         placeholder={children}
         error={error}
+        onKeyPress={(event) => {
+          if (event.key === "Enter") event.preventDefault();
+        }}
+        onKeyUp={(event) => handleChange(event)}
         onInput={(event) => handleChange(event)}
-        onKeyDown={(event) => handleKeyPress(event)}
+        onChange={(event) => handleChange(event)}
         defaultValue={value || ""}
       />
       <InputIcon iconBefore={iconBefore}>
-        {inputIcon === "list" && <IconList />}
-        {inputIcon === "plus" && <IconPlus />}
+        {inputIcon === "list" && <MdList size="24px" />}
+        {inputIcon === "plus" && <MdAdd size="24px" />}
       </InputIcon>
     </Group>
   );
@@ -134,7 +142,11 @@ function Select({
         >
           <InputIcon iconBefore={iconBefore}>
             {inputIcon === "chevronDown" &&
-              (!isOpen ? <IconChevronDown /> : <IconChevronUp />)}
+              (!isOpen ? (
+                <MdKeyboardArrowDown size="24px" />
+              ) : (
+                <MdKeyboardArrowUp size="24px" />
+              ))}
           </InputIcon>
           {selectedOption.name}
         </SelectionHeader>

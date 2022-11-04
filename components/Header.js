@@ -1,11 +1,10 @@
+import Image from "next/image";
 import styled from "styled-components";
-
-import { IconLogo } from "./Icons";
 
 export default function Header({ children }) {
   return (
     <PageHeader>
-      <IconLogo />
+      <Image src={"/icons/logo-white.svg"} width="24px" height="24px" />
       <HeaderTitle>{children}</HeaderTitle>
     </PageHeader>
   );

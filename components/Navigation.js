@@ -4,7 +4,7 @@ import { useListItemsStore } from "../useStore";
 import { useState } from "react";
 
 //Components
-import { IconCross, IconDelete, IconPlus } from "./Icons";
+import { MdClear, MdDelete, MdAdd } from "react-icons/md"; //Icons
 import ModalDeleteBox from "./ModalDeleteBox";
 
 export default function Navigation() {
@@ -47,13 +47,13 @@ export default function Navigation() {
             <>
               <NavEntry width="50%">
                 <NavButton onClick={handleUnselect}>
-                  <IconCross />
+                  <MdClear size="24px" />
                   <NavDesc>alles abwählen</NavDesc>
                 </NavButton>
               </NavEntry>
               <NavEntry width="50%">
                 <NavButton onClick={() => setDeleteModalBoxOpen(true)}>
-                  <IconDelete />
+                  <MdDelete size="24px" />
                   <NavDesc>markierte löschen</NavDesc>
                 </NavButton>
               </NavEntry>
@@ -62,7 +62,7 @@ export default function Navigation() {
             <NavEntry width="100%">
               <Link href={"/create-entry"} passHref>
                 <NavLink width="100%">
-                  <IconPlus />
+                  <MdAdd size="24px" />
                   <NavDesc>neuer Eintrag</NavDesc>
                 </NavLink>
               </Link>

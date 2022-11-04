@@ -5,7 +5,7 @@ import { useEffect, useState } from "react";
 import { useListItemsStore } from "../../useStore";
 
 //Components
-import { IconDrag, IconEdit } from "../Icons";
+import { MdOutlineDragHandle, MdEdit } from "react-icons/md"; //Icons
 import { PTag } from "../HtmlComponents";
 import Checkbox from "../Checkbox";
 
@@ -31,13 +31,13 @@ export default function CategoryListItem({ children, id, index, checked }) {
           ref={provided.innerRef}
         >
           <DragWrapper>
-            <IconDrag />
+            <MdOutlineDragHandle size="24px" />
           </DragWrapper>
           <Checkbox id={id} onChange={handleCheckboxChange} checked={checked} />
           <ListItemName>{children}</ListItemName>
           <Link href={"/edit-entry/" + id} passHref>
             <EditAnchor>
-              <IconEdit />
+              <MdEdit size="24px" />
             </EditAnchor>
           </Link>
         </CategoryListItemWrapper>
