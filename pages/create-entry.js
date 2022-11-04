@@ -166,7 +166,10 @@ export default function CreateEntry() {
             <ButtonIcon
               color="secondary"
               aria-label={"zurück"}
-              onClick={(event) => goBack(event)}
+              onClick={(event) => {
+                event.preventDefault();
+                router.push("/");
+              }}
             >
               <MdKeyboardArrowLeft />
             </ButtonIcon>
