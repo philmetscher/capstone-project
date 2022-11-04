@@ -176,7 +176,9 @@ export default function CreateEntry() {
             <ButtonSmall
               color="primary"
               disabled={!submitButtonReady}
-              onClick={() => {}}
+              onClick={() => {
+                return submitButtonReady;
+              }}
             >
               erstellen
               <MdKeyboardArrowRight />
