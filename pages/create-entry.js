@@ -14,103 +14,85 @@ import {
   Select,
 } from "../components/FormComponents";
 import { ButtonGroup, ButtonIcon, ButtonSmall } from "../components/Button";
-import { IconChevronLeft, IconChevronRight } from "../components/Icons";
+import { MdKeyboardArrowLeft, MdKeyboardArrowRight } from "react-icons/md"; //Icons
+import Info from "../components/Info";
 
 export default function CreateEntry() {
   const router = useRouter();
 
-  const startsWith = new RegExp("^[^-\\s][\\w]");
+  const testHasChar = new RegExp("[\\w]");
 
   //GET THINGS FROM STORE
-
   const categories = useCategoriesStore((state) => state.categories);
   const listItems = useListItemsStore((state) => state.listItems);
-
   const addCategory = useCategoriesStore((state) => state.addCategory);
   const addListItem = useListItemsStore((state) => state.addListItem);
 
-  //SOME STATES
-
-  //variable to check if user has pressed enter on input field
-  const [pressedEnter, setPressedEnter] = useState(false);
-  //variable to check if input-field with new category has value
-  const [categoriesSelectionAvailable, setCategoriesSelectionAvailable] =
-    useState(true);
-  //variable to validate the "list item name" input field (not empty)
+  //STATES
+  const [itemNameExist, setItemNameExist] = useState(false); //checks if the listItem name is already taken
+  const [itemNameValidated, setItemNameValidated] = useState(true);
+  const [categoryNameExist, setCategoryNameExist] = useState(false); //checks if the category name is already taken
+  const [categoryValidated, setCategoryValidated] = useState(false);
+  const [categoryDropdownUsed, setCategoryDropdownUsed] = useState(true);
   const [submitButtonReady, setSubmitButtonReady] = useState(false);
-  //variable to check if the "list item name" exists in the already existing "list item names"
-  const [listItemExistsInListItems, setListItemExistsInListItems] =
-    useState(false);
-  //variable to check if the new category exists in the already existing categories
-  const [categoryExistsInCategories, setCategoryExistsInCategories] =
-    useState(false);
 
-  //HANDLING FUNCTIONS
+  const [currentInfo, setCurrentInfo] = useState(["", ""]);
 
-  function handleGoBack(event) {
-    event.preventDefault();
-    if (!pressedEnter) {
-      router.push(`/`);
-    } else {
-      setPressedEnter(false);
-    }
-  }
-  function handleKeyPress(event) {
-    switch (event.key) {
-      case "Enter": //check if user has not pressed enter on input field (for mobile check purposes "Go" or "Enter")
-        setPressedEnter(true);
-        break;
-      case "Backspace": //check if user has pressed backspace on input field (onChange won't work on backspace)
-        if (event.target.name === "newCategory") {
-          handleCategoryInput(event);
-        } else if (event.target.name === "itemName") {
-          handleListItemInput(event);
-        }
-        break;
-    }
-  }
+  //HANDLE FUNCTIONS
+  function handleItemInput(event) {
+    const value = event.target.value;
+    const inListItems = itemInListItems(value.trim());
 
-  function handleListItemInput(event) {
-    checkListItemInput();
-
-    function checkListItemInput() {
-      let value = event.target.value;
-
-      if (!value.startsWith(" ") && value.length > 0) {
-        setListItemExistsInListItems(listItemInListItems(value));
-        setSubmitButtonReady(!listItemInListItems(value));
-      } else if (value.length > 0) {
-        value = value.trim();
-        event.target.value = value;
-        checkListItemInput();
+    if (testHasChar.test(value)) {
+      if (!inListItems) {
+        setItemNameValidated(true);
+        if (currentInfo[0] === "listItem") setCurrentInfo(["", ""]);
+        setSubmitButtonReady(categoryDropdownUsed || categoryValidated);
       } else {
+        setCurrentInfo(["listItem", "Dieser Eintrag existiert bereits"]);
+        setItemNameValidated(false);
         setSubmitButtonReady(false);
-        setListItemExistsInListItems(false);
       }
+    } else {
+      setItemNameValidated(false);
+      setSubmitButtonReady(false);
+      setCurrentInfo([
+        "listItem",
+        "Ein Eintrag muss mind. ein Zeichen enthalten",
+      ]);
     }
   }
 
   function handleCategoryInput(event) {
-    checkCategoryInput();
+    const value = event.target.value;
+    const inCategories = categoryInCategories(value.trim());
 
-    function checkCategoryInput() {
-      if (!event.target.value.startsWith(" ")) {
-        setCategoriesSelectionAvailable(false);
+    if (testHasChar.test(value)) {
+      setCategoryDropdownUsed(false);
 
-        if (categoryInCategories(event.target.value)) {
-          setCategoryExistsInCategories(true);
-        } else {
-          setCategoryExistsInCategories(false);
-        }
+      if (!inCategories) {
+        setCategoryValidated(true);
+        if (currentInfo[0] === "category") setCurrentInfo(["", ""]);
+        setSubmitButtonReady(itemNameValidated);
       } else {
-        const value = event.target.value.substring(
-          1,
-          event.target.value.length
-        );
-        event.target.value = value;
-        checkCategoryInput();
-        setCategoryExistsInCategories(false);
-        setCategoriesSelectionAvailable(true);
+        setCurrentInfo(["category", "Diese Kategorie existiert bereits"]);
+        setCategoryValidated(false);
+        setSubmitButtonReady(false);
+      }
+    } else {
+      setCategoryValidated(false);
+
+      if (value.length > 0) {
+        setCurrentInfo([
+          "category",
+          "Eine Kategorie muss mind. ein Zeichen enthalten",
+        ]);
+        setCategoryDropdownUsed(false);
+        setSubmitButtonReady(false);
+      } else {
+        if (currentInfo[0] === "category") setCurrentInfo(["", ""]);
+        setCategoryDropdownUsed(true);
+        setSubmitButtonReady(itemNameValidated && categoryDropdownUsed);
       }
     }
   }
@@ -121,29 +103,24 @@ export default function CreateEntry() {
     const formData = new FormData(event.target);
     const data = Object.fromEntries(formData);
 
-    let name = data.itemName,
-      categoryId = data.itemCategory;
+    const name = data.itemName;
+    let categoryId = data.itemCategory;
 
-    if (!pressedEnter) {
-      if (data.newCategory) {
-        const newCategoryId = nanoid();
-        addCategory(newCategoryId, data.newCategory);
-        categoryId = newCategoryId;
-      }
-
-      addListItem(name, categoryId);
-      router.push(`/`);
-    } else {
-      setPressedEnter(false);
+    if (data.newCategory) {
+      const newCategoryId = nanoid();
+      addCategory(newCategoryId, data.newCategory);
+      categoryId = newCategoryId;
     }
+
+    addListItem(name, categoryId);
+    router.push("/");
   }
 
   //HELPER FUNCTIONS
-  const categoryInCategories = (newCategoryName) =>
-    categories.some((category) => category.name === newCategoryName);
-
-  const listItemInListItems = (newListItemName) =>
-    listItems.some((listItem) => listItem.name === newListItemName);
+  const itemInListItems = (name) =>
+    listItems.some((listItem) => listItem.name === name);
+  const categoryInCategories = (name) =>
+    categories.some((category) => category.name === name);
 
   if (!categories || !listItems) {
     return <p>Loading...</p>;
@@ -152,21 +129,21 @@ export default function CreateEntry() {
   return (
     <>
       <Head>
-        <title>Create new list-item</title>
+        <title>neuer Eintrag</title>
         <meta name="description" content="JustList App" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
       <Header>neuer Eintrag</Header>
+      {currentInfo[1] && <Info>{currentInfo[1]}</Info>}
       <FormMain>
         <StyledForm onSubmit={(event) => handleSubmit(event)}>
           <Input
             name="itemName"
             labelText="Name des Eintrags"
             inputIcon="list"
-            handleChange={(event) => handleListItemInput(event)}
-            handleKeyPress={(event) => handleKeyPress(event)}
-            error={listItemExistsInListItems}
+            handleChange={(event) => handleItemInput(event)}
+            error={!itemNameValidated}
           >
             Name...
           </Input>
@@ -175,7 +152,7 @@ export default function CreateEntry() {
             labelText="Kategorie auswählen"
             inputIcon="chevronDown"
             options={categories}
-            disabled={!categoriesSelectionAvailable}
+            disabled={!categoryDropdownUsed}
           />
           <Input
             name="newCategory"
@@ -183,8 +160,7 @@ export default function CreateEntry() {
             inputIcon="plus"
             iconBefore={false}
             handleChange={(event) => handleCategoryInput(event)}
-            handleKeyPress={(event) => handleKeyPress(event)}
-            error={categoryExistsInCategories}
+            error={!categoryValidated && !categoryDropdownUsed}
           >
             Kategorie-Name...
           </Input>
@@ -192,19 +168,17 @@ export default function CreateEntry() {
             <ButtonIcon
               color="secondary"
               aria-label={"zurück"}
-              onClick={(event) => handleGoBack(event)}
+              onClick={(event) => goBack(event)}
             >
-              <IconChevronLeft />
+              <MdKeyboardArrowLeft />
             </ButtonIcon>
             <ButtonSmall
               color="primary"
-              disabled={!submitButtonReady || categoryExistsInCategories}
-              onClick={() => {
-                return submitButtonReady && categoryExistsInCategories;
-              }}
+              disabled={!submitButtonReady}
+              onClick={() => {}}
             >
               erstellen
-              <IconChevronRight />
+              <MdKeyboardArrowRight />
             </ButtonSmall>
           </ButtonGroup>
         </StyledForm>

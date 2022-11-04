@@ -54,7 +54,6 @@ function Input({
   inputIcon,
   iconBefore = true,
   handleChange,
-  handleKeyPress,
   error = false,
   value = "",
 }) {
@@ -68,8 +67,15 @@ function Input({
         iconBefore={iconBefore}
         placeholder={children}
         error={error}
+        onKeyPress={(event) => {
+          if (event.key === "Enter") {
+            event.preventDefault();
+            return false;
+          }
+        }}
+        onKeyUp={(event) => handleChange(event)}
         onInput={(event) => handleChange(event)}
-        onKeyDown={(event) => handleKeyPress(event)}
+        onChange={(event) => handleChange(event)}
         defaultValue={value || ""}
       />
       <InputIcon iconBefore={iconBefore}>
