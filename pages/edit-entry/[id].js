@@ -16,123 +16,99 @@ import {
 import ModalDeleteBox from "../../components/ModalDeleteBox";
 import { ButtonGroup, ButtonIcon, ButtonSmall } from "../../components/Button";
 import {
-  IconChevronLeft,
-  IconChevronRight,
-  IconDelete,
-} from "../../components/Icons";
+  MdKeyboardArrowLeft,
+  MdKeyboardArrowRight,
+  MdDelete,
+} from "react-icons/md"; //Icons
+import Info from "../../components/Info";
 
 export default function EditEntry() {
   const router = useRouter();
   const { id } = router.query;
 
-  //GET THINGS FROM STORE
+  const testHasChar = new RegExp("[\\w]");
 
+  //GET THINGS FROM STORE
   const categories = useCategoriesStore((state) => state.categories);
   const listItems = useListItemsStore((state) => state.listItems);
-
   const addCategory = useCategoriesStore((state) => state.addCategory);
   const editListItem = useListItemsStore((state) => state.editListItem);
   const deleteListItem = useListItemsStore((state) => state.deleteListItem);
 
   //GET CURRENT LIST ITEM & LIST ITEM CATEGORY
-
   let listItem = {};
   if (listItems) listItem = listItems.find((listItem) => listItem.id == id);
-
   let listItemCategory = {};
-  if (listItem)
+  if (listItem) {
     listItemCategory = categories.find(
       (category) => category.id === listItem.categoryId
     );
+  }
 
-  //SOME STATES
-
-  //variable to check if user has pressed enter on input field
-  const [pressedEnter, setPressedEnter] = useState(false);
-  //variable to check if input-field with new category has value
-  const [categoriesSelectionAvailable, setCategoriesSelectionAvailable] =
-    useState(true);
-  //variable to validate the "list item name" input field (not empty)
-  const [submitButtonReady, setSubmitButtonReady] = useState(true);
-  //variable to check if the new category exists in the already existing categories
-  const [categoryExistsInCategories, setCategoryExistsInCategories] =
-    useState(false);
-  //variable to check if the "list item name" exists in the already existing "list item names"
-  const [listItemExistsInListItems, setListItemExistsInListItems] =
-    useState(false);
-  //variable to check if Modal Box for deletion is open
+  //STATES
+  const [itemNameValidated, setItemNameValidated] = useState(true);
+  const [categoryValidated, setCategoryValidated] = useState(false);
+  const [categoryDropdownUsed, setCategoryDropdownUsed] = useState(true);
+  const [submitButtonReady, setSubmitButtonReady] = useState(false);
   const [deleteModalBoxOpen, setDeleteModalBoxOpen] = useState(false);
 
-  //HANDLING FUNCTIONS
+  const [currentInfo, setCurrentInfo] = useState(["", ""]);
 
-  function handleGoBack(event) {
-    event.preventDefault();
-    if (!pressedEnter) {
-      router.push(`/`);
-    } else {
-      setPressedEnter(false);
-    }
-  }
+  //HANDLE FUNCTIONS
+  function handleItemInput(event) {
+    const value = event.target.value;
+    const inListItems = itemInListItems(value.trim());
 
-  function handleKeyPress(event) {
-    switch (event.key) {
-      case "Enter": //check if user has not pressed enter on input field (for mobile check purposes "Go" or "Enter")
-        setPressedEnter(true);
-        break;
-      case "Backspace": //check if user has pressed backspace on input field (onChange won't work on backspace)
-        checkHandling(event);
-        break;
-    }
-
-    function checkHandling(event) {
-      if (event.target.name === "newCategory") {
-        handleCategoryInput(event);
-      } else if (event.target.name === "itemName") {
-        handleListItemInput(event);
-      }
-    }
-  }
-
-  function handleListItemInput(event) {
-    checkListItemInput();
-
-    function checkListItemInput() {
-      let value = event.target.value;
-
-      if (!value.startsWith(" ") && value.length > 0) {
-        const inListItems = listItemInListItems(value);
-
-        setListItemExistsInListItems(inListItems);
-        setSubmitButtonReady(!inListItems);
-      } else if (value.length > 0) {
-        value = value.trim();
-        event.target.value = value;
-        checkListItemInput();
+    if (testHasChar.test(value)) {
+      if (!inListItems) {
+        setItemNameValidated(true);
+        if (currentInfo[0] === "listItem") setCurrentInfo(["", ""]);
+        setSubmitButtonReady(categoryDropdownUsed || categoryValidated);
       } else {
+        setCurrentInfo(["listItem", "Dieser Eintrag existiert bereits"]);
+        setItemNameValidated(false);
         setSubmitButtonReady(false);
-        setListItemExistsInListItems(false);
       }
+    } else {
+      setItemNameValidated(false);
+      setSubmitButtonReady(false);
+      setCurrentInfo([
+        "listItem",
+        "Ein Eintrag muss mind. ein Zeichen enthalten",
+      ]);
     }
   }
 
   function handleCategoryInput(event) {
-    checkCategoryInput();
+    const value = event.target.value;
+    const inCategories = categoryInCategories(value.trim());
 
-    function checkCategoryInput() {
-      let value = event.target.value;
+    if (testHasChar.test(value)) {
+      setCategoryDropdownUsed(false);
 
-      if (!value.startsWith(" ") && value.length > 0) {
-        const inCategories = categoryInCategories(value);
-
-        setCategoriesSelectionAvailable(false);
-        setCategoryExistsInCategories(inCategories);
-      } else if (value.length > 0) {
-        value = value.trim();
-        event.target.value = value;
-        checkCategoryInput();
+      if (!inCategories) {
+        setCategoryValidated(true);
+        if (currentInfo[0] === "category") setCurrentInfo(["", ""]);
+        setSubmitButtonReady(itemNameValidated);
       } else {
-        setCategoryExistsInCategories(false);
-        setCategoriesSelectionAvailable(true);
+        setCurrentInfo(["category", "Diese Kategorie existiert bereits"]);
+        setCategoryValidated(false);
+        setSubmitButtonReady(false);
+      }
+    } else {
+      setCategoryValidated(false);
+
+      if (value.length > 0) {
+        setCurrentInfo([
+          "category",
+          "Eine Kategorie muss mind. ein Zeichen enthalten",
+        ]);
+        setCategoryDropdownUsed(false);
+        setSubmitButtonReady(false);
+      } else {
+        if (currentInfo[0] === "category") setCurrentInfo(["", ""]);
+        setCategoryDropdownUsed(true);
+        setSubmitButtonReady(itemNameValidated && categoryDropdownUsed);
       }
     }
   }
@@ -149,46 +125,27 @@ export default function EditEntry() {
     const data = Object.fromEntries(formData);
 
     let id = listItem.id,
-      name = listItem.name,
-      categoryId = listItem.categoryId,
-      somethingChanged = false;
+      name = data.itemName,
+      categoryId = listItem.categoryId;
 
-    if (!pressedEnter) {
-      if (name !== data.itemName) {
-        name = data.itemName;
-        somethingChanged = true;
-      }
-      if (data.newCategory) {
-        const newCategoryId = nanoid();
-
-        addCategory(newCategoryId, data.newCategory);
-        categoryId = newCategoryId;
-
-        somethingChanged = true;
-      } else if (categoryId !== data.itemCategory) {
-        categoryId = data.itemCategory;
-
-        somethingChanged = true;
-      }
-
-      //check if something has changed. if so redirect to list
-      if (somethingChanged) {
-        editListItem(id, name, categoryId);
-        router.push(`/`);
-      }
-    } else {
-      setPressedEnter(false);
+    if (data.newCategory) {
+      const newCategoryId = nanoid();
+      addCategory(newCategoryId, data.newCategory);
+      categoryId = newCategoryId;
     }
+    if (categoryId != data.itemCategory) {
+      categoryId = data.itemCategory;
+    }
+
+    editListItem(id, name, categoryId);
+    router.push("/");
   }
 
   //HELPER FUNCTIONS
-  const categoryInCategories = (newCategoryName) =>
-    categories.some((category) => category.name === newCategoryName);
-
-  const listItemInListItems = (newListItemName) =>
-    listItems.some(
-      (item) => item.name === newListItemName && item.id != listItem.id
-    );
+  const itemInListItems = (name) =>
+    listItems.some((item) => item.name === name && item.id != listItem.id);
+  const categoryInCategories = (name) =>
+    categories.some((category) => category.name === name);
 
   if (!categories || !listItem) {
     return <p>Loading...</p>;
@@ -203,16 +160,16 @@ export default function EditEntry() {
       </Head>
 
       <Header>Bearbeiten</Header>
+      {currentInfo[1] && <Info>{currentInfo[1]}</Info>}
       <FormMain>
         <StyledForm onSubmit={(event) => handleSubmit(event)}>
           <Input
             name="itemName"
             labelText="Name des Eintrags"
             inputIcon="list"
-            handleChange={(event) => handleListItemInput(event)}
-            handleKeyPress={(event) => handleKeyPress(event)}
+            handleChange={(event) => handleItemInput(event)}
             value={listItem.name}
-            error={listItemExistsInListItems}
+            error={!itemNameValidated}
           >
             Name...
           </Input>
@@ -227,7 +184,7 @@ export default function EditEntry() {
                   (category) => category.id !== listItem.categoryId
                 ),
               ]}
-              disabled={!categoriesSelectionAvailable}
+              disabled={!categoryDropdownUsed}
             />
           )}
           <Input
@@ -236,8 +193,7 @@ export default function EditEntry() {
             inputIcon="plus"
             iconBefore={false}
             handleChange={(event) => handleCategoryInput(event)}
-            handleKeyPress={(event) => handleKeyPress(event)}
-            error={categoryExistsInCategories}
+            error={!categoryValidated && !categoryDropdownUsed}
           >
             Kategorie-Name...
           </Input>
@@ -245,9 +201,12 @@ export default function EditEntry() {
             <ButtonIcon
               color="secondary"
               aria-label={"zurück"}
-              onClick={(event) => handleGoBack(event)}
+              onClick={(event) => {
+                event.preventDefault();
+                router.push("/");
+              }}
             >
-              <IconChevronLeft />
+              <MdKeyboardArrowLeft />
             </ButtonIcon>
             <ButtonSmall
               color="error"
@@ -257,18 +216,18 @@ export default function EditEntry() {
                 return false;
               }}
             >
-              <IconDelete />
+              <MdDelete />
               löschen
             </ButtonSmall>
             <ButtonSmall
               color="primary"
-              disabled={!submitButtonReady || categoryExistsInCategories}
+              disabled={!submitButtonReady}
               onClick={() => {
-                return submitButtonReady && categoryExistsInCategories;
+                return submitButtonReady;
               }}
             >
               speichern
-              <IconChevronRight />
+              <MdKeyboardArrowRight />
             </ButtonSmall>
           </EditButtonGroup>
         </StyledForm>
