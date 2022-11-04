@@ -11,7 +11,7 @@ export default function Info({ children }) {
 }
 
 const InfoWrapper = styled.div`
-  display: inline-flex;
+  display: flex;
   align-items: center;
   gap: 10px;
   background: var(--card-bg);
@@ -20,10 +20,10 @@ const InfoWrapper = styled.div`
   border: 1px solid var(--error);
   border-left: none;
   z-index: 4000;
-  width: calc(100% - 50px);
   max-width: 400px;
   position: absolute;
   left: 0;
+  right: 50px;
   top: 24px;
 
   [class*="icon-"] {
