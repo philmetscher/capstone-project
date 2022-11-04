@@ -68,10 +68,7 @@ function Input({
         placeholder={children}
         error={error}
         onKeyPress={(event) => {
-          if (event.key === "Enter") {
-            event.preventDefault();
-            return false;
-          }
+          if (event.key === "Enter") event.preventDefault();
         }}
         onKeyUp={(event) => handleChange(event)}
         onInput={(event) => handleChange(event)}
