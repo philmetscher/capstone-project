@@ -47,24 +47,26 @@ export default function EditCategory() {
     const value = event.target.value;
     const inCategories = categoryInCategories(value.trim());
 
-    if (testHasChar.test(value)) {
-      if (!inCategories) {
-        setCategoryValidated(true);
-        setCurrentInfo(["", ""]);
-        setSubmitButtonReady(true);
-      } else {
-        setCurrentInfo(["category", "Diese Kategorie existiert bereits"]);
-        setCategoryValidated(false);
-        setSubmitButtonReady(false);
-      }
-    } else {
+    if (!testHasChar.test(value)) {
       setCategoryValidated(false);
       setCurrentInfo([
         "category",
         "Eine Kategorie muss mind. ein Zeichen enthalten",
       ]);
       setSubmitButtonReady(false);
+      return;
     }
+
+    if (!inCategories) {
+      setCategoryValidated(true);
+      setCurrentInfo(["", ""]);
+      setSubmitButtonReady(true);
+      return;
+    }
+
+    setCurrentInfo(["category", "Diese Kategorie existiert bereits"]);
+    setCategoryValidated(false);
+    setSubmitButtonReady(false);
   }
 
   function handleDelete() {

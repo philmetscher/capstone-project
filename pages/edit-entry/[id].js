@@ -59,43 +59,33 @@ export default function EditEntry() {
     const value = event.target.value;
     const inListItems = itemInListItems(value.trim());
 
-    if (testHasChar.test(value)) {
-      if (!inListItems) {
-        setItemNameValidated(true);
-        if (currentInfo[0] === "listItem") setCurrentInfo(["", ""]);
-        setSubmitButtonReady(categoryDropdownUsed || categoryValidated);
-      } else {
-        setCurrentInfo(["listItem", "Dieser Eintrag existiert bereits"]);
-        setItemNameValidated(false);
-        setSubmitButtonReady(false);
-      }
-    } else {
+    if (!testHasChar.test(value)) {
       setItemNameValidated(false);
       setSubmitButtonReady(false);
       setCurrentInfo([
         "listItem",
         "Ein Eintrag muss mind. ein Zeichen enthalten",
       ]);
+      return;
     }
+
+    if (!inListItems) {
+      setItemNameValidated(true);
+      if (currentInfo[0] === "listItem") setCurrentInfo(["", ""]);
+      setSubmitButtonReady(categoryDropdownUsed || categoryValidated);
+      return;
+    }
+
+    setCurrentInfo(["listItem", "Dieser Eintrag existiert bereits"]);
+    setItemNameValidated(false);
+    setSubmitButtonReady(false);
   }
 
   function handleCategoryInput(event) {
     const value = event.target.value;
     const inCategories = categoryInCategories(value.trim());
 
-    if (testHasChar.test(value)) {
-      setCategoryDropdownUsed(false);
-
-      if (!inCategories) {
-        setCategoryValidated(true);
-        if (currentInfo[0] === "category") setCurrentInfo(["", ""]);
-        setSubmitButtonReady(itemNameValidated);
-      } else {
-        setCurrentInfo(["category", "Diese Kategorie existiert bereits"]);
-        setCategoryValidated(false);
-        setSubmitButtonReady(false);
-      }
-    } else {
+    if (!testHasChar.test(value)) {
       setCategoryValidated(false);
 
       if (value.length > 0) {
@@ -105,12 +95,27 @@ export default function EditEntry() {
         ]);
         setCategoryDropdownUsed(false);
         setSubmitButtonReady(false);
-      } else {
-        if (currentInfo[0] === "category") setCurrentInfo(["", ""]);
-        setCategoryDropdownUsed(true);
-        setSubmitButtonReady(itemNameValidated && categoryDropdownUsed);
+        return;
       }
+
+      if (currentInfo[0] === "category") setCurrentInfo(["", ""]);
+      setCategoryDropdownUsed(true);
+      setSubmitButtonReady(itemNameValidated && categoryDropdownUsed);
+      return;
     }
+
+    setCategoryDropdownUsed(false);
+
+    if (!inCategories) {
+      setCategoryValidated(true);
+      if (currentInfo[0] === "category") setCurrentInfo(["", ""]);
+      setSubmitButtonReady(itemNameValidated);
+      return;
+    }
+
+    setCurrentInfo(["category", "Diese Kategorie existiert bereits"]);
+    setCategoryValidated(false);
+    setSubmitButtonReady(false);
   }
 
   function handleDelete() {
