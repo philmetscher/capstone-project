@@ -84,8 +84,18 @@ export default function EditCategory() {
         editListItem(item.id, item.name, standardCategoryId); //checks if any listItem is part of the deleted category
     });
 
-    deleteCategory(category.id);
-    router.push("/");
+    if (category === standardCategory) {
+      setDeleteModalBoxOpen(false);
+      setCurrentInfo([
+        "category",
+        "Die Standard-Kategorie kann nicht gelöscht werden!",
+      ]);
+
+      setTimeout(() => setCurrentInfo(["", ""]), 3500);
+    } else {
+      deleteCategory(category.id);
+      router.push("/");
+    }
   }
 
   function handleSubmit(event) {
