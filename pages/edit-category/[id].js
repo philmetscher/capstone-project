@@ -15,106 +15,77 @@ import {
   MdKeyboardArrowRight,
   MdDelete,
 } from "react-icons/md"; //Icons
+import Info from "../../components/Info";
 
 export default function EditCategory() {
   const router = useRouter();
   const { id } = router.query;
 
-  //GET THINGS FROM STORE
+  const testHasChar = new RegExp("[\\w]");
 
+  //GET THINGS FROM STORE
   const categories = useCategoriesStore((state) => state.categories);
   const listItems = useListItemsStore((state) => state.listItems);
-
   const addCategory = useCategoriesStore((state) => state.addCategory);
   const editCategory = useCategoriesStore((state) => state.editCategory);
   const deleteCategory = useCategoriesStore((state) => state.deleteCategory);
-
   const editListItem = useListItemsStore((state) => state.editListItem);
 
   //GET CURRENT CATEGORY
-
   let category = {};
   if (categories) category = categories.find((category) => category.id == id);
 
-  //SOME STATES
-
-  //variable to check if user has pressed enter on input field
-  const [pressedEnter, setPressedEnter] = useState(false);
-  //variable to validate the "list item name" input field (not empty)
+  //STATES
+  const [categoryValidated, setCategoryValidated] = useState(true);
   const [submitButtonReady, setSubmitButtonReady] = useState(true);
-  //variable to check if the new category exists in the already existing categories
-  const [categoryExistsInCategories, setCategoryExistsInCategories] =
-    useState(false);
-  //variable to check if Modal Box for deletion is open
   const [deleteModalBoxOpen, setDeleteModalBoxOpen] = useState(false);
 
+  const [currentInfo, setCurrentInfo] = useState(["", ""]);
+
   //HANDLING FUNCTIONS
-
-  function handleGoBack(event) {
-    event.preventDefault();
-    if (!pressedEnter) {
-      router.push(`/`);
-    } else {
-      setPressedEnter(false);
-    }
-  }
-
-  function handleKeyPress(event) {
-    switch (event.key) {
-      case "Enter": //check if user has not pressed enter on input field (for mobile check purposes "Go" or "Enter")
-        setPressedEnter(true);
-        break;
-      case "Backspace": //check if user has pressed backspace on input field (onChange won't work on backspace)
-        handleInput(event);
-        break;
-    }
-  }
-
   function handleInput(event) {
-    checkInput();
+    const value = event.target.value;
+    const inCategories = categoryInCategories(value.trim());
 
-    function checkInput() {
-      let value = event.target.value;
-
-      if (!value.startsWith(" ") && value.length > 0) {
-        const inCategories = categoryInCategories(value);
-
-        setCategoryExistsInCategories(inCategories);
-        setSubmitButtonReady(!inCategories);
-      } else if (value.length > 0) {
-        value = value.trim();
-        event.target.value = value;
-        checkInput();
+    if (testHasChar.test(value)) {
+      if (!inCategories) {
+        setCategoryValidated(true);
+        setCurrentInfo(["", ""]);
+        setSubmitButtonReady(true);
       } else {
+        setCurrentInfo(["category", "Diese Kategorie existiert bereits"]);
+        setCategoryValidated(false);
         setSubmitButtonReady(false);
-        setCategoryExistsInCategories(false);
       }
+    } else {
+      setCategoryValidated(false);
+      setCurrentInfo([
+        "category",
+        "Eine Kategorie muss mind. ein Zeichen enthalten",
+      ]);
+      setSubmitButtonReady(false);
     }
   }
 
   function handleDelete() {
-    checkDelete();
+    let standardCategory = categories.find(
+      (category) => category.default === true
+    );
+    let standardCategoryId = standardCategory ? standardCategory.id : null;
 
-    function checkDelete() {
-      let standardCategory = categories.find(
-        (category) => category.default === true
-      );
-      let standardCategoryId = standardCategory ? standardCategory.id : null;
-
-      //no default category exist
-      if (!standardCategoryId) {
-        standardCategoryId = nanoid();
-        addCategory(standardCategoryId, "Standard Kategorie", true);
-      }
-
-      listItems.forEach((item) => {
-        if (item.categoryId === category.id)
-          editListItem(item.id, item.name, standardCategoryId); //checks if any listItem is part of the deleted category
-      });
-
-      deleteCategory(category.id);
-      router.push("/");
+    //no default category exist
+    if (!standardCategoryId) {
+      standardCategoryId = nanoid();
+      addCategory(standardCategoryId, "Standard Kategorie", true);
     }
+
+    listItems.forEach((item) => {
+      if (item.categoryId === category.id)
+        editListItem(item.id, item.name, standardCategoryId); //checks if any listItem is part of the deleted category
+    });
+
+    deleteCategory(category.id);
+    router.push("/");
   }
 
   function handleSubmit(event) {
@@ -151,6 +122,7 @@ export default function EditCategory() {
       </Head>
 
       <Header>Kateg. Bearbeiten</Header>
+      {currentInfo[1] && <Info>{currentInfo[1]}</Info>}
       <FormMain>
         <StyledForm onSubmit={(event) => handleSubmit(event)}>
           <Input
@@ -158,9 +130,8 @@ export default function EditCategory() {
             labelText="Name der Kategorie"
             inputIcon="list"
             handleChange={(event) => handleInput(event)}
-            handleKeyPress={(event) => handleKeyPress(event)}
             value={category.name}
-            error={categoryExistsInCategories}
+            error={!categoryValidated}
           >
             Name...
           </Input>
@@ -168,7 +139,10 @@ export default function EditCategory() {
             <ButtonIcon
               color="secondary"
               aria-label={"zurück"}
-              onClick={(event) => handleGoBack(event)}
+              onClick={(event) => {
+                event.preventDefault();
+                router.push("/");
+              }}
             >
               <MdKeyboardArrowLeft size="24px" />
             </ButtonIcon>
@@ -185,9 +159,9 @@ export default function EditCategory() {
             </ButtonSmall>
             <ButtonSmall
               color="primary"
-              disabled={!submitButtonReady || categoryExistsInCategories}
+              disabled={!submitButtonReady}
               onClick={() => {
-                return submitButtonReady && categoryExistsInCategories;
+                return submitButtonReady;
               }}
             >
               speichern
