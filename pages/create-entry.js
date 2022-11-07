@@ -17,6 +17,9 @@ import Info from "../components/Info";
 
 export default function CreateEntry() {
   const router = useRouter();
+  const { listId } = router.query;
+
+  const routerReturnPath = "/list/" + listId;
 
   const testHasChar = new RegExp("[\\w]");
 
@@ -110,12 +113,12 @@ export default function CreateEntry() {
 
     if (data.newCategory) {
       const newCategoryId = nanoid();
-      addCategory(newCategoryId, data.newCategory);
+      addCategory(newCategoryId, data.newCategory, listId);
       categoryId = newCategoryId;
     }
 
     addListItem(name, categoryId);
-    router.push("/");
+    router.push(routerReturnPath);
   }
 
   //HELPER FUNCTIONS
@@ -166,7 +169,7 @@ export default function CreateEntry() {
               aria-label={"zurück"}
               onClick={(event) => {
                 event.preventDefault();
-                router.push("/");
+                router.push(routerReturnPath);
               }}
             >
               <MdKeyboardArrowLeft />

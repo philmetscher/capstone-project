@@ -18,7 +18,9 @@ import Info from "../../components/Info";
 
 export default function EditCategory() {
   const router = useRouter();
-  const { id } = router.query;
+  const { id, listId } = router.query;
+
+  const routerReturnPath = "/list/" + listId;
 
   const testHasChar = new RegExp("[\\w]");
 
@@ -77,7 +79,7 @@ export default function EditCategory() {
     //no default category exist
     if (!standardCategoryId) {
       standardCategoryId = nanoid();
-      addCategory(standardCategoryId, "Verschiedenes", true);
+      addCategory(standardCategoryId, "Verschiedenes", listId, true);
     }
 
     listItems.forEach((item) => {
@@ -95,7 +97,7 @@ export default function EditCategory() {
       setTimeout(() => setCurrentInfo(["", ""]), 3500);
     } else {
       deleteCategory(category.id);
-      router.push("/");
+      router.push(routerReturnPath);
     }
   }
 
@@ -108,10 +110,8 @@ export default function EditCategory() {
     let id = category.id,
       name = data.categoryName;
 
-    if (!pressedEnter) {
-      editCategory(id, name);
-      router.push("/");
-    }
+    editCategory(id, name);
+    router.push(routerReturnPath);
   }
 
   //HELPER FUNCTIONS
@@ -146,7 +146,7 @@ export default function EditCategory() {
               aria-label={"zurück"}
               onClick={(event) => {
                 event.preventDefault();
-                router.push("/");
+                router.push(routerReturnPath);
               }}
             >
               <MdKeyboardArrowLeft size="24px" />

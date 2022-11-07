@@ -10,10 +10,20 @@ export default function CategoryHeadline({
   id,
   extended,
   handleClick,
+  listId = { listId },
 }) {
   return (
     <CategoryHeadlineWrapper onClick={handleClick}>
-      <Link href={"/edit-category/" + id} passHref>
+      <Link
+        href={{
+          pathname: "/edit-category/" + id,
+          query: {
+            id: id,
+            listId: listId,
+          },
+        }}
+        passHref
+      >
         <EditAnchor onClick={(event) => event.stopPropagation()}>
           <PTagBold>{children}</PTagBold>
           <MdEdit size="24px" />

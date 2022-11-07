@@ -7,7 +7,7 @@ import { DragDropContext, Droppable } from "@hello-pangea/dnd";
 import CategoryHeadline from "./CategoryHeadline";
 import CategoryListItem from "./CategoryListItem";
 
-export default function Category({ category }) {
+export default function Category({ category, listId }) {
   const [isExtended, setIsExtended] = useState(true);
 
   //GET THINGS FROM STORE
@@ -34,6 +34,7 @@ export default function Category({ category }) {
         id={category.id}
         extended={isExtended}
         handleClick={() => setIsExtended((oldIsExtended) => !oldIsExtended)}
+        listId={listId}
       >
         {category.name}
       </CategoryHeadline>
@@ -52,6 +53,7 @@ export default function Category({ category }) {
                       id={listItem.id}
                       index={index}
                       checked={listItem.checked}
+                      listId={listId}
                     >
                       {listItem.name}
                     </CategoryListItem>

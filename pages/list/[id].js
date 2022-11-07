@@ -38,8 +38,6 @@ export default function List() {
 
   if (!list) return;
 
-  console.log(filteredCategories);
-
   return (
     <>
       <Layout>{list.name}</Layout>
@@ -50,11 +48,15 @@ export default function List() {
           )}
           {filteredCategories &&
             filteredCategories.map((category) => (
-              <DynamicCategory key={category.id} category={category} />
+              <DynamicCategory
+                key={category.id}
+                category={category}
+                listId={id}
+              />
             ))}
         </CategoriesSection>
       </ListMain>
-      <DynamicNavigation />
+      <DynamicNavigation listId={id} />
     </>
   );
 }

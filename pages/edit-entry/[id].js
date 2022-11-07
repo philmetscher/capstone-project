@@ -23,7 +23,9 @@ import Info from "../../components/Info";
 
 export default function EditEntry() {
   const router = useRouter();
-  const { id } = router.query;
+  const { id, listId } = router.query;
+
+  const routerReturnPath = "/list/" + listId;
 
   const testHasChar = new RegExp("[\\w]");
 
@@ -119,7 +121,7 @@ export default function EditEntry() {
 
   function handleDelete() {
     deleteListItem(listItem.id);
-    router.push("/");
+    router.push(routerReturnPath);
   }
 
   function handleSubmit(event) {
@@ -134,7 +136,7 @@ export default function EditEntry() {
 
     if (data.newCategory) {
       const newCategoryId = nanoid();
-      addCategory(newCategoryId, data.newCategory);
+      addCategory(newCategoryId, data.newCategory, listId);
       categoryId = newCategoryId;
     }
     if (categoryId != data.itemCategory) {
@@ -142,7 +144,7 @@ export default function EditEntry() {
     }
 
     editListItem(id, name, categoryId);
-    router.push("/");
+    router.push(routerReturnPath);
   }
 
   //HELPER FUNCTIONS
@@ -201,7 +203,7 @@ export default function EditEntry() {
               aria-label={"zurück"}
               onClick={(event) => {
                 event.preventDefault();
-                router.push("/");
+                router.push(routerReturnPath);
               }}
             >
               <MdKeyboardArrowLeft />
