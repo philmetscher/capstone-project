@@ -80,8 +80,6 @@ export default function EditCategory() {
       (listItem) => listItem.categoryId === category.id
     );
 
-    console.log(standardCategory);
-
     if (listItemsInCategory) {
       //listItems are in the deleted category
       if (!standardCategory) {

@@ -151,8 +151,6 @@ export default function EditEntry() {
       categoryId = newCategoryId;
     }
 
-    console.log(categoryId);
-
     editListItem(id, name, categoryId);
     router.push(routerReturnPath);
   }
