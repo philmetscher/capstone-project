@@ -118,10 +118,8 @@ function Select({
   options,
   disabled = false,
 }) {
-  if (options.length === 0) return;
-
   const [isOpen, setIsOpen] = useState(false);
-  const [selectedOption, setSelectedOption] = useState(options[0]);
+  const [selectedOption, setSelectedOption] = useState(options[0] || {});
 
   const toggling = () => setIsOpen(!isOpen);
 
@@ -129,6 +127,8 @@ function Select({
     setSelectedOption(value);
     setIsOpen(false);
   };
+
+  if (options.length === 0) return;
 
   return (
     <Group>
