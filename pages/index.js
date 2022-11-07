@@ -1,9 +1,13 @@
 import styled from "styled-components";
 import { useListsStore } from "../useStore";
+import dynamic from "next/dynamic";
 
 //Components
 import Layout from "../components/Layout";
 import OverviewListEntry from "../components/OverviewListEntry";
+const DynamicNavigation = dynamic(() => import("../components/Navigation"), {
+  ssr: false,
+});
 
 export default function Home() {
   //GET THINGS FROM STORE
@@ -19,6 +23,7 @@ export default function Home() {
           </OverviewListEntry>
         ))}
       </OverviewList>
+      <DynamicNavigation isHome />
     </>
   );
 }
