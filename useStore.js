@@ -9,6 +9,18 @@ export const useListsStore = create(
   persist(
     (set, get) => ({
       lists: exampleLists,
+
+      addList: (newListName) => {
+        set({
+          lists: [
+            ...get().lists,
+            {
+              id: nanoid(),
+              name: newListName,
+            },
+          ],
+        });
+      },
     }),
     {
       name: "lists",
