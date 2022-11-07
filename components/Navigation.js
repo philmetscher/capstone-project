@@ -2,12 +2,13 @@ import Link from "next/link";
 import styled from "styled-components";
 import { useListItemsStore } from "../useStore";
 import { useState } from "react";
+import { useRouter } from "next/router";
 
 //Components
-import { MdClear, MdDelete, MdAdd } from "react-icons/md"; //Icons
+import { MdClear, MdDelete, MdAdd, MdKeyboardArrowLeft } from "react-icons/md"; //Icons
 import ModalDeleteBox from "./ModalDeleteBox";
 
-export default function Navigation() {
+export default function Navigation({ listId }) {
   //SOME STATES
   //variable to check if Modal Box for deletion is open
   const [deleteModalBoxOpen, setDeleteModalBoxOpen] = useState(false);
@@ -59,14 +60,30 @@ export default function Navigation() {
               </NavEntry>
             </>
           ) : (
-            <NavEntry width="100%">
-              <Link href={"/create-entry"} passHref>
-                <NavLink width="100%">
-                  <MdAdd size="24px" />
-                  <NavDesc>neuer Eintrag</NavDesc>
-                </NavLink>
-              </Link>
-            </NavEntry>
+            <>
+              <NavEntry width="50%">
+                <Link href="/" passHref>
+                  <NavLink width="100%">
+                    <MdKeyboardArrowLeft size="24px" />
+                    <NavDesc>zu Listen</NavDesc>
+                  </NavLink>
+                </Link>
+              </NavEntry>
+              <NavEntry width="50%">
+                <Link
+                  href={{
+                    pathname: "/create-entry",
+                    query: { listId: listId },
+                  }}
+                  passHref
+                >
+                  <NavLink width="100%">
+                    <MdAdd size="24px" />
+                    <NavDesc>neuer Eintrag</NavDesc>
+                  </NavLink>
+                </Link>
+              </NavEntry>
+            </>
           )}
         </NavList>
       </NavigationWrapper>

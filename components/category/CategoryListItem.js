@@ -9,7 +9,13 @@ import { MdOutlineDragHandle, MdEdit } from "react-icons/md"; //Icons
 import { PTag } from "../HtmlComponents";
 import Checkbox from "../Checkbox";
 
-export default function CategoryListItem({ children, id, index, checked }) {
+export default function CategoryListItem({
+  children,
+  id,
+  index,
+  checked,
+  listId,
+}) {
   const toggleCheck = useListItemsStore((state) => state.toggleCheck);
   const updateAnyListItemChecked = useListItemsStore(
     (state) => state.updateAnyListItemChecked
@@ -35,7 +41,16 @@ export default function CategoryListItem({ children, id, index, checked }) {
           </DragWrapper>
           <Checkbox id={id} onChange={handleCheckboxChange} checked={checked} />
           <ListItemName>{children}</ListItemName>
-          <Link href={"/edit-entry/" + id} passHref>
+          <Link
+            href={{
+              pathname: "/edit-entry/" + id,
+              query: {
+                id: id,
+                listId: listId,
+              },
+            }}
+            passHref
+          >
             <EditAnchor>
               <MdEdit size="24px" />
             </EditAnchor>

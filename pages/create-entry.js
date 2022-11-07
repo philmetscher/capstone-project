@@ -1,12 +1,10 @@
-import Head from "next/head";
 import { useRouter } from "next/router";
 import { useState } from "react";
 import { useCategoriesStore, useListItemsStore } from "../useStore";
-
 import { nanoid } from "nanoid";
 
 // Components
-import Header from "../components/Header";
+import Layout from "../components/Layout";
 import {
   FormMain,
   StyledForm,
@@ -19,6 +17,9 @@ import Info from "../components/Info";
 
 export default function CreateEntry() {
   const router = useRouter();
+  const { listId } = router.query;
+
+  const routerReturnPath = "/list/" + listId;
 
   const testHasChar = new RegExp("[\\w]");
 
@@ -35,6 +36,13 @@ export default function CreateEntry() {
   const [submitButtonReady, setSubmitButtonReady] = useState(false);
 
   const [currentInfo, setCurrentInfo] = useState(["", ""]);
+
+  let filteredCategories;
+  if (categories) {
+    filteredCategories = categories.filter((category) =>
+      category.listId === listId ? category : ""
+    );
+  }
 
   //HANDLE FUNCTIONS
   function handleItemInput(event) {
@@ -55,6 +63,15 @@ export default function CreateEntry() {
     if (!inListItems) {
       setItemNameValidated(true);
       if (currentInfo[0] === "listItem") setCurrentInfo(["", ""]);
+
+      if (filteredCategories.length === 0) {
+        setCurrentInfo([
+          "category",
+          "Erstelle eine neue Kategorie für deinen Eintrag",
+        ]);
+        setSubmitButtonReady(false);
+        return;
+      }
       setSubmitButtonReady(categoryDropdownUsed || categoryValidated);
 
       return;
@@ -71,11 +88,21 @@ export default function CreateEntry() {
 
     if (!testHasChar.test(value)) {
       setCategoryValidated(false);
+      console.log("test");
 
-      if (value.length === 0) {
+      if (value.length === 0 && filteredCategories.length > 0) {
         if (currentInfo[0] === "category") setCurrentInfo(["", ""]);
         setCategoryDropdownUsed(true);
         setSubmitButtonReady(itemNameValidated && categoryDropdownUsed);
+        return;
+      }
+
+      if (filteredCategories.length === 0) {
+        setCurrentInfo([
+          "category",
+          "Erstelle eine neue Kategorie für deinen Eintrag",
+        ]);
+        setSubmitButtonReady(false);
         return;
       }
 
@@ -112,19 +139,23 @@ export default function CreateEntry() {
 
     if (data.newCategory) {
       const newCategoryId = nanoid();
-      addCategory(newCategoryId, data.newCategory);
+      addCategory(newCategoryId, data.newCategory, listId);
       categoryId = newCategoryId;
     }
 
     addListItem(name, categoryId);
-    router.push("/");
+    router.push(routerReturnPath);
   }
 
   //HELPER FUNCTIONS
   const itemInListItems = (name) =>
-    listItems.some((listItem) => listItem.name === name);
+    listItems.some(
+      (listItem) => listItem.name === name && listItem.listId === listId
+    );
   const categoryInCategories = (name) =>
-    categories.some((category) => category.name === name);
+    categories.some(
+      (category) => category.name === name && category.listId === listId
+    );
 
   if (!categories || !listItems) {
     return <p>Loading...</p>;
@@ -132,13 +163,7 @@ export default function CreateEntry() {
 
   return (
     <>
-      <Head>
-        <title>neuer Eintrag</title>
-        <meta name="description" content="JustList App" />
-        <link rel="icon" href="/favicon.ico" />
-      </Head>
-
-      <Header>neuer Eintrag</Header>
+      <Layout>neuer Eintrag</Layout>
       {currentInfo[1] && <Info>{currentInfo[1]}</Info>}
       <FormMain>
         <StyledForm onSubmit={(event) => handleSubmit(event)}>
@@ -151,16 +176,22 @@ export default function CreateEntry() {
           >
             Name...
           </Input>
-          <Select
-            name="itemCategory"
-            labelText="Kategorie auswählen"
-            inputIcon="chevronDown"
-            options={categories}
-            disabled={!categoryDropdownUsed}
-          />
+          {filteredCategories && (
+            <Select
+              name="itemCategory"
+              labelText="Kategorie auswählen"
+              inputIcon="chevronDown"
+              options={filteredCategories}
+              disabled={!categoryDropdownUsed}
+            />
+          )}
           <Input
             name="newCategory"
-            labelText="oder neue Kateg. erstellen"
+            labelText={
+              filteredCategories.length > 0
+                ? "oder neue Kateg. erstellen"
+                : "neue Kateg. erstellen"
+            }
             inputIcon="plus"
             iconBefore={false}
             handleChange={(event) => handleCategoryInput(event)}
@@ -174,7 +205,7 @@ export default function CreateEntry() {
               aria-label={"zurück"}
               onClick={(event) => {
                 event.preventDefault();
-                router.push("/");
+                router.push(routerReturnPath);
               }}
             >
               <MdKeyboardArrowLeft />

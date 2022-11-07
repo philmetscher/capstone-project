@@ -1,4 +1,3 @@
-import Head from "next/head";
 import styled from "styled-components";
 import { useState } from "react";
 import { useRouter } from "next/router";
@@ -6,7 +5,7 @@ import { useCategoriesStore, useListItemsStore } from "../../useStore";
 import { nanoid } from "nanoid";
 
 // Components
-import Header from "../../components/Header";
+import Layout from "../../components/Layout";
 import { FormMain, StyledForm, Input } from "../../components/FormComponents";
 import ModalDeleteBox from "../../components/ModalDeleteBox";
 import { ButtonGroup, ButtonIcon, ButtonSmall } from "../../components/Button";
@@ -19,7 +18,9 @@ import Info from "../../components/Info";
 
 export default function EditCategory() {
   const router = useRouter();
-  const { id } = router.query;
+  const { id, listId } = router.query;
+
+  const routerReturnPath = "/list/" + listId;
 
   const testHasChar = new RegExp("[\\w]");
 
@@ -75,16 +76,19 @@ export default function EditCategory() {
     );
     let standardCategoryId = standardCategory ? standardCategory.id : null;
 
-    //no default category exist
-    if (!standardCategoryId) {
+    const listItemsInCategory = listItems.some(
+      (listItem) => listItem.categoryId === category.id
+    );
+    if (listItemsInCategory && !standardCategory) {
+      //listItems are in the deleted category & no default category exist
       standardCategoryId = nanoid();
-      addCategory(standardCategoryId, "Verschiedenes", true);
-    }
+      addCategory(standardCategoryId, "Verschiedenes", listId, true);
 
-    listItems.forEach((item) => {
-      if (item.categoryId === category.id)
-        editListItem(item.id, item.name, standardCategoryId); //checks if any listItem is part of the deleted category
-    });
+      listItems.forEach((item) => {
+        if (item.categoryId === category.id)
+          editListItem(item.id, item.name, standardCategoryId); //checks if any listItem is part of the deleted category
+      });
+    }
 
     if (category === standardCategory) {
       setDeleteModalBoxOpen(false);
@@ -96,7 +100,7 @@ export default function EditCategory() {
       setTimeout(() => setCurrentInfo(["", ""]), 3500);
     } else {
       deleteCategory(category.id);
-      router.push("/");
+      router.push(routerReturnPath);
     }
   }
 
@@ -109,16 +113,17 @@ export default function EditCategory() {
     let id = category.id,
       name = data.categoryName;
 
-    if (!pressedEnter) {
-      editCategory(id, name);
-      router.push("/");
-    }
+    editCategory(id, name);
+    router.push(routerReturnPath);
   }
 
   //HELPER FUNCTIONS
   const categoryInCategories = (newCategoryName) =>
     categories.some(
-      (item) => item.name === newCategoryName && item.id != category.id
+      (item) =>
+        item.name === newCategoryName &&
+        item.id != category.id &&
+        item.listId === listId
     );
 
   if (!category) {
@@ -127,13 +132,7 @@ export default function EditCategory() {
 
   return (
     <>
-      <Head>
-        <title>Bearbeite Kategorie</title>
-        <meta name="description" content="JustList App" />
-        <link rel="icon" href="/favicon.ico" />
-      </Head>
-
-      <Header>Kateg. Bearbeiten</Header>
+      <Layout>Kateg. Bearbeiten</Layout>
       {currentInfo[1] && <Info>{currentInfo[1]}</Info>}
       <FormMain>
         <StyledForm onSubmit={(event) => handleSubmit(event)}>
@@ -153,7 +152,7 @@ export default function EditCategory() {
               aria-label={"zurück"}
               onClick={(event) => {
                 event.preventDefault();
-                router.push("/");
+                router.push(routerReturnPath);
               }}
             >
               <MdKeyboardArrowLeft size="24px" />

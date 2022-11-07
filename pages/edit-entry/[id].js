@@ -1,4 +1,3 @@
-import Head from "next/head";
 import styled from "styled-components";
 import { useState } from "react";
 import { useRouter } from "next/router";
@@ -6,7 +5,7 @@ import { useCategoriesStore, useListItemsStore } from "../../useStore";
 import { nanoid } from "nanoid";
 
 // Components
-import Header from "../../components/Header";
+import Layout from "../../components/Layout";
 import {
   FormMain,
   StyledForm,
@@ -24,7 +23,9 @@ import Info from "../../components/Info";
 
 export default function EditEntry() {
   const router = useRouter();
-  const { id } = router.query;
+  const { id, listId } = router.query;
+
+  const routerReturnPath = "/list/" + listId;
 
   const testHasChar = new RegExp("[\\w]");
 
@@ -35,12 +36,20 @@ export default function EditEntry() {
   const editListItem = useListItemsStore((state) => state.editListItem);
   const deleteListItem = useListItemsStore((state) => state.deleteListItem);
 
+  let filteredCategories;
+  if (categories) {
+    filteredCategories = categories.filter((category) =>
+      category.listId === listId ? category : ""
+    );
+  }
+
   //GET CURRENT LIST ITEM & LIST ITEM CATEGORY
   let listItem = {};
   if (listItems) listItem = listItems.find((listItem) => listItem.id == id);
+
   let listItemCategory = {};
-  if (listItem) {
-    listItemCategory = categories.find(
+  if (filteredCategories) {
+    listItemCategory = filteredCategories.find(
       (category) => category.id === listItem.categoryId
     );
   }
@@ -120,7 +129,7 @@ export default function EditEntry() {
 
   function handleDelete() {
     deleteListItem(listItem.id);
-    router.push("/");
+    router.push(routerReturnPath);
   }
 
   function handleSubmit(event) {
@@ -133,38 +142,48 @@ export default function EditEntry() {
       name = data.itemName,
       categoryId = listItem.categoryId;
 
-    if (data.newCategory) {
-      const newCategoryId = nanoid();
-      addCategory(newCategoryId, data.newCategory);
-      categoryId = newCategoryId;
-    }
     if (categoryId != data.itemCategory) {
       categoryId = data.itemCategory;
     }
+    if (data.newCategory) {
+      const newCategoryId = nanoid();
+      addCategory(newCategoryId, data.newCategory, listId);
+      categoryId = newCategoryId;
+    }
+
+    console.log(categoryId);
 
     editListItem(id, name, categoryId);
-    router.push("/");
+    router.push(routerReturnPath);
   }
 
   //HELPER FUNCTIONS
   const itemInListItems = (name) =>
-    listItems.some((item) => item.name === name && item.id != listItem.id);
+    listItems.some(
+      (item) =>
+        item.name === name &&
+        item.id != listItem.id &&
+        listItem.listId === listId
+    );
   const categoryInCategories = (name) =>
-    categories.some((category) => category.name === name);
+    categories.some(
+      (category) => category.name === name && category.listId === listId
+    );
 
   if (!categories || !listItem) {
     return <p>Loading...</p>;
   }
 
+  const options = [
+    listItemCategory,
+    ...filteredCategories.filter(
+      (category) => category.id !== listItem.categoryId
+    ),
+  ];
+
   return (
     <>
-      <Head>
-        <title>Bearbeite list-item</title>
-        <meta name="description" content="JustList App" />
-        <link rel="icon" href="/favicon.ico" />
-      </Head>
-
-      <Header>Bearbeiten</Header>
+      <Layout>Bearbeiten</Layout>
       {currentInfo[1] && <Info>{currentInfo[1]}</Info>}
       <FormMain>
         <StyledForm onSubmit={(event) => handleSubmit(event)}>
@@ -178,17 +197,12 @@ export default function EditEntry() {
           >
             Name...
           </Input>
-          {listItemCategory && (
+          {options && (
             <Select
               name="itemCategory"
               labelText="Kategorie auswählen"
               inputIcon="chevronDown"
-              options={[
-                listItemCategory,
-                ...categories.filter(
-                  (category) => category.id !== listItem.categoryId
-                ),
-              ]}
+              options={options}
               disabled={!categoryDropdownUsed}
             />
           )}
@@ -208,7 +222,7 @@ export default function EditEntry() {
               aria-label={"zurück"}
               onClick={(event) => {
                 event.preventDefault();
-                router.push("/");
+                router.push(routerReturnPath);
               }}
             >
               <MdKeyboardArrowLeft />
