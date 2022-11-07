@@ -1,4 +1,3 @@
-import Head from "next/head";
 import styled from "styled-components";
 import { useState } from "react";
 import { useRouter } from "next/router";
@@ -6,7 +5,7 @@ import { useCategoriesStore, useListItemsStore } from "../../useStore";
 import { nanoid } from "nanoid";
 
 // Components
-import Header from "../../components/Header";
+import Layout from "../../components/Layout";
 import { FormMain, StyledForm, Input } from "../../components/FormComponents";
 import ModalDeleteBox from "../../components/ModalDeleteBox";
 import { ButtonGroup, ButtonIcon, ButtonSmall } from "../../components/Button";
@@ -127,13 +126,7 @@ export default function EditCategory() {
 
   return (
     <>
-      <Head>
-        <title>Bearbeite Kategorie</title>
-        <meta name="description" content="JustList App" />
-        <link rel="icon" href="/favicon.ico" />
-      </Head>
-
-      <Header>Kateg. Bearbeiten</Header>
+      <Layout>Kateg. Bearbeiten</Layout>
       {currentInfo[1] && <Info>{currentInfo[1]}</Info>}
       <FormMain>
         <StyledForm onSubmit={(event) => handleSubmit(event)}>

@@ -1,12 +1,10 @@
-import Head from "next/head";
 import { useRouter } from "next/router";
 import { useState } from "react";
 import { useCategoriesStore, useListItemsStore } from "../useStore";
-
 import { nanoid } from "nanoid";
 
 // Components
-import Header from "../components/Header";
+import Layout from "../components/Layout";
 import {
   FormMain,
   StyledForm,
@@ -132,13 +130,7 @@ export default function CreateEntry() {
 
   return (
     <>
-      <Head>
-        <title>neuer Eintrag</title>
-        <meta name="description" content="JustList App" />
-        <link rel="icon" href="/favicon.ico" />
-      </Head>
-
-      <Header>neuer Eintrag</Header>
+      <Layout>neuer Eintrag</Layout>
       {currentInfo[1] && <Info>{currentInfo[1]}</Info>}
       <FormMain>
         <StyledForm onSubmit={(event) => handleSubmit(event)}>
