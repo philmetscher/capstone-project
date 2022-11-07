@@ -120,7 +120,10 @@ export default function EditCategory() {
   //HELPER FUNCTIONS
   const categoryInCategories = (newCategoryName) =>
     categories.some(
-      (item) => item.name === newCategoryName && item.id != category.id
+      (item) =>
+        item.name === newCategoryName &&
+        item.id != category.id &&
+        item.listId === listId
     );
 
   if (!category) {

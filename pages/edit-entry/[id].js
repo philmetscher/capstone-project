@@ -159,9 +159,16 @@ export default function EditEntry() {
 
   //HELPER FUNCTIONS
   const itemInListItems = (name) =>
-    listItems.some((item) => item.name === name && item.id != listItem.id);
+    listItems.some(
+      (item) =>
+        item.name === name &&
+        item.id != listItem.id &&
+        listItem.listId === listId
+    );
   const categoryInCategories = (name) =>
-    categories.some((category) => category.name === name);
+    categories.some(
+      (category) => category.name === name && category.listId === listId
+    );
 
   if (!categories || !listItem) {
     return <p>Loading...</p>;

@@ -149,9 +149,13 @@ export default function CreateEntry() {
 
   //HELPER FUNCTIONS
   const itemInListItems = (name) =>
-    listItems.some((listItem) => listItem.name === name);
+    listItems.some(
+      (listItem) => listItem.name === name && listItem.listId === listId
+    );
   const categoryInCategories = (name) =>
-    categories.some((category) => category.name === name);
+    categories.some(
+      (category) => category.name === name && category.listId === listId
+    );
 
   if (!categories || !listItems) {
     return <p>Loading...</p>;
