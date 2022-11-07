@@ -134,14 +134,16 @@ export default function EditEntry() {
       name = data.itemName,
       categoryId = listItem.categoryId;
 
+    if (categoryId != data.itemCategory) {
+      categoryId = data.itemCategory;
+    }
     if (data.newCategory) {
       const newCategoryId = nanoid();
       addCategory(newCategoryId, data.newCategory, listId);
       categoryId = newCategoryId;
     }
-    if (categoryId != data.itemCategory) {
-      categoryId = data.itemCategory;
-    }
+
+    console.log(categoryId);
 
     editListItem(id, name, categoryId);
     router.push(routerReturnPath);
