@@ -36,12 +36,20 @@ export default function EditEntry() {
   const editListItem = useListItemsStore((state) => state.editListItem);
   const deleteListItem = useListItemsStore((state) => state.deleteListItem);
 
+  let filteredCategories;
+  if (categories) {
+    filteredCategories = categories.filter((category) =>
+      category.listId === listId ? category : ""
+    );
+  }
+
   //GET CURRENT LIST ITEM & LIST ITEM CATEGORY
   let listItem = {};
   if (listItems) listItem = listItems.find((listItem) => listItem.id == id);
+
   let listItemCategory = {};
-  if (listItem) {
-    listItemCategory = categories.find(
+  if (filteredCategories) {
+    listItemCategory = filteredCategories.find(
       (category) => category.id === listItem.categoryId
     );
   }
@@ -159,6 +167,13 @@ export default function EditEntry() {
     return <p>Loading...</p>;
   }
 
+  const options = [
+    listItemCategory,
+    ...filteredCategories.filter(
+      (category) => category.id !== listItem.categoryId
+    ),
+  ];
+
   return (
     <>
       <Layout>Bearbeiten</Layout>
@@ -175,17 +190,12 @@ export default function EditEntry() {
           >
             Name...
           </Input>
-          {listItemCategory && (
+          {options && (
             <Select
               name="itemCategory"
               labelText="Kategorie auswählen"
               inputIcon="chevronDown"
-              options={[
-                listItemCategory,
-                ...categories.filter(
-                  (category) => category.id !== listItem.categoryId
-                ),
-              ]}
+              options={options}
               disabled={!categoryDropdownUsed}
             />
           )}
