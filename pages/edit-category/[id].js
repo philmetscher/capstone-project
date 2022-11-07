@@ -76,16 +76,19 @@ export default function EditCategory() {
     );
     let standardCategoryId = standardCategory ? standardCategory.id : null;
 
-    //no default category exist
-    if (!standardCategoryId) {
+    const listItemsInCategory = listItems.some(
+      (listItem) => listItem.categoryId === category.id
+    );
+    if (listItemsInCategory && !standardCategory) {
+      //listItems are in the deleted category & no default category exist
       standardCategoryId = nanoid();
       addCategory(standardCategoryId, "Verschiedenes", listId, true);
-    }
 
-    listItems.forEach((item) => {
-      if (item.categoryId === category.id)
-        editListItem(item.id, item.name, standardCategoryId); //checks if any listItem is part of the deleted category
-    });
+      listItems.forEach((item) => {
+        if (item.categoryId === category.id)
+          editListItem(item.id, item.name, standardCategoryId); //checks if any listItem is part of the deleted category
+      });
+    }
 
     if (category === standardCategory) {
       setDeleteModalBoxOpen(false);
