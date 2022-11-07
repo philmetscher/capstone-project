@@ -37,6 +37,13 @@ export default function CreateEntry() {
 
   const [currentInfo, setCurrentInfo] = useState(["", ""]);
 
+  let filteredCategories;
+  if (categories) {
+    filteredCategories = categories.filter((category) =>
+      category.listId === listId ? category : ""
+    );
+  }
+
   //HANDLE FUNCTIONS
   function handleItemInput(event) {
     const value = event.target.value;
@@ -146,16 +153,22 @@ export default function CreateEntry() {
           >
             Name...
           </Input>
-          <Select
-            name="itemCategory"
-            labelText="Kategorie auswählen"
-            inputIcon="chevronDown"
-            options={categories}
-            disabled={!categoryDropdownUsed}
-          />
+          {filteredCategories && (
+            <Select
+              name="itemCategory"
+              labelText="Kategorie auswählen"
+              inputIcon="chevronDown"
+              options={filteredCategories}
+              disabled={!categoryDropdownUsed}
+            />
+          )}
           <Input
             name="newCategory"
-            labelText="oder neue Kateg. erstellen"
+            labelText={
+              filteredCategories.length > 0
+                ? "oder neue Kateg. erstellen"
+                : "neue Kateg. erstellen"
+            }
             inputIcon="plus"
             iconBefore={false}
             handleChange={(event) => handleCategoryInput(event)}

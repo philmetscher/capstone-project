@@ -118,6 +118,8 @@ function Select({
   options,
   disabled = false,
 }) {
+  if (options.length === 0) return;
+
   const [isOpen, setIsOpen] = useState(false);
   const [selectedOption, setSelectedOption] = useState(options[0]);
 
