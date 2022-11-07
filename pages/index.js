@@ -1,3 +1,10 @@
+//Components
+import Layout from "../components/Layout";
+
 export default function Home() {
-  return <div>Test</div>;
+  return (
+    <>
+      <Layout>deine Listen</Layout>
+    </>
+  );
 }
