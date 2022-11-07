@@ -14,7 +14,9 @@ export default function Home() {
       <Layout>deine Listen</Layout>
       <OverviewList>
         {lists.map((list) => (
-          <OverviewListEntry>{list.name}</OverviewListEntry>
+          <OverviewListEntry key={list.id} id={list.id}>
+            {list.name}
+          </OverviewListEntry>
         ))}
       </OverviewList>
     </>

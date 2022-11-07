@@ -1,9 +1,11 @@
 import styled from "styled-components";
-import { useCategoriesStore } from "../../useStore";
+import { useCategoriesStore, useListsStore } from "../../useStore";
 import dynamic from "next/dynamic";
 
 // Components
 import Layout from "../../components/Layout";
+import { useRouter } from "next/router";
+import Info from "../../components/Info";
 const DynamicNavigation = dynamic(() => import("../../components/Navigation"), {
   ssr: false,
 });
@@ -16,16 +18,38 @@ const DynamicCategory = dynamic(
 );
 
 export default function List() {
+  const router = useRouter();
+  const { id } = router.query;
+
+  const lists = useListsStore((state) => state.lists);
   const categories = useCategoriesStore((state) => state.categories);
+
+  let list;
+  if (lists) {
+    list = lists.find((list) => list.id === id);
+  }
+
+  let filteredCategories;
+  if (list) {
+    filteredCategories = categories.filter((category) =>
+      category.listId === list.id ? category : ""
+    );
+  }
+
+  if (!list) return;
+
+  console.log(filteredCategories);
 
   return (
     <>
-      <Layout>Todos</Layout>
+      <Layout>{list.name}</Layout>
       <ListMain>
         <CategoriesSection>
-          {!categories && <p>Loading...</p>}
-          {categories &&
-            categories.map((category) => (
+          {!filteredCategories.length && (
+            <Info>Derzeit noch keine Einträge oder Kategorien vorhanden</Info>
+          )}
+          {filteredCategories &&
+            filteredCategories.map((category) => (
               <DynamicCategory key={category.id} category={category} />
             ))}
         </CategoriesSection>

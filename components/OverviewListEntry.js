@@ -4,10 +4,10 @@ import styled from "styled-components";
 //Components
 import { PTag } from "./HtmlComponents";
 
-export default function OverviewListEntry({ children }) {
+export default function OverviewListEntry({ id, children }) {
   return (
     <ListEntry>
-      <Link href="#" passHref>
+      <Link href={"/list/" + id} passHref>
         <ListEntryLink>
           <PTag>{children}</PTag>
         </ListEntryLink>
