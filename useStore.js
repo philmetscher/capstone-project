@@ -3,7 +3,18 @@ import { persist } from "zustand/middleware";
 
 import { nanoid } from "nanoid";
 
-import { exampleCategories, exampleListItems } from "./lib/db";
+import { exampleLists, exampleCategories, exampleListItems } from "./lib/db";
+
+export const useListsStore = create(
+  persist(
+    (set, get) => ({
+      lists: exampleLists,
+    }),
+    {
+      name: "lists",
+    }
+  )
+);
 
 export const useCategoriesStore = create(
   persist(
