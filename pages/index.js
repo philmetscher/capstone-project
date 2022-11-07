@@ -4,7 +4,12 @@ import dynamic from "next/dynamic";
 
 //Components
 import Layout from "../components/Layout";
-import OverviewListEntry from "../components/OverviewListEntry";
+const DynamicOverviewListEntry = dynamic(
+  () => import("../components/OverviewListEntry"),
+  {
+    ssr: false,
+  }
+);
 const DynamicNavigation = dynamic(() => import("../components/Navigation"), {
   ssr: false,
 });
@@ -18,9 +23,9 @@ export default function Home() {
       <Layout>deine Listen</Layout>
       <OverviewList>
         {lists.map((list) => (
-          <OverviewListEntry key={list.id} id={list.id}>
+          <DynamicOverviewListEntry key={list.id} id={list.id}>
             {list.name}
-          </OverviewListEntry>
+          </DynamicOverviewListEntry>
         ))}
       </OverviewList>
       <DynamicNavigation isHome />
