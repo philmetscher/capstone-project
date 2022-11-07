@@ -63,6 +63,15 @@ export default function CreateEntry() {
     if (!inListItems) {
       setItemNameValidated(true);
       if (currentInfo[0] === "listItem") setCurrentInfo(["", ""]);
+
+      if (filteredCategories.length === 0) {
+        setCurrentInfo([
+          "category",
+          "Erstelle eine neue Kategorie für deinen Eintrag",
+        ]);
+        setSubmitButtonReady(false);
+        return;
+      }
       setSubmitButtonReady(categoryDropdownUsed || categoryValidated);
 
       return;
@@ -79,11 +88,21 @@ export default function CreateEntry() {
 
     if (!testHasChar.test(value)) {
       setCategoryValidated(false);
+      console.log("test");
 
-      if (value.length === 0) {
+      if (value.length === 0 && filteredCategories.length > 0) {
         if (currentInfo[0] === "category") setCurrentInfo(["", ""]);
         setCategoryDropdownUsed(true);
         setSubmitButtonReady(itemNameValidated && categoryDropdownUsed);
+        return;
+      }
+
+      if (filteredCategories.length === 0) {
+        setCurrentInfo([
+          "category",
+          "Erstelle eine neue Kategorie für deinen Eintrag",
+        ]);
+        setSubmitButtonReady(false);
         return;
       }
 
