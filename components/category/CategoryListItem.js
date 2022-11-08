@@ -2,7 +2,7 @@ import styled from "styled-components";
 import Link from "next/link";
 import { Draggable } from "@hello-pangea/dnd";
 import { useEffect, useState } from "react";
-import { useListItemsStore } from "../../useStore";
+import { useStore } from "../../useStore";
 
 //Components
 import { MdOutlineDragHandle, MdEdit } from "react-icons/md"; //Icons
@@ -17,8 +17,8 @@ export default function CategoryListItem({
   checked,
   listId,
 }) {
-  const toggleCheck = useListItemsStore((state) => state.toggleCheck);
-  const updateAnyListItemChecked = useListItemsStore(
+  const toggleCheck = useStore((state) => state.toggleCheck);
+  const updateAnyListItemChecked = useStore(
     (state) => state.updateAnyListItemChecked
   );
 
@@ -41,7 +41,9 @@ export default function CategoryListItem({
             <MdOutlineDragHandle size="24px" />
           </DragWrapper>
           <Checkbox id={id} onChange={handleCheckboxChange} checked={checked} />
-          <CategoryListItemHeadline>{children}</CategoryListItemHeadline>
+          <CategoryListItemHeadline id={id}>
+            {children}
+          </CategoryListItemHeadline>
           <Link
             href={{
               pathname: "/edit-entry/" + id,

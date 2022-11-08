@@ -5,11 +5,14 @@ import { nanoid } from "nanoid";
 
 import { exampleLists, exampleCategories, exampleListItems } from "./lib/db";
 
-export const useListsStore = create(
+export const useStore = create(
   persist(
     (set, get) => ({
       lists: exampleLists,
+      categories: exampleCategories,
+      listItems: exampleListItems,
 
+      /* 'lists' functions */
       addList: (newListName) => {
         set({
           lists: [
@@ -49,18 +52,8 @@ export const useListsStore = create(
           lists: newSortedLists,
         });
       },
-    }),
-    {
-      name: "lists",
-    }
-  )
-);
 
-export const useCategoriesStore = create(
-  persist(
-    (set, get) => ({
-      categories: exampleCategories,
-
+      /* 'categories' functions */
       addCategory: (
         newCategoryId,
         newCategoryName,
@@ -89,6 +82,7 @@ export const useCategoriesStore = create(
             name: newName,
             default: currentCategory.default,
             listId: currentCategory.listId,
+            hasDisabledItems: currentCategory.disabled,
           };
           set({
             categories: get().categories.map((category) =>
@@ -106,18 +100,8 @@ export const useCategoriesStore = create(
           categories: newCategories,
         });
       },
-    }),
-    {
-      name: "categories",
-    }
-  )
-);
 
-export const useListItemsStore = create(
-  persist(
-    (set, get) => ({
-      listItems: exampleListItems,
-
+      /* 'listItems' functions */
       addListItem: (newListItemName, categoryId) => {
         set({
           listItems: [
@@ -158,44 +142,6 @@ export const useListItemsStore = create(
           listItems: newListItems,
         });
       },
-      updateListItemIndex: (destination, source) => {
-        const swappedListItem = get().listItems[destination];
-        const draggedListItem = get().listItems[source];
-
-        const newSortedListItems = get().listItems.map((item) => {
-          switch (item) {
-            case swappedListItem:
-              return draggedListItem;
-            case draggedListItem:
-              return swappedListItem;
-            default:
-              return item;
-          }
-        });
-
-        set({
-          listItems: newSortedListItems,
-        });
-      },
-      toggleCheck: (listItemId) => {
-        const newListItems = get().listItems.map((item) => {
-          if (item.id === listItemId) {
-            return {
-              ...item,
-              checked: !item.checked,
-            };
-          }
-          return item;
-        });
-
-        set({
-          listItems: newListItems,
-        });
-
-        get().updateAnyListItemChecked();
-      },
-
-      anyListItemChecked: false,
       updateAnyListItemChecked: (state = false) => {
         let anyChecked = state;
         if (!state) anyChecked = get().listItems.some((item) => item.checked);
@@ -204,9 +150,44 @@ export const useListItemsStore = create(
           anyListItemChecked: anyChecked,
         });
       },
+      toggleListItemDisabled: (listItemId) => {
+        const currentListItem = get().listItems.find(
+          (listItem) => listItem.id === listItemId
+        );
+        const newListItems = get().listItems.map((item) =>
+          item.id === listItemId ? { ...item, disabled: !item.disabled } : item
+        );
+
+        let categoriesDisablingList = [];
+        newListItems.forEach((listItem) =>
+          listItem.disabled
+            ? categoriesDisablingList.push(listItem.categoryId)
+            : ""
+        );
+
+        let newCategories = get().categories;
+        newCategories = newCategories.map((category) => {
+          if (!categoriesDisablingList.length) {
+            return {
+              ...category,
+              hasDisabledItems: false,
+            };
+          }
+
+          return {
+            ...category,
+            hasDisabledItems: categoriesDisablingList.includes(category.id),
+          };
+        });
+
+        set({
+          listItems: newListItems,
+          categories: newCategories,
+        });
+      },
     }),
     {
-      name: "listItems",
+      name: "store",
     }
   )
 );

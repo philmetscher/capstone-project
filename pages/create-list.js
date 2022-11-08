@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useRouter } from "next/router";
-import { useListsStore } from "../useStore";
+import { useStore } from "../useStore";
 
 //Components
 import Layout from "../components/Layout";
@@ -15,8 +15,8 @@ export default function CreateList() {
   const testHasChar = new RegExp("[\\w]");
 
   //GET THINGS FROM STORE
-  const lists = useListsStore((state) => state.lists);
-  const addList = useListsStore((state) => state.addList);
+  const lists = useStore((state) => state.lists);
+  const addList = useStore((state) => state.addList);
 
   //STATES
   const [listValidated, setListValidated] = useState(true);

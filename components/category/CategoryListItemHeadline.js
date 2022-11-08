@@ -1,13 +1,15 @@
 import styled from "styled-components";
-import { useCategoriesStore } from "../../useStore";
+import { useStore } from "../../useStore";
 
-export default function CategoryListItemHeadline({ children }) {
-  //GET THINGS FROM STORE
-  const addCategory = useCategoriesStore((state) => state.addCategory);
+export default function CategoryListItemHeadline({ id, children }) {
+  const toggleListItemDisabled = useStore(
+    (state) => state.toggleListItemDisabled
+  );
 
   const handleListItem = (event) => {
     event.preventDefault();
-    console.log("test");
+
+    toggleListItemDisabled(id);
   };
 
   return <HeadlineButton onClick={handleListItem}>{children}</HeadlineButton>;

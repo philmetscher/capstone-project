@@ -1,6 +1,6 @@
 import { useRouter } from "next/router";
 import { useState } from "react";
-import { useCategoriesStore, useListItemsStore } from "../useStore";
+import { useStore } from "../useStore";
 import { nanoid } from "nanoid";
 
 // Components
@@ -24,10 +24,10 @@ export default function CreateEntry() {
   const testHasChar = new RegExp("[\\w]");
 
   //GET THINGS FROM STORE
-  const categories = useCategoriesStore((state) => state.categories);
-  const listItems = useListItemsStore((state) => state.listItems);
-  const addCategory = useCategoriesStore((state) => state.addCategory);
-  const addListItem = useListItemsStore((state) => state.addListItem);
+  const categories = useStore((state) => state.categories);
+  const listItems = useStore((state) => state.listItems);
+  const addCategory = useStore((state) => state.addCategory);
+  const addListItem = useStore((state) => state.addListItem);
 
   //STATES
   const [itemNameValidated, setItemNameValidated] = useState(false);

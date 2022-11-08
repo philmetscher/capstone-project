@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import { useCategoriesStore, useListsStore } from "../../useStore";
+import { useStore } from "../../useStore";
 import dynamic from "next/dynamic";
 
 // Components
@@ -21,8 +21,8 @@ export default function List() {
   const router = useRouter();
   const { id } = router.query;
 
-  const lists = useListsStore((state) => state.lists);
-  const categories = useCategoriesStore((state) => state.categories);
+  const lists = useStore((state) => state.lists);
+  const categories = useStore((state) => state.categories);
 
   let list;
   if (lists) {
@@ -40,7 +40,7 @@ export default function List() {
     );
   }
 
-  if (!list) return;
+  if (!activeCategories && !inactiveCategories) return;
 
   return (
     <>

@@ -1,6 +1,6 @@
 import styled from "styled-components";
 import dynamic from "next/dynamic";
-import { useListsStore } from "../../useStore";
+import { useStore } from "../../useStore";
 import { DragDropContext, Droppable } from "@hello-pangea/dnd";
 
 //Components
@@ -10,8 +10,8 @@ const DynamicEntry = dynamic(() => import("./Entry"), {
 
 export default function OverviewList() {
   //GET THINGS FROM STORE
-  const lists = useListsStore((state) => state.lists);
-  const updateListIndex = useListsStore((state) => state.updateListIndex);
+  const lists = useStore((state) => state.lists);
+  const updateListIndex = useStore((state) => state.updateListIndex);
 
   const handleOnDragEnd = ({ destination, source }) => {
     //check if destination is not the same index as before & the destination is not in another category

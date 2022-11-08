@@ -1,6 +1,6 @@
 import Link from "next/link";
 import styled from "styled-components";
-import { useListItemsStore } from "../useStore";
+import { useStore } from "../useStore";
 import { useState } from "react";
 
 //Components
@@ -13,13 +13,11 @@ export default function Navigation({ listId, isHome = false }) {
   const [deleteModalBoxOpen, setDeleteModalBoxOpen] = useState(false);
 
   //GET THINGS FROM STORE
-  const listItems = useListItemsStore((state) => state.listItems);
-  const anyListItemChecked = useListItemsStore(
-    (state) => state.anyListItemChecked
-  );
-  const toggleCheck = useListItemsStore((state) => state.toggleCheck);
-  const deleteListItem = useListItemsStore((state) => state.deleteListItem);
-  const updateAnyListItemChecked = useListItemsStore(
+  const listItems = useStore((state) => state.listItems);
+  const anyListItemChecked = useStore((state) => state.anyListItemChecked);
+  const toggleCheck = useStore((state) => state.toggleCheck);
+  const deleteListItem = useStore((state) => state.deleteListItem);
+  const updateAnyListItemChecked = useStore(
     (state) => state.updateAnyListItemChecked
   );
 
