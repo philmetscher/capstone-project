@@ -144,7 +144,10 @@ export default function EditCategory() {
       <Layout>Kateg. Bearbeiten</Layout>
       {currentInfo[1] && <Info>{currentInfo[1]}</Info>}
       <FormMain>
-        <StyledForm onSubmit={(event) => handleSubmit(event)}>
+        <StyledForm
+          onSubmit={(event) => handleSubmit(event)}
+          autoComplete="off"
+        >
           <Input
             name="categoryName"
             labelText="Name der Kategorie"

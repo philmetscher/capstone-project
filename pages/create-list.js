@@ -67,7 +67,10 @@ export default function CreateList() {
       <Layout>Liste erstellen</Layout>
       {currentInfo[1] && <Info>{currentInfo[1]}</Info>}
       <FormMain>
-        <StyledForm onSubmit={(event) => handleSubmit(event)}>
+        <StyledForm
+          onSubmit={(event) => handleSubmit(event)}
+          autoComplete="off"
+        >
           <Input
             name="listName"
             labelText="Name der Liste"

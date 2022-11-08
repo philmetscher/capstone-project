@@ -61,6 +61,7 @@ function Input({
     <Group>
       <Label htmlFor={name}>{labelText}</Label>
       <StyledInput
+        autoComplete="off"
         className={error ? "error" : ""}
         name={name}
         inputIcon={inputIcon}
@@ -133,7 +134,11 @@ function Select({
   return (
     <Group>
       <Label htmlFor={name}>{labelText}</Label>
-      <Selection className="noselect" disabled={disabled}>
+      <Selection
+        className="noselect"
+        disabled={disabled}
+        onMouseLeave={() => setIsOpen(false)}
+      >
         <SelectionHeader
           className="noselect"
           onClick={disabled ? () => setIsOpen(false) : toggling}
