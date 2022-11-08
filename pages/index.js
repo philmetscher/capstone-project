@@ -21,18 +21,25 @@ export default function Home() {
   return (
     <>
       <Layout>deine Listen</Layout>
-      <OverviewList>
-        {lists.map((list) => (
-          <DynamicOverviewListEntry key={list.id} id={list.id}>
-            {list.name}
-          </DynamicOverviewListEntry>
-        ))}
-      </OverviewList>
+      <ListMain>
+        <OverviewList>
+          {lists.map((list) => (
+            <DynamicOverviewListEntry key={list.id} id={list.id}>
+              {list.name}
+            </DynamicOverviewListEntry>
+          ))}
+        </OverviewList>
+      </ListMain>
       <DynamicNavigation isHome />
     </>
   );
 }
 
+const ListMain = styled.main`
+  height: calc(100vh - 182px);
+  overflow-y: auto;
+`;
 const OverviewList = styled.ul`
   list-style-type: none;
+  padding-bottom: 40px;
 `;
