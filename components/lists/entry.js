@@ -2,7 +2,7 @@ import Link from "next/link";
 import styled from "styled-components";
 
 //Components
-import { PTag } from "./HtmlComponents";
+import { PTag } from "../HtmlComponents";
 import { MdOutlineDragHandle, MdEdit } from "react-icons/md"; //Icons
 
 export default function OverviewListEntry({ id, children }) {
