@@ -7,7 +7,7 @@ import { DragDropContext, Droppable } from "@hello-pangea/dnd";
 import CategoryHeadline from "./CategoryHeadline";
 import CategoryListItem from "./CategoryListItem";
 
-export default function Category({ category, listId }) {
+export default function Category({ category, listId, hasDisabledItems }) {
   const [isExtended, setIsExtended] = useState(true);
 
   //GET THINGS FROM STORE
@@ -28,13 +28,23 @@ export default function Category({ category, listId }) {
     updateListItemIndex(destination.index, source.index);
   };
 
+  //activeListItems
+  const activeListItems = listItems.filter(
+    (listItem) => listItem.categoryId === category.id && !listItem.disabled
+  );
+  //inactiveListItems
+  const inactiveListItems = listItems.filter(
+    (listItem) => listItem.categoryId === category.id && listItem.disabled
+  );
+
   return (
-    <article>
+    <CategoryWrapper disabled={hasDisabledItems}>
       <CategoryHeadline
         id={category.id}
         extended={isExtended}
         handleClick={() => setIsExtended((oldIsExtended) => !oldIsExtended)}
         listId={listId}
+        disabled={hasDisabledItems}
       >
         {category.name}
       </CategoryHeadline>
@@ -46,31 +56,49 @@ export default function Category({ category, listId }) {
                 ref={provided.innerRef}
                 {...provided.droppableProps}
               >
-                {listItems.map((listItem, index) =>
-                  listItem.categoryId === category.id ? (
-                    <CategoryListItem
-                      key={listItem.id}
-                      id={listItem.id}
-                      index={index}
-                      checked={listItem.checked}
-                      listId={listId}
-                    >
-                      {listItem.name}
-                    </CategoryListItem>
-                  ) : (
-                    ""
-                  )
+                {hasDisabledItems ? (
+                  <>
+                    {inactiveListItems.map((listItem, index) => (
+                      <CategoryListItem
+                        key={listItem.id}
+                        id={listItem.id}
+                        index={index}
+                        checked={listItem.checked}
+                        listId={listId}
+                      >
+                        {listItem.name}
+                      </CategoryListItem>
+                    ))}
+                  </>
+                ) : (
+                  <>
+                    {activeListItems.map((listItem, index) => (
+                      <CategoryListItem
+                        key={listItem.id}
+                        id={listItem.id}
+                        index={index}
+                        checked={listItem.checked}
+                        listId={listId}
+                      >
+                        {listItem.name}
+                      </CategoryListItem>
+                    ))}
+                  </>
                 )}
+
                 {provided.placeholder}
               </CategoryList>
             )}
           </Droppable>
         </DragDropContext>
       )}
-    </article>
+    </CategoryWrapper>
   );
 }
 
+const CategoryWrapper = styled.article`
+  opacity: ${({ disabled }) => (disabled ? 0.5 : 1)};
+`;
 const CategoryList = styled.ul`
   list-style-type: none;
 `;

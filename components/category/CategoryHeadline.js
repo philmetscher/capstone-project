@@ -11,24 +11,29 @@ export default function CategoryHeadline({
   extended,
   handleClick,
   listId = { listId },
+  disabled,
 }) {
   return (
-    <CategoryHeadlineWrapper onClick={handleClick}>
-      <Link
-        href={{
-          pathname: "/edit-category/" + id,
-          query: {
-            id: id,
-            listId: listId,
-          },
-        }}
-        passHref
-      >
-        <EditAnchor onClick={(event) => event.stopPropagation()}>
-          <PTagBold>{children}</PTagBold>
-          <MdEdit size="24px" />
-        </EditAnchor>
-      </Link>
+    <CategoryHeadlineWrapper onClick={handleClick} isDisabled={disabled}>
+      {!disabled ? (
+        <Link
+          href={{
+            pathname: "/edit-category/" + id,
+            query: {
+              id: id,
+              listId: listId,
+            },
+          }}
+          passHref
+        >
+          <EditAnchor onClick={(event) => event.stopPropagation()}>
+            <PTagBold>{children}</PTagBold>
+            <MdEdit size="24px" />
+          </EditAnchor>
+        </Link>
+      ) : (
+        <PTagBold>{children}</PTagBold>
+      )}
       {extended ? (
         <MdKeyboardArrowDown size="24px" />
       ) : (
@@ -45,7 +50,9 @@ const CategoryHeadlineWrapper = styled.button`
   padding: 10px 20px;
   gap: 10px;
   width: 100%;
-  background: var(--primary-gradient);
+  background: var(
+    ${({ isDisabled }) => (isDisabled ? "--gray" : "--primary-gradient")}
+  );
   border: none;
   color: var(--white);
   cursor: pointer;

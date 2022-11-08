@@ -8,6 +8,7 @@ import { useListItemsStore } from "../../useStore";
 import { MdOutlineDragHandle, MdEdit } from "react-icons/md"; //Icons
 import { PTag } from "../HtmlComponents";
 import Checkbox from "../Checkbox";
+import CategoryListItemHeadline from "./CategoryListItemHeadline";
 
 export default function CategoryListItem({
   children,
@@ -40,7 +41,7 @@ export default function CategoryListItem({
             <MdOutlineDragHandle size="24px" />
           </DragWrapper>
           <Checkbox id={id} onChange={handleCheckboxChange} checked={checked} />
-          <ListItemName>{children}</ListItemName>
+          <CategoryListItemHeadline>{children}</CategoryListItemHeadline>
           <Link
             href={{
               pathname: "/edit-entry/" + id,
@@ -79,9 +80,6 @@ const CategoryListItemWrapper = styled.li`
 `;
 const DragWrapper = styled.div`
   height: 24px;
-`;
-const ListItemName = styled(PTag)`
-  margin-right: auto;
 `;
 const EditAnchor = styled.a`
   width: 24px;

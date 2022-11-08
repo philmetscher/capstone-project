@@ -29,10 +29,14 @@ export default function List() {
     list = lists.find((list) => list.id === id);
   }
 
-  let filteredCategories;
+  let activeCategories;
+  let inactiveCategories;
   if (list) {
-    filteredCategories = categories.filter((category) =>
-      category.listId === list.id ? category : ""
+    activeCategories = categories.filter(
+      (category) => category.listId === list.id
+    );
+    inactiveCategories = categories.filter(
+      (category) => category.listId === list.id && category.hasDisabledItems
     );
   }
 
@@ -43,15 +47,24 @@ export default function List() {
       <Layout>{list.name}</Layout>
       <ListMain>
         <CategoriesSection>
-          {!filteredCategories.length && (
+          {!activeCategories.length && (
             <Info>Derzeit noch keine Einträge oder Kategorien vorhanden</Info>
           )}
-          {filteredCategories &&
-            filteredCategories.map((category) => (
+          {activeCategories &&
+            activeCategories.map((category) => (
               <DynamicCategory
                 key={category.id}
                 category={category}
                 listId={id}
+              />
+            ))}
+          {inactiveCategories &&
+            inactiveCategories.map((category) => (
+              <DynamicCategory
+                key={category.id}
+                category={category}
+                listId={id}
+                hasDisabledItems
               />
             ))}
         </CategoriesSection>
