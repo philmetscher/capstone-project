@@ -78,8 +78,11 @@ export const useStore = create(
         );
         if (currentCategory) {
           const newCategory = {
-            ...currentCategory,
+            id: currentCategory.id,
             name: newName,
+            default: currentCategory.default,
+            listId: currentCategory.listId,
+            hasDisabledItems: currentCategory.disabled,
           };
           set({
             categories: get().categories.map((category) =>
@@ -119,8 +122,11 @@ export const useStore = create(
         );
         if (currentListItem) {
           const newListItem = {
-            ...currentListItem,
+            id: currentListItem.id,
             name: newName,
+            categoryId: newCategoryId,
+            checked: currentListItem.checked,
+            disabled: currentListItem.disabled,
           };
           set({
             listItems: get().listItems.map((listItem) =>
@@ -174,7 +180,6 @@ export const useStore = create(
 
         get().updateAnyListItemChecked();
       },
-
       updateAnyListItemChecked: (state = false) => {
         let anyChecked = state;
         if (!state) anyChecked = get().listItems.some((item) => item.checked);
