@@ -61,6 +61,7 @@ function Input({
     <Group>
       <Label htmlFor={name}>{labelText}</Label>
       <StyledInput
+        autoComplete="off"
         className={error ? "error" : ""}
         name={name}
         inputIcon={inputIcon}

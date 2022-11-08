@@ -184,7 +184,10 @@ export default function EditEntry() {
       <Layout>Bearbeiten</Layout>
       {currentInfo[1] && <Info>{currentInfo[1]}</Info>}
       <FormMain>
-        <StyledForm onSubmit={(event) => handleSubmit(event)}>
+        <StyledForm
+          onSubmit={(event) => handleSubmit(event)}
+          autoComplete="off"
+        >
           <Input
             name="itemName"
             labelText="Name des Eintrags"
