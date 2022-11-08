@@ -3,7 +3,7 @@ import dynamic from "next/dynamic";
 
 //Components
 import Layout from "../components/Layout";
-import OverviewList from "../components/lists/list";
+import OverviewList from "../components/lists/List";
 const DynamicNavigation = dynamic(() => import("../components/Navigation"), {
   ssr: false,
 });

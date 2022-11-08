@@ -3,7 +3,7 @@ import dynamic from "next/dynamic";
 import { useListsStore } from "../../useStore";
 
 //Components
-const DynamicEntry = dynamic(() => import("./entry"), {
+const DynamicEntry = dynamic(() => import("./Entry"), {
   ssr: false,
 });
 
