@@ -79,10 +79,14 @@ export default function EditCategory() {
     const listItemsInCategory = listItems.some(
       (listItem) => listItem.categoryId === category.id
     );
-    if (listItemsInCategory && !standardCategory) {
-      //listItems are in the deleted category & no default category exist
-      standardCategoryId = nanoid();
-      addCategory(standardCategoryId, "Verschiedenes", listId, true);
+
+    if (listItemsInCategory) {
+      //listItems are in the deleted category
+      if (!standardCategory) {
+        //no default category exist
+        standardCategoryId = nanoid();
+        addCategory(standardCategoryId, "Verschiedenes", listId, true);
+      }
 
       listItems.forEach((item) => {
         if (item.categoryId === category.id)
@@ -127,7 +131,12 @@ export default function EditCategory() {
     );
 
   if (!category) {
-    return <p>Loading...</p>;
+    setTimeout(() => {
+      if (!category) {
+        router.push(routerReturnPath);
+      }
+    }, 3000);
+    return;
   }
 
   return (

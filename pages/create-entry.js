@@ -88,7 +88,6 @@ export default function CreateEntry() {
 
     if (!testHasChar.test(value)) {
       setCategoryValidated(false);
-      console.log("test");
 
       if (value.length === 0 && filteredCategories.length > 0) {
         if (currentInfo[0] === "category") setCurrentInfo(["", ""]);
