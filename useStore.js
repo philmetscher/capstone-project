@@ -78,11 +78,8 @@ export const useStore = create(
         );
         if (currentCategory) {
           const newCategory = {
-            id: currentCategory.id,
+            ...currentCategory,
             name: newName,
-            default: currentCategory.default,
-            listId: currentCategory.listId,
-            hasDisabledItems: currentCategory.disabled,
           };
           set({
             categories: get().categories.map((category) =>
@@ -111,6 +108,7 @@ export const useStore = create(
               name: newListItemName,
               categoryId: categoryId,
               checked: false,
+              disabled: false,
             },
           ],
         });
@@ -121,10 +119,8 @@ export const useStore = create(
         );
         if (currentListItem) {
           const newListItem = {
-            id: currentListItem.id,
+            ...currentListItem,
             name: newName,
-            categoryId: newCategoryId,
-            checked: currentListItem.checked,
           };
           set({
             listItems: get().listItems.map((listItem) =>
