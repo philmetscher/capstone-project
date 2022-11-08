@@ -1,27 +1,36 @@
 import Link from "next/link";
 import styled from "styled-components";
+import { Draggable } from "@hello-pangea/dnd";
 
 //Components
 import { PTag } from "../HtmlComponents";
 import { MdOutlineDragHandle, MdEdit } from "react-icons/md"; //Icons
 
-export default function OverviewListEntry({ id, children }) {
+export default function OverviewListEntry({ children, id, index }) {
   return (
-    <ListEntry>
-      <DragWrapper>
-        <MdOutlineDragHandle size="24px" />
-      </DragWrapper>
-      <Link href={"/list/" + id} passHref>
-        <ListEntryLink>
-          <PTag>{children}</PTag>
-        </ListEntryLink>
-      </Link>
-      <Link href={"/edit-list/" + id} passHref>
-        <EditAnchor>
-          <MdEdit size="24px" />
-        </EditAnchor>
-      </Link>
-    </ListEntry>
+    <Draggable draggableId={id} index={index}>
+      {(provided) => (
+        <ListEntry
+          {...provided.draggableProps}
+          {...provided.dragHandleProps}
+          ref={provided.innerRef}
+        >
+          <DragWrapper>
+            <MdOutlineDragHandle size="24px" />
+          </DragWrapper>
+          <Link href={"/list/" + id} passHref>
+            <ListEntryLink>
+              <PTag>{children}</PTag>
+            </ListEntryLink>
+          </Link>
+          <Link href={"/edit-list/" + id} passHref>
+            <EditAnchor>
+              <MdEdit size="24px" />
+            </EditAnchor>
+          </Link>
+        </ListEntry>
+      )}
+    </Draggable>
   );
 }
 

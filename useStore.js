@@ -30,6 +30,25 @@ export const useListsStore = create(
           lists: newLists,
         });
       },
+      updateListIndex: (destination, source) => {
+        const swappedList = get().lists[destination];
+        const draggedList = get().lists[source];
+
+        const newSortedLists = get().lists.map((item) => {
+          switch (item) {
+            case swappedList:
+              return draggedList;
+            case draggedList:
+              return swappedList;
+            default:
+              return item;
+          }
+        });
+
+        set({
+          lists: newSortedLists,
+        });
+      },
     }),
     {
       name: "lists",
