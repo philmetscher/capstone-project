@@ -30,7 +30,7 @@ export default function CreateEntry() {
   const addListItem = useListItemsStore((state) => state.addListItem);
 
   //STATES
-  const [itemNameValidated, setItemNameValidated] = useState(true);
+  const [itemNameValidated, setItemNameValidated] = useState(false);
   const [categoryValidated, setCategoryValidated] = useState(false);
   const [categoryDropdownUsed, setCategoryDropdownUsed] = useState(true);
   const [submitButtonReady, setSubmitButtonReady] = useState(false);
@@ -178,7 +178,7 @@ export default function CreateEntry() {
           >
             Name...
           </Input>
-          {filteredCategories && (
+          {filteredCategories.length > 0 && (
             <Select
               name="itemCategory"
               labelText="Kategorie auswählen"

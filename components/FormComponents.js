@@ -129,8 +129,6 @@ function Select({
     setIsOpen(false);
   };
 
-  if (options.length === 0) return;
-
   return (
     <Group>
       <Label htmlFor={name}>{labelText}</Label>
