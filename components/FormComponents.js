@@ -134,7 +134,11 @@ function Select({
   return (
     <Group>
       <Label htmlFor={name}>{labelText}</Label>
-      <Selection className="noselect" disabled={disabled}>
+      <Selection
+        className="noselect"
+        disabled={disabled}
+        onMouseLeave={() => setIsOpen(false)}
+      >
         <SelectionHeader
           className="noselect"
           onClick={disabled ? () => setIsOpen(false) : toggling}
