@@ -21,6 +21,15 @@ export const useListsStore = create(
           ],
         });
       },
+      editList: (id, newListName) => {
+        const newLists = get().lists.map((list) =>
+          list.id === id ? { ...list, name: newListName } : list
+        );
+
+        set({
+          lists: newLists,
+        });
+      },
     }),
     {
       name: "lists",

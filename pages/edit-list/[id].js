@@ -1,29 +1,35 @@
 import { useState } from "react";
 import { useRouter } from "next/router";
-import { useListsStore } from "../useStore";
+import { useListsStore } from "../../useStore";
 
 //Components
-import Layout from "../components/Layout";
-import { FormMain, StyledForm, Input } from "../components/FormComponents";
-import { ButtonGroup, ButtonIcon, ButtonSmall } from "../components/Button";
+import Layout from "../../components/Layout";
+import { FormMain, StyledForm, Input } from "../../components/FormComponents";
+import { ButtonGroup, ButtonIcon, ButtonSmall } from "../../components/Button";
 import { MdKeyboardArrowLeft, MdKeyboardArrowRight } from "react-icons/md"; //Icons
-import Info from "../components/Info";
+import Info from "../../components/Info";
 
-export default function CreateList() {
+export default function EditList() {
   const router = useRouter();
+  const { id } = router.query;
 
   const testHasChar = new RegExp("[\\w]");
 
   //GET THINGS FROM STORE
   const lists = useListsStore((state) => state.lists);
-  const addList = useListsStore((state) => state.addList);
+  const editList = useListsStore((state) => state.editList);
+
+  //GET CURRENT LIST
+  let list;
+  if (lists) list = lists.find((list) => list.id === id);
 
   //STATES
   const [listValidated, setListValidated] = useState(true);
-  const [submitButtonReady, setSubmitButtonReady] = useState(false);
+  const [submitButtonReady, setSubmitButtonReady] = useState(true);
 
   const [currentInfo, setCurrentInfo] = useState(["", ""]);
 
+  //HANDLE FUNCTIONS
   function handleListInput(event) {
     const value = event.target.value;
     const inLists = listInLists(value.trim());
@@ -53,14 +59,14 @@ export default function CreateList() {
     const formData = new FormData(event.target);
     const data = Object.fromEntries(formData);
 
-    addList(data.listName);
+    editList(id, data.listName);
     router.push("/");
   }
 
   //HELPER FUNCTIONS
   const listInLists = (name) => lists.some((list) => list.name === name);
 
-  if (!lists) return;
+  if (!list) return;
 
   return (
     <>
@@ -73,6 +79,7 @@ export default function CreateList() {
             labelText="Name der Liste"
             inputIcon="list"
             handleChange={(event) => handleListInput(event)}
+            value={list.name}
             error={!listValidated}
           >
             Listenname...
