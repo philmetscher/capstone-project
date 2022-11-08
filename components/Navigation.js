@@ -15,7 +15,7 @@ export default function Navigation({ listId, isHome = false }) {
   //GET THINGS FROM STORE
   const listItems = useStore((state) => state.listItems);
   const anyListItemChecked = useStore((state) => state.anyListItemChecked);
-  const toggleCheck = useStore((state) => state.toggleCheck);
+  const toggleListItemCheck = useStore((state) => state.toggleListItemCheck);
   const deleteListItem = useStore((state) => state.deleteListItem);
   const updateAnyListItemChecked = useStore(
     (state) => state.updateAnyListItemChecked
@@ -24,7 +24,7 @@ export default function Navigation({ listId, isHome = false }) {
   const handleUnselect = () => {
     listItems.forEach((item) => {
       if (item.checked) {
-        toggleCheck(item.id);
+        toggleListItemCheck(item.id);
       }
     });
   };

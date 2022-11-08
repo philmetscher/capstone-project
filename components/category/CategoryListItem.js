@@ -17,7 +17,7 @@ export default function CategoryListItem({
   checked,
   listId,
 }) {
-  const toggleCheck = useStore((state) => state.toggleCheck);
+  const toggleListItemCheck = useStore((state) => state.toggleListItemCheck);
   const updateAnyListItemChecked = useStore(
     (state) => state.updateAnyListItemChecked
   );
@@ -26,7 +26,7 @@ export default function CategoryListItem({
     updateAnyListItemChecked();
   }, []);
   const handleCheckboxChange = () => {
-    toggleCheck(id);
+    toggleListItemCheck(id);
     updateAnyListItemChecked();
   };
   return (

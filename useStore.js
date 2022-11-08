@@ -142,6 +142,25 @@ export const useStore = create(
           listItems: newListItems,
         });
       },
+
+      toggleListItemCheck: (listItemId) => {
+        const newListItems = get().listItems.map((item) => {
+          if (item.id === listItemId) {
+            return {
+              ...item,
+              checked: !item.checked,
+            };
+          }
+          return item;
+        });
+
+        set({
+          listItems: newListItems,
+        });
+
+        get().updateAnyListItemChecked();
+      },
+
       updateAnyListItemChecked: (state = false) => {
         let anyChecked = state;
         if (!state) anyChecked = get().listItems.some((item) => item.checked);
