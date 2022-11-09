@@ -29,8 +29,8 @@ export default function List() {
     list = lists.find((list) => list.id === id);
   }
 
-  let activeCategories;
-  let inactiveCategories;
+  let activeCategories = undefined;
+  let inactiveCategories = undefined;
   if (list) {
     activeCategories = categories.filter(
       (category) => category.listId === list.id
@@ -40,7 +40,7 @@ export default function List() {
     );
   }
 
-  if (!activeCategories && !inactiveCategories) return;
+  if ((activeCategories && inactiveCategories) === undefined) return;
 
   return (
     <>
@@ -50,14 +50,13 @@ export default function List() {
           {!activeCategories.length && (
             <Info>Derzeit noch keine Einträge oder Kategorien vorhanden</Info>
           )}
-          {activeCategories &&
-            activeCategories.map((category) => (
-              <DynamicCategory
-                key={category.id}
-                category={category}
-                listId={id}
-              />
-            ))}
+          {activeCategories.map((category) => (
+            <DynamicCategory
+              key={category.id}
+              category={category}
+              listId={id}
+            />
+          ))}
           {inactiveCategories &&
             inactiveCategories.map((category) => (
               <DynamicCategory

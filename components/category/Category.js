@@ -23,16 +23,13 @@ export default function Category({ category, listId, hasDisabledItems }) {
     )
       return;
 
-    updateListItemIndex(destination, source);
+    updateListItemIndex(destination, source, hasDisabledItems);
   };
 
-  //activeListItems
-  const activeListItems = listItems.filter(
-    (listItem) => listItem.categoryId === category.id && !listItem.disabled
-  );
-  //inactiveListItems
-  const inactiveListItems = listItems.filter(
-    (listItem) => listItem.categoryId === category.id && listItem.disabled
+  const filteredListItems = listItems.filter(
+    (listItem) =>
+      listItem.categoryId === category.id &&
+      listItem.disabled === hasDisabledItems
   );
 
   return (
@@ -48,45 +45,23 @@ export default function Category({ category, listId, hasDisabledItems }) {
       </CategoryHeadline>
       {isExtended && (
         <DragDropContext onDragEnd={handleOnDragEnd}>
-          <Droppable
-            droppableId={
-              hasDisabledItems ? "disabled" + category.id : category.id
-            }
-          >
+          <Droppable droppableId={category.id}>
             {(provided) => (
               <CategoryList
                 ref={provided.innerRef}
                 {...provided.droppableProps}
               >
-                {hasDisabledItems ? (
-                  <>
-                    {inactiveListItems.map((listItem, index) => (
-                      <CategoryListItem
-                        key={listItem.id}
-                        id={listItem.id}
-                        index={index}
-                        checked={listItem.checked}
-                        listId={listId}
-                      >
-                        {listItem.name}
-                      </CategoryListItem>
-                    ))}
-                  </>
-                ) : (
-                  <>
-                    {activeListItems.map((listItem, index) => (
-                      <CategoryListItem
-                        key={listItem.id}
-                        id={listItem.id}
-                        index={index}
-                        checked={listItem.checked}
-                        listId={listId}
-                      >
-                        {listItem.name}
-                      </CategoryListItem>
-                    ))}
-                  </>
-                )}
+                {filteredListItems.map((listItem, index) => (
+                  <CategoryListItem
+                    key={listItem.id}
+                    id={listItem.id}
+                    index={index}
+                    checked={listItem.checked}
+                    listId={listId}
+                  >
+                    {listItem.name}
+                  </CategoryListItem>
+                ))}
 
                 {provided.placeholder}
               </CategoryList>

@@ -144,22 +144,14 @@ export const useStore = create(
           listItems: newListItems,
         });
       },
-      updateListItemIndex: (destination, source) => {
+      updateListItemIndex: (destination, source, onlyDisabledItems) => {
         let destinationDroppableId = destination.droppableId;
-        let destinationListItems = get().listItems;
 
-        if (destinationDroppableId.startsWith("disabled")) {
-          const destinationDroppableId = destination.droppableId.substring(8);
-          destinationListItems = destinationListItems.filter(
-            (item) =>
-              item.categoryId === destinationDroppableId && item.disabled
-          );
-        } else {
-          destinationListItems = destinationListItems.filter(
-            (item) =>
-              item.categoryId === destinationDroppableId && !item.disabled
-          );
-        }
+        const destinationListItems = get().listItems.filter(
+          (item) =>
+            item.categoryId === destinationDroppableId &&
+            item.disabled === onlyDisabledItems
+        );
 
         const destinationListItem = destinationListItems[destination.index];
         const sourceListItem = destinationListItems[source.index];
