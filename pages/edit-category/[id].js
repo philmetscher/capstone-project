@@ -1,7 +1,7 @@
 import styled from "styled-components";
 import { useState } from "react";
 import { useRouter } from "next/router";
-import { useCategoriesStore, useListItemsStore } from "../../useStore";
+import { useStore } from "../../useStore";
 import { nanoid } from "nanoid";
 
 // Components
@@ -25,12 +25,12 @@ export default function EditCategory() {
   const testHasChar = new RegExp("[\\w]");
 
   //GET THINGS FROM STORE
-  const categories = useCategoriesStore((state) => state.categories);
-  const listItems = useListItemsStore((state) => state.listItems);
-  const addCategory = useCategoriesStore((state) => state.addCategory);
-  const editCategory = useCategoriesStore((state) => state.editCategory);
-  const deleteCategory = useCategoriesStore((state) => state.deleteCategory);
-  const editListItem = useListItemsStore((state) => state.editListItem);
+  const categories = useStore((state) => state.categories);
+  const listItems = useStore((state) => state.listItems);
+  const addCategory = useStore((state) => state.addCategory);
+  const editCategory = useStore((state) => state.editCategory);
+  const deleteCategory = useStore((state) => state.deleteCategory);
+  const editListItem = useStore((state) => state.editListItem);
 
   //GET CURRENT CATEGORY
   let category = {};

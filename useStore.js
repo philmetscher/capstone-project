@@ -5,11 +5,14 @@ import { nanoid } from "nanoid";
 
 import { exampleLists, exampleCategories, exampleListItems } from "./lib/db";
 
-export const useListsStore = create(
+export const useStore = create(
   persist(
     (set, get) => ({
       lists: exampleLists,
+      categories: exampleCategories,
+      listItems: exampleListItems,
 
+      /* 'lists' functions */
       addList: (newListName) => {
         set({
           lists: [
@@ -49,18 +52,8 @@ export const useListsStore = create(
           lists: newSortedLists,
         });
       },
-    }),
-    {
-      name: "lists",
-    }
-  )
-);
 
-export const useCategoriesStore = create(
-  persist(
-    (set, get) => ({
-      categories: exampleCategories,
-
+      /* 'categories' functions */
       addCategory: (
         newCategoryId,
         newCategoryName,
@@ -89,6 +82,7 @@ export const useCategoriesStore = create(
             name: newName,
             default: currentCategory.default,
             listId: currentCategory.listId,
+            hasDisabledItems: currentCategory.hasDisabledItems,
           };
           set({
             categories: get().categories.map((category) =>
@@ -106,18 +100,8 @@ export const useCategoriesStore = create(
           categories: newCategories,
         });
       },
-    }),
-    {
-      name: "categories",
-    }
-  )
-);
 
-export const useListItemsStore = create(
-  persist(
-    (set, get) => ({
-      listItems: exampleListItems,
-
+      /* 'listItems' functions */
       addListItem: (newListItemName, categoryId) => {
         set({
           listItems: [
@@ -127,6 +111,7 @@ export const useListItemsStore = create(
               name: newListItemName,
               categoryId: categoryId,
               checked: false,
+              disabled: false,
             },
           ],
         });
@@ -141,6 +126,7 @@ export const useListItemsStore = create(
             name: newName,
             categoryId: newCategoryId,
             checked: currentListItem.checked,
+            disabled: currentListItem.disabled,
           };
           set({
             listItems: get().listItems.map((listItem) =>
@@ -158,16 +144,24 @@ export const useListItemsStore = create(
           listItems: newListItems,
         });
       },
-      updateListItemIndex: (destination, source) => {
-        const swappedListItem = get().listItems[destination];
-        const draggedListItem = get().listItems[source];
+      updateListItemIndex: (destination, source, onlyDisabledItems) => {
+        let destinationDroppableId = destination.droppableId;
+
+        const destinationListItems = get().listItems.filter(
+          (item) =>
+            item.categoryId === destinationDroppableId &&
+            item.disabled === onlyDisabledItems
+        );
+
+        const destinationListItem = destinationListItems[destination.index];
+        const sourceListItem = destinationListItems[source.index];
 
         const newSortedListItems = get().listItems.map((item) => {
           switch (item) {
-            case swappedListItem:
-              return draggedListItem;
-            case draggedListItem:
-              return swappedListItem;
+            case destinationListItem:
+              return sourceListItem;
+            case sourceListItem:
+              return destinationListItem;
             default:
               return item;
           }
@@ -177,7 +171,7 @@ export const useListItemsStore = create(
           listItems: newSortedListItems,
         });
       },
-      toggleCheck: (listItemId) => {
+      toggleListItemCheck: (listItemId) => {
         const newListItems = get().listItems.map((item) => {
           if (item.id === listItemId) {
             return {
@@ -194,8 +188,6 @@ export const useListItemsStore = create(
 
         get().updateAnyListItemChecked();
       },
-
-      anyListItemChecked: false,
       updateAnyListItemChecked: (state = false) => {
         let anyChecked = state;
         if (!state) anyChecked = get().listItems.some((item) => item.checked);
@@ -204,9 +196,50 @@ export const useListItemsStore = create(
           anyListItemChecked: anyChecked,
         });
       },
+      toggleListItemDisabled: (listItemId) => {
+        const currentListItem = get().listItems.find(
+          (listItem) => listItem.id === listItemId
+        );
+        const newListItems = get().listItems.map((item) =>
+          item.id === listItemId ? { ...item, disabled: !item.disabled } : item
+        );
+
+        let categoriesDisablingList = [];
+        newListItems.forEach((listItem) =>
+          listItem.disabled
+            ? categoriesDisablingList.push(listItem.categoryId)
+            : ""
+        );
+
+        get().updateCategoryHasDisabledItems(categoriesDisablingList);
+
+        set({
+          listItems: newListItems,
+        });
+      },
+      updateCategoryHasDisabledItems: (categoriesDisablingList) => {
+        let newCategories = get().categories;
+        newCategories = newCategories.map((category) => {
+          if (!categoriesDisablingList.length) {
+            return {
+              ...category,
+              hasDisabledItems: false,
+            };
+          }
+
+          return {
+            ...category,
+            hasDisabledItems: categoriesDisablingList.includes(category.id),
+          };
+        });
+
+        set({
+          categories: newCategories,
+        });
+      },
     }),
     {
-      name: "listItems",
+      name: "store",
     }
   )
 );

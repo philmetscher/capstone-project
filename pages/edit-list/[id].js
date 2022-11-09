@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useRouter } from "next/router";
-import { useListsStore } from "../../useStore";
+import { useStore } from "../../useStore";
 
 //Components
 import Layout from "../../components/Layout";
@@ -16,8 +16,8 @@ export default function EditList() {
   const testHasChar = new RegExp("[\\w]");
 
   //GET THINGS FROM STORE
-  const lists = useListsStore((state) => state.lists);
-  const editList = useListsStore((state) => state.editList);
+  const lists = useStore((state) => state.lists);
+  const editList = useStore((state) => state.editList);
 
   //GET CURRENT LIST
   let list;
