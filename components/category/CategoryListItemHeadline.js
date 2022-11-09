@@ -1,3 +1,4 @@
+import { useState } from "react";
 import styled from "styled-components";
 import { useStore } from "../../useStore";
 
@@ -22,4 +23,5 @@ const HeadlineButton = styled.button`
   color: var(--white);
   line-height: 1.5rem;
   cursor: pointer;
+  text-align: left;
 `;
