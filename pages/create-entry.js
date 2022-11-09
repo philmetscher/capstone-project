@@ -24,10 +24,12 @@ export default function CreateEntry() {
   const testHasChar = new RegExp("[\\w]");
 
   //GET THINGS FROM STORE
+  const lists = useStore((state) => state.lists);
   const categories = useStore((state) => state.categories);
   const listItems = useStore((state) => state.listItems);
   const addCategory = useStore((state) => state.addCategory);
   const addListItem = useStore((state) => state.addListItem);
+  const updateItemCount = useStore((state) => state.updateItemCount);
 
   //STATES
   const [itemNameValidated, setItemNameValidated] = useState(false);
@@ -43,6 +45,9 @@ export default function CreateEntry() {
       category.listId === listId ? category : ""
     );
   }
+
+  let list = {};
+  if (lists) list = lists.find((list) => list.id === listId);
 
   //HANDLE FUNCTIONS
   function handleItemInput(event) {
@@ -141,6 +146,8 @@ export default function CreateEntry() {
       addCategory(newCategoryId, data.newCategory, listId);
       categoryId = newCategoryId;
     }
+
+    updateItemCount(listId, list.itemCount[0], list.itemCount[1] + 1);
 
     addListItem(name, categoryId);
     router.push(routerReturnPath);

@@ -2,7 +2,7 @@ import { useState } from "react";
 import styled from "styled-components";
 import { useStore } from "../../useStore";
 
-export default function CategoryListItemHeadline({ id, children }) {
+export default function CategoryListItemHeadline({ listItem, children }) {
   const toggleListItemDisabled = useStore(
     (state) => state.toggleListItemDisabled
   );
@@ -10,7 +10,7 @@ export default function CategoryListItemHeadline({ id, children }) {
   const handleListItem = (event) => {
     event.preventDefault();
 
-    toggleListItemDisabled(id);
+    toggleListItemDisabled(listItem);
   };
 
   return <HeadlineButton onClick={handleListItem}>{children}</HeadlineButton>;

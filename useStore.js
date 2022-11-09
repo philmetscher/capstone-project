@@ -52,6 +52,21 @@ export const useStore = create(
           lists: newSortedLists,
         });
       },
+      updateItemCount: (listId, itemsCompleted, itemsUncompleted) => {
+        const newLists = get().lists.map((list) => {
+          if (list.id === listId) {
+            return {
+              ...list,
+              itemCount: [itemsCompleted, itemsUncompleted],
+            };
+          }
+          return list;
+        });
+
+        set({
+          lists: newLists,
+        });
+      },
 
       /* 'categories' functions */
       addCategory: (
@@ -196,12 +211,21 @@ export const useStore = create(
           anyListItemChecked: anyChecked,
         });
       },
-      toggleListItemDisabled: (listItemId) => {
-        const currentListItem = get().listItems.find(
-          (listItem) => listItem.id === listItemId
+      toggleListItemDisabled: (listItem) => {
+        const newLists = get().lists.map((list) =>
+          list.id === listItem.listId
+            ? {
+                ...list,
+                itemCount: [
+                  (list.itemCount[0] += listItem.disabled ? -1 : 1),
+                  list.itemCount[1],
+                ],
+              }
+            : list
         );
+
         const newListItems = get().listItems.map((item) =>
-          item.id === listItemId ? { ...item, disabled: !item.disabled } : item
+          item.id === listItem.id ? { ...item, disabled: !item.disabled } : item
         );
 
         let categoriesDisablingList = [];
@@ -215,6 +239,7 @@ export const useStore = create(
 
         set({
           listItems: newListItems,
+          lists: newLists,
         });
       },
       updateCategoryHasDisabledItems: (categoriesDisablingList) => {
