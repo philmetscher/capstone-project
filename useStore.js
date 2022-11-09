@@ -145,15 +145,31 @@ export const useStore = create(
         });
       },
       updateListItemIndex: (destination, source) => {
-        const swappedListItem = get().listItems[destination];
-        const draggedListItem = get().listItems[source];
+        let destinationDroppableId = destination.droppableId;
+        let destinationListItems = get().listItems;
+
+        if (destinationDroppableId.startsWith("disabled")) {
+          const destinationDroppableId = destination.droppableId.substring(8);
+          destinationListItems = destinationListItems.filter(
+            (item) =>
+              item.categoryId === destinationDroppableId && item.disabled
+          );
+        } else {
+          destinationListItems = destinationListItems.filter(
+            (item) =>
+              item.categoryId === destinationDroppableId && !item.disabled
+          );
+        }
+
+        const destinationListItem = destinationListItems[destination.index];
+        const sourceListItem = destinationListItems[source.index];
 
         const newSortedListItems = get().listItems.map((item) => {
           switch (item) {
-            case swappedListItem:
-              return draggedListItem;
-            case draggedListItem:
-              return swappedListItem;
+            case destinationListItem:
+              return sourceListItem;
+            case sourceListItem:
+              return destinationListItem;
             default:
               return item;
           }

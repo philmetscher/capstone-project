@@ -6,13 +6,11 @@ import { DragDropContext, Droppable } from "@hello-pangea/dnd";
 // Components
 import CategoryHeadline from "./CategoryHeadline";
 import CategoryListItem from "./CategoryListItem";
-import { useEffect } from "react";
 
 export default function Category({ category, listId, hasDisabledItems }) {
   const [isExtended, setIsExtended] = useState(true);
 
   //GET THINGS FROM STORE
-  const updateDisabled = useStore((state) => state.updateDisabled);
   const listItems = useStore((state) => state.listItems);
   const updateListItemIndex = useStore((state) => state.updateListItemIndex);
 
@@ -25,7 +23,7 @@ export default function Category({ category, listId, hasDisabledItems }) {
     )
       return;
 
-    updateListItemIndex(destination.index, source.index);
+    updateListItemIndex(destination, source);
   };
 
   //activeListItems
@@ -50,7 +48,11 @@ export default function Category({ category, listId, hasDisabledItems }) {
       </CategoryHeadline>
       {isExtended && (
         <DragDropContext onDragEnd={handleOnDragEnd}>
-          <Droppable droppableId={category.id}>
+          <Droppable
+            droppableId={
+              hasDisabledItems ? "disabled" + category.id : category.id
+            }
+          >
             {(provided) => (
               <CategoryList
                 ref={provided.innerRef}
