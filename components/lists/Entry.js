@@ -6,7 +6,14 @@ import { Draggable } from "@hello-pangea/dnd";
 import { PTag } from "../HtmlComponents";
 import { MdOutlineDragHandle, MdEdit } from "react-icons/md"; //Icons
 
-export default function OverviewListEntry({ children, id, index }) {
+export default function OverviewListEntry({ children, id, index, itemCount }) {
+  console.log(itemCount);
+  const countUncompleted =
+    itemCount[0].toString().length > 1 ? itemCount[0] : `0${itemCount[0]}`;
+  const countCompleted =
+    itemCount[1].toString().length > 1 ? itemCount[1] : `0${itemCount[1]}`;
+  const counter = `${countUncompleted}/${countCompleted}`;
+
   return (
     <Draggable draggableId={id} index={index}>
       {(provided) => (
@@ -23,11 +30,14 @@ export default function OverviewListEntry({ children, id, index }) {
               <PTag>{children}</PTag>
             </ListEntryLink>
           </Link>
-          <Link href={"/edit-list/" + id} passHref>
-            <EditAnchor>
-              <MdEdit size="24px" />
-            </EditAnchor>
-          </Link>
+          <GroupEditCount>
+            <Link href={"/edit-list/" + id} passHref>
+              <EditAnchor>
+                <MdEdit size="24px" />
+              </EditAnchor>
+            </Link>
+            <ItemCounter>{counter}</ItemCounter>
+          </GroupEditCount>
         </ListEntry>
       )}
     </Draggable>
@@ -59,8 +69,12 @@ const ListEntryLink = styled.a`
   display: inline-block;
   width: calc(100% - 48px);
 `;
+const GroupEditCount = styled.div`
+  text-align: right;
+`;
 const EditAnchor = styled.a`
   display: inline-block;
   width: 24px;
-  height: 64px;
+  height: 24px;
 `;
+const ItemCounter = styled.p``;
