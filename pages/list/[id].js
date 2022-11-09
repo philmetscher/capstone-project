@@ -35,8 +35,8 @@ export default function List() {
     activeCategories = categories.filter(
       (category) => category.listId === list.id
     );
-    inactiveCategories = categories.filter(
-      (category) => category.listId === list.id && category.hasDisabledItems
+    inactiveCategories = activeCategories.filter(
+      (category) => category.hasDisabledItems
     );
   }
 

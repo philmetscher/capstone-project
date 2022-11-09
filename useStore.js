@@ -82,7 +82,7 @@ export const useStore = create(
             name: newName,
             default: currentCategory.default,
             listId: currentCategory.listId,
-            hasDisabledItems: currentCategory.disabled,
+            hasDisabledItems: currentCategory.hasDisabledItems,
           };
           set({
             categories: get().categories.map((category) =>
@@ -211,6 +211,13 @@ export const useStore = create(
             : ""
         );
 
+        get().updateCategoryHasDisabledItems(categoriesDisablingList);
+
+        set({
+          listItems: newListItems,
+        });
+      },
+      updateCategoryHasDisabledItems: (categoriesDisablingList) => {
         let newCategories = get().categories;
         newCategories = newCategories.map((category) => {
           if (!categoriesDisablingList.length) {
@@ -227,7 +234,6 @@ export const useStore = create(
         });
 
         set({
-          listItems: newListItems,
           categories: newCategories,
         });
       },
