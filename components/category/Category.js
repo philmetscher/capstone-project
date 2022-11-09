@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useStore } from "../../useStore";
 import { DragDropContext, Droppable } from "@hello-pangea/dnd";
 
@@ -7,7 +7,11 @@ import { DragDropContext, Droppable } from "@hello-pangea/dnd";
 import CategoryHeadline from "./CategoryHeadline";
 import CategoryListItem from "./CategoryListItem";
 
-export default function Category({ category, listId, hasDisabledItems }) {
+export default function Category({
+  category,
+  listId,
+  hasDisabledItems = false,
+}) {
   const [isExtended, setIsExtended] = useState(true);
 
   //GET THINGS FROM STORE
@@ -33,7 +37,7 @@ export default function Category({ category, listId, hasDisabledItems }) {
   );
 
   return (
-    <CategoryWrapper disabled={hasDisabledItems}>
+    <CategoryWrapper isDisabled={hasDisabledItems}>
       <CategoryHeadline
         id={category.id}
         extended={isExtended}
@@ -74,7 +78,7 @@ export default function Category({ category, listId, hasDisabledItems }) {
 }
 
 const CategoryWrapper = styled.article`
-  opacity: ${({ disabled }) => (disabled ? 0.5 : 1)};
+  opacity: ${({ isDisabled }) => (isDisabled ? 0.5 : 1)};
 `;
 const CategoryList = styled.ul`
   list-style-type: none;
