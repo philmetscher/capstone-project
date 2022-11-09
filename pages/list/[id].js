@@ -29,8 +29,8 @@ export default function List() {
     list = lists.find((list) => list.id === id);
   }
 
-  let activeCategories = undefined;
-  let inactiveCategories = undefined;
+  let activeCategories = null;
+  let inactiveCategories = null;
   if (list) {
     activeCategories = categories.filter(
       (category) => category.listId === list.id
@@ -40,7 +40,7 @@ export default function List() {
     );
   }
 
-  if ((activeCategories && inactiveCategories) === undefined) return;
+  if (activeCategories === null) return;
 
   return (
     <>
