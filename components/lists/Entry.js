@@ -7,10 +7,8 @@ import { PTag } from "../HtmlComponents";
 import { MdOutlineDragHandle, MdEdit } from "react-icons/md"; //Icons
 
 export default function OverviewListEntry({ children, id, index, itemCount }) {
-  const countUncompleted =
-    itemCount[0].toString().length > 1 ? itemCount[0] : `0${itemCount[0]}`;
-  const countCompleted =
-    itemCount[1].toString().length > 1 ? itemCount[1] : `0${itemCount[1]}`;
+  const countUncompleted = itemCount[0].toString().padStart(2, "0");
+  const countCompleted = itemCount[1].toString().padStart(2, "0");
   const counter = `${countUncompleted}/${countCompleted}`;
 
   return (
