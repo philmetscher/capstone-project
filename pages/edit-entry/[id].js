@@ -30,13 +30,11 @@ export default function EditEntry() {
   const testHasChar = new RegExp("[\\w]");
 
   //GET THINGS FROM STORE
-  const lists = useStore((state) => state.lists);
   const categories = useStore((state) => state.categories);
   const listItems = useStore((state) => state.listItems);
   const addCategory = useStore((state) => state.addCategory);
   const editListItem = useStore((state) => state.editListItem);
   const deleteListItem = useStore((state) => state.deleteListItem);
-  const updateItemCount = useStore((state) => state.updateItemCount);
 
   let filteredCategories;
   if (categories) {
@@ -54,9 +52,6 @@ export default function EditEntry() {
     listItemCategory = categories.find(
       (category) => category.id === listItem.categoryId
     );
-
-  let list = {};
-  if (listItem) list = lists.find((list) => list.id === listItem.listId);
 
   //STATES
   const [itemNameValidated, setItemNameValidated] = useState(true);
@@ -132,12 +127,6 @@ export default function EditEntry() {
   }
 
   function handleDelete() {
-    const itemsCompleted = listItem.disabled
-      ? list.itemCount[0] - 1
-      : list.itemCount[0];
-    const itemsUncompleted = list.itemCount[1] - 1;
-
-    updateItemCount(listItem.listId, itemsCompleted, itemsUncompleted);
     deleteListItem(listItem.id);
     router.push(routerReturnPath);
   }

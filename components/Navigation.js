@@ -30,7 +30,7 @@ export default function Navigation({ listId, isHome = false }) {
   };
   const handleDeleteSelected = () => {
     listItems.forEach((item) => {
-      if (item.checked) deleteListItem(item.id);
+      if (item.checked) deleteListItem(item);
     });
 
     setDeleteModalBoxOpen(false);

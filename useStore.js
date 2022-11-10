@@ -52,21 +52,6 @@ export const useStore = create(
           lists: newSortedLists,
         });
       },
-      updateItemCount: (listId, itemsCompleted, itemsUncompleted) => {
-        const newLists = get().lists.map((list) => {
-          if (list.id === listId) {
-            return {
-              ...list,
-              itemCount: [itemsCompleted, itemsUncompleted],
-            };
-          }
-          return list;
-        });
-
-        set({
-          lists: newLists,
-        });
-      },
 
       /* 'categories' functions */
       addCategory: (
@@ -117,18 +102,20 @@ export const useStore = create(
       },
 
       /* 'listItems' functions */
-      addListItem: (newListItemName, categoryId) => {
+      addListItem: (newListItemName, categoryId, listId) => {
+        const newListItem = {
+          id: nanoid(),
+          name: newListItemName,
+          categoryId: categoryId,
+          checked: false,
+          listId: listId,
+          disabled: false,
+        };
+
+        get().updateItemCount(newListItem, true, false);
+
         set({
-          listItems: [
-            ...get().listItems,
-            {
-              id: nanoid(),
-              name: newListItemName,
-              categoryId: categoryId,
-              checked: false,
-              disabled: false,
-            },
-          ],
+          listItems: [...get().listItems, newListItem],
         });
       },
       editListItem: (listItemId, newName, newCategoryId) => {
@@ -150,10 +137,12 @@ export const useStore = create(
           });
         }
       },
-      deleteListItem: (listItemId) => {
+      deleteListItem: (listItem) => {
         const newListItems = get().listItems.filter(
-          (listItem) => listItem.id != listItemId
+          (item) => item.id != listItem.id
         );
+
+        get().updateItemCount(listItem, false, true);
 
         set({
           listItems: newListItems,
@@ -260,6 +249,28 @@ export const useStore = create(
 
         set({
           categories: newCategories,
+        });
+      },
+      updateItemCount: (
+        listItem,
+        listItemAdded = false,
+        listItemDeleted = false
+      ) => {
+        const newLists = get().lists.map((list) => {
+          if (list.id === listItem.listId) {
+            if (listItem.disabled) list.itemCount[0] + 1;
+            if (listItemAdded) list.itemCount[1] = list.itemCount[1] + 1;
+            if (listItemDeleted) {
+              list.itemCount[0] = listItem.disabled
+                ? list.itemCount[0] - 1
+                : list.itemCount[0];
+              list.itemCount[1] = list.itemCount[1] - 1;
+            }
+          }
+          return list;
+        });
+        set({
+          lists: newLists,
         });
       },
     }),
