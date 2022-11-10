@@ -142,7 +142,7 @@ export default function CreateEntry() {
       categoryId = newCategoryId;
     }
 
-    addListItem(name, categoryId);
+    addListItem(name, categoryId, listId);
     router.push(routerReturnPath);
   }
 

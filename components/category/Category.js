@@ -58,10 +58,8 @@ export default function Category({
                 {filteredListItems.map((listItem, index) => (
                   <CategoryListItem
                     key={listItem.id}
-                    id={listItem.id}
+                    listItem={listItem}
                     index={index}
-                    checked={listItem.checked}
-                    listId={listId}
                   >
                     {listItem.name}
                   </CategoryListItem>

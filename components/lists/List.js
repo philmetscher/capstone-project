@@ -31,7 +31,12 @@ export default function OverviewList() {
         {(provided) => (
           <List ref={provided.innerRef} {...provided.droppableProps}>
             {lists.map((list, index) => (
-              <DynamicEntry key={list.id} id={list.id} index={index}>
+              <DynamicEntry
+                key={list.id}
+                id={list.id}
+                index={index}
+                itemCount={list.itemCount}
+              >
                 {list.name}
               </DynamicEntry>
             ))}

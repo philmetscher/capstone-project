@@ -48,11 +48,10 @@ export default function EditEntry() {
   if (listItems) listItem = listItems.find((listItem) => listItem.id == id);
 
   let listItemCategory = {};
-  if (filteredCategories) {
-    listItemCategory = filteredCategories.find(
+  if (listItem)
+    listItemCategory = categories.find(
       (category) => category.id === listItem.categoryId
     );
-  }
 
   //STATES
   const [itemNameValidated, setItemNameValidated] = useState(true);

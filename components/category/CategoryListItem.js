@@ -10,13 +10,7 @@ import { PTag } from "../HtmlComponents";
 import Checkbox from "../Checkbox";
 import CategoryListItemHeadline from "./CategoryListItemHeadline";
 
-export default function CategoryListItem({
-  children,
-  id,
-  index,
-  checked,
-  listId,
-}) {
+export default function CategoryListItem({ children, listItem, index }) {
   const toggleListItemCheck = useStore((state) => state.toggleListItemCheck);
   const updateAnyListItemChecked = useStore(
     (state) => state.updateAnyListItemChecked
@@ -26,11 +20,11 @@ export default function CategoryListItem({
     updateAnyListItemChecked();
   }, []);
   const handleCheckboxChange = () => {
-    toggleListItemCheck(id);
+    toggleListItemCheck(listItem.id);
     updateAnyListItemChecked();
   };
   return (
-    <Draggable draggableId={id} index={index}>
+    <Draggable draggableId={listItem.id} index={index}>
       {(provided) => (
         <CategoryListItemWrapper
           {...provided.draggableProps}
@@ -40,16 +34,20 @@ export default function CategoryListItem({
           <DragWrapper>
             <MdOutlineDragHandle size="24px" />
           </DragWrapper>
-          <Checkbox id={id} onChange={handleCheckboxChange} checked={checked} />
-          <CategoryListItemHeadline id={id}>
+          <Checkbox
+            id={listItem.id}
+            onChange={handleCheckboxChange}
+            checked={listItem.checked}
+          />
+          <CategoryListItemHeadline listItem={listItem}>
             {children}
           </CategoryListItemHeadline>
           <Link
             href={{
-              pathname: "/edit-entry/" + id,
+              pathname: "/edit-entry/" + listItem.id,
               query: {
-                id: id,
-                listId: listId,
+                id: listItem.id,
+                listId: listItem.listId,
               },
             }}
             passHref
