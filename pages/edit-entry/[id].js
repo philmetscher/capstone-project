@@ -57,7 +57,7 @@ export default function EditEntry() {
   const [itemNameValidated, setItemNameValidated] = useState(true);
   const [categoryValidated, setCategoryValidated] = useState(false);
   const [categoryDropdownUsed, setCategoryDropdownUsed] = useState(true);
-  const [submitButtonReady, setSubmitButtonReady] = useState(false);
+  const [submitButtonReady, setSubmitButtonReady] = useState(true);
   const [deleteModalBoxOpen, setDeleteModalBoxOpen] = useState(false);
 
   const [currentInfo, setCurrentInfo] = useState(["", ""]);
