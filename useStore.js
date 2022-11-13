@@ -20,6 +20,7 @@ export const useStore = create(
             {
               id: nanoid(),
               name: newListName,
+              itemCount: [0, 0],
             },
           ],
         });
