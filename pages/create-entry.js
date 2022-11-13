@@ -65,11 +65,12 @@ export default function CreateEntry() {
       if (currentInfo[0] === "listItem") setCurrentInfo(["", ""]);
 
       if (filteredCategories.length === 0) {
-        setCurrentInfo([
-          "category",
-          "Erstelle eine neue Kategorie für deinen Eintrag",
-        ]);
-        setSubmitButtonReady(false);
+        setSubmitButtonReady(categoryValidated);
+        setCurrentInfo(
+          categoryValidated
+            ? ["", ""]
+            : ["category", "Erstelle eine neue Kategorie für deinen Eintrag"]
+        );
         return;
       }
       setSubmitButtonReady(categoryDropdownUsed || categoryValidated);
