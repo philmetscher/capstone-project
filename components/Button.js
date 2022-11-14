@@ -36,6 +36,7 @@ const ButtonSmall = styled(Button)`
 
 const ButtonIcon = styled(ButtonSmall)`
   padding: 14px;
+  min-width: 55px;
 `;
 
 export { ButtonGroup, Button, ButtonSmall, ButtonIcon };
