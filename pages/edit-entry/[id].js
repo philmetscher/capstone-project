@@ -127,7 +127,7 @@ export default function EditEntry() {
   }
 
   function handleDelete() {
-    deleteListItem(listItem.id);
+    deleteListItem(listItem);
     router.push(routerReturnPath);
   }
 
